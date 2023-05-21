@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.3 - 2023-05-21
+ * jquery.databind.js - version 1.6.4 - 2023-05-21
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
  * @license GPL2 License http://www.gnu.org/licenses/gpl.html
@@ -120,7 +120,7 @@
 		let name = $(dom).attr(CORE.CHECK_FIELD);
 		if (!CommonUtil.isBlank(name)) {
 			let nameSet = extractName(name);
-			$("input:checkbox[name" + nameSet[0] + "='" + nameSet[1] + "']").prop("checked", dom.checked);
+			$("input:checkbox[name" + nameSet[0] + "='" + nameSet[1] + "']").prop("checked", CommonUtil.exists(dom.checked) ? dom.checked : false);
 		}
 	}
 

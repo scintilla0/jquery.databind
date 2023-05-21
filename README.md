@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.4 (2023-05-21)
+*	Button with no attribute [checked] unable to uncheck fixed. 
+
 #### 1.6.3 (2023-05-21)
 *	[data-bind] event can be initiated by radio elements now. 
 
