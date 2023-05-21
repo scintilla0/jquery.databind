@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.4 - 2023-05-21
+ * jquery.databind.js - version 1.6.5 - 2023-05-21
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
  * @license GPL2 License http://www.gnu.org/licenses/gpl.html
@@ -8,11 +8,11 @@
  * Requires jQuery.
  * Add the attribute [data-bind="$fieldName"] to enable automatic configuration, e.g. [data-bind="userName"]．
  * Add the attribute [data-bind-option-text] to bind the option text of the other source in group instead of its exact value to this DOM element.
- * Add the attribute [data-check-field="$name"] to a button or a checkbox to control the checked status of a set of checkboxes, e.g. [data-check-field="retired"].
+ * Add the attribute [data-check-field="$name"] to a button or a checkbox to control the check status of a set of checkboxes, e.g. [data-check-field="retired"].
  * Support [*], [^] and [$] characters for a more flexible way to specify the name of the target checkboxes, e.g. [data-check-field=".retired$"].
  * Add the attribute [data-display="$name:$value"] to a DOM element to control its display status
  * 	according to the value of the specified DOM elements, e.g. [data-display="gender:1"].
- * Add the attribute [data-display-hide-callback="functionName"] to invoke the specified function as a callback when the DOM element is hidden.
+ * Add the attribute [data-display-hide-callback="$functionName"] to invoke the specified function as a callback when the DOM element is hidden.
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
  * For a better visual effect, please add the CSS rule [.display-only, [data-display] { display: none; }] to your main stylesheet.
  */
@@ -178,12 +178,17 @@
 		for (let field of dataBindField.split(';')) {
 			field = field.split(':')
 			let impactArray = displayControlInitiator[field[0]];
+			let hasBound = true;
 			if (!CommonUtil.exists(impactArray)) {
+				hasBound = false;
 				displayControlInitiator[field[0]] = [];
 				impactArray = displayControlInitiator[field[0]];
 			}
 			impactArray.push(itemId);
 			initiatorArray[field[0]] = field[1];
+			if (hasBound === true) {
+				continue;
+			}
 			let bindDisplayControlEvent = (_, eventItem) => {
 				$(eventItem).on("change", function() {
 					for (let impacted of displayControlInitiator[field[0]]) {

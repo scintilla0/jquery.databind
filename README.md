@@ -11,11 +11,14 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.5 (2023-05-21)
+*	Repeated binding of [data-display] event when multiple elements is bound to a same field fixed.
+
 #### 1.6.4 (2023-05-21)
-*	Button with no attribute [checked] unable to uncheck fixed. 
+*	Button with no attribute [checked] unable to uncheck fixed.
 
 #### 1.6.3 (2023-05-21)
-*	[data-bind] event can be initiated by radio elements now. 
+*	[data-bind] event can be initiated by radio elements now.
 
 #### 1.6.2 (2023-05-21)
 *	Remove unused exports of the internal util.
