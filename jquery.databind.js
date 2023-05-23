@@ -77,12 +77,12 @@
 				// maxlength highlight minus adapt
 				let activeItemDom = $("[id='" + CommonUtil.wrapQuotes(activeItem) + "']");
 				let fontColor = $(activeItemDom).css("color");
+				// maxlength highlight minus adapt end
 				if (CommonUtil.exists($(activeItemDom).attr(CORE.OPTION_TEXT))) {
 					let reverseOption = $(dataBindDoms).filter("select").find("option:contains('" + value + "')")
 							.filter((_, item) => $(item).text() === value);
 					value = $(reverseOption).length === 1 ? $(reverseOption).val() : '';
 				}
-				// maxlength highlight minus adapt end
 				$(dataBindDoms).each((_, item) => {
 					let notCurrentDom = activeItem !== $(item).attr("id");
 					if (notCurrentDom) {
