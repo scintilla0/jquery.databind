@@ -11,6 +11,10 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.6 (2023-05-23)
+*	[data-bind] event initiated by a [data-bind-option-text] element now evaluates its value as option text whether selects and options exist or not.
+*	Minor optimization.
+
 #### 1.6.5 (2023-05-21)
 *	Repeated binding of [data-display] event when multiple elements is bound to a same field fixed.
 

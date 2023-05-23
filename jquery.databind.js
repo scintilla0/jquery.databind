@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.5 - 2023-05-21
+ * jquery.databind.js - version 1.6.6 - 2023-05-23
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
  * @license GPL2 License http://www.gnu.org/licenses/gpl.html
@@ -77,6 +77,11 @@
 				// maxlength highlight minus adapt
 				let activeItemDom = $("[id='" + CommonUtil.wrapQuotes(activeItem) + "']");
 				let fontColor = $(activeItemDom).css("color");
+				if (CommonUtil.exists($(activeItemDom).attr(CORE.OPTION_TEXT))) {
+					let reverseOption = $(dataBindDoms).filter("select").find("option:contains('" + value + "')")
+							.filter((_, item) => $(item).text() === value);
+					value = $(reverseOption).length === 1 ? $(reverseOption).val() : '';
+				}
 				// maxlength highlight minus adapt end
 				$(dataBindDoms).each((_, item) => {
 					let notCurrentDom = activeItem !== $(item).attr("id");
@@ -131,11 +136,7 @@
 			let selector = $("input:checkbox[name" + nameSet[0] + "='" + nameSet[1] + "']");
 			let bindReverseLinkageEvent = () => {
 				$(selector).on("click", function() {
-					if ($(selector).filter(":checked").length === $(selector).length) {
-						$(item).prop("checked", true);
-					} else {
-						$(item).prop("checked", false);
-					}
+					$(item).prop("checked", $(selector).filter(":checked").length === $(selector).length);
 				});
 			};
 			bindReverseLinkageEvent()
