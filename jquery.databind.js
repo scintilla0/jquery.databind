@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.6 - 2023-05-23
+ * jquery.databind.js - version 1.6.7 - 2023-05-25
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
  * @license GPL2 License http://www.gnu.org/licenses/gpl.html
@@ -245,6 +245,7 @@
 			$(item).after('<span' + dataBindProperty + '>' + value + '</span>');
 			$(item).css("display", 'none');
 		}
+		$(item).removeClass(CORE.DISPLAY_ONLY);
 	}
 
 	function _CommonUtil() {

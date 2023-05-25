@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.7 (2023-05-25)
+*	Remove class "display-only" after ready to prevent re-triggering the appending event while using other plug-ins such as tablesorter.js.
+
 #### 1.6.6 (2023-05-23)
 *	[data-bind] event initiated by a [data-bind-option-text] element now evaluates its value as option text whether selects and options exist or not.
 *	Minor optimization.
