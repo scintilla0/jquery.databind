@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.8 (2023-05-29)
+*	Rollback the modification in 1.6.7 and add a new class to achieve the purpose instead.
+
 #### 1.6.7 (2023-05-25)
 *	Remove class "display-only" after ready to prevent re-triggering the appending event while using other plug-ins such as tablesorter.js.
 

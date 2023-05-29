@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.7 - 2023-05-25
+ * jquery.databind.js - version 1.6.8 - 2023-05-29
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
  * @license GPL2 License http://www.gnu.org/licenses/gpl.html
@@ -20,7 +20,8 @@
 	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: 'activeItem', BIND: "data-bind",
 			OPTION_TEXT: "data-bind-option-text", CHECK_FIELD: "data-check-field",
 			DISPLAY: "data-display", DISPLAY_HIDE_CALLBACK: "data-display-hide-callback",
-			DISPLAY_ONLY: "display-only", CALLBACK_FUNCTION_NAME: '_callback_function_name'};
+			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
+			CALLBACK_FUNCTION_NAME: '_callback_function_name'};
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
 	const DEFAULT_CSS = {NON_SELECTABLE_OPACITY: '0.5'};
 	const CommonUtil = _CommonUtil();
@@ -232,6 +233,9 @@
 	}
 
 	function prepareDisplayOnlyContent(_, item) {
+		if ($(item).hasClass(CORE.DISPLAY_ONLY_DEPLOYED)) {
+			return;
+		}
 		if ($(item).is("input:checkbox, input:radio")) {
 			$(item).on("click", () => false);
 			$(item).parent("label, span, div").css("cursor", 'default').css("opacity", DEFAULT_CSS.NON_SELECTABLE_OPACITY);
@@ -245,7 +249,7 @@
 			$(item).after('<span' + dataBindProperty + '>' + value + '</span>');
 			$(item).css("display", 'none');
 		}
-		$(item).removeClass(CORE.DISPLAY_ONLY);
+		$(item).addClass(CORE.DISPLAY_ONLY_DEPLOYED);
 	}
 
 	function _CommonUtil() {
