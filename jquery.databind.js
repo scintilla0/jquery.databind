@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.8 - 2023-05-29
+ * jquery.databind.js - version 1.6.9 - 2023-06-09
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
  * @license GPL2 License http://www.gnu.org/licenses/gpl.html
@@ -21,7 +21,7 @@
 			OPTION_TEXT: "data-bind-option-text", CHECK_FIELD: "data-check-field",
 			DISPLAY: "data-display", DISPLAY_HIDE_CALLBACK: "data-display-hide-callback",
 			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
-			CALLBACK_FUNCTION_NAME: '_callback_function_name'};
+			TEMPLATE_ID_SELECTOR: "[id*='emplate']", CALLBACK_FUNCTION_NAME: '_callback_function_name'};
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
 	const DEFAULT_CSS = {NON_SELECTABLE_OPACITY: '0.5'};
 	const CommonUtil = _CommonUtil();
@@ -140,7 +140,7 @@
 					$(item).prop("checked", $(selector).filter(":checked").length === $(selector).length);
 				});
 			};
-			bindReverseLinkageEvent()
+			bindReverseLinkageEvent.apply();
 			CommonUtil.deployNodeAppendListener(selector, bindReverseLinkageEvent);
 		}
 	}
@@ -233,7 +233,9 @@
 	}
 
 	function prepareDisplayOnlyContent(_, item) {
-		if ($(item).hasClass(CORE.DISPLAY_ONLY_DEPLOYED)) {
+		let hidden = ":hidden"; // evasion of IDEA warning
+		if ($(item).hasClass(CORE.DISPLAY_ONLY_DEPLOYED) ||
+				$(item).closest(CORE.TEMPLATE_ID_SELECTOR + hidden).length > 0 || $(item).closest(CORE.TEMPLATE_ID_SELECTOR).closest(hidden).length > 0) {
 			return;
 		}
 		if ($(item).is("input:checkbox, input:radio")) {

@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.9 (2023-06-09)
+*	Prevent initialization of "display-only" items in hidden templates which is wrapped by a hidden [id*='emplate'] element.
+
 #### 1.6.8 (2023-05-29)
 *	Rollback the modification in 1.6.7 and add a new class to achieve the purpose instead.
 
