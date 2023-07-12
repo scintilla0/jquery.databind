@@ -16,7 +16,7 @@
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
  * For a better visual effect, please add the CSS rule [.display-only, [data-display] { display: none; }] to your main stylesheet.
  */
-(function() {
+(function($) {
 	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: 'activeItem', BIND: "data-bind",
 			OPTION_TEXT: "data-bind-option-text", CHECK_FIELD: "data-check-field",
 			DISPLAY: "data-display", DISPLAY_HIDE_CALLBACK: "data-display-hide-callback",
@@ -37,6 +37,7 @@
 	$("[" + CORE.BIND + "]").each(prepareGroup);
 	$(document)
 		.on("keyup change", "input:text[" + CORE.BIND + "]", bindAction)
+		.on("keyup change", "textarea[" + CORE.BIND + "]", bindAction)
 		.on("change", "select[" + CORE.BIND + "]", bindAction)
 		.on("click", "input:radio[" + CORE.BIND + "]", bindAction)
 		.on("click", "input[" + CORE.CHECK_FIELD + "], button[" + CORE.CHECK_FIELD + "]", checkAction);
@@ -328,4 +329,4 @@
 		};
 	}
 
-}) ();
+}) (jQuery);
