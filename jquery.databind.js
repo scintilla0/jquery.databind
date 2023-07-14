@@ -1,6 +1,7 @@
 /*!
- * jquery.databind.js - version 1.6.9 - 2023-06-09
+ * jquery.databind.js - version 1.6.10 - 2023-07-14
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
+ * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
  * @license GPL2 License http://www.gnu.org/licenses/gpl.html
  *
@@ -36,8 +37,7 @@
 
 	$("[" + CORE.BIND + "]").each(prepareGroup);
 	$(document)
-		.on("keyup change", "input:text[" + CORE.BIND + "]", bindAction)
-		.on("keyup change", "textarea[" + CORE.BIND + "]", bindAction)
+		.on("keyup change", "input:text[" + CORE.BIND + "], textarea[" + CORE.BIND + "]", bindAction)
 		.on("change", "select[" + CORE.BIND + "]", bindAction)
 		.on("click", "input:radio[" + CORE.BIND + "]", bindAction)
 		.on("click", "input[" + CORE.CHECK_FIELD + "], button[" + CORE.CHECK_FIELD + "]", checkAction);

@@ -11,6 +11,10 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.10 (2023-07-14)
+*	Add support for jQuery's no Conflict mode. (Contributor: Squibler)
+*	Add [data-bind] event for textarea elements. (Contributor: Squibler)
+
 #### 1.6.9 (2023-06-09)
 *	Prevent initialization of "display-only" items in hidden templates which is wrapped by a hidden [id*='emplate'] element.
 
