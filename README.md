@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.11 (2023-11-21)
+*	Add initial refresh for [data-bind] elements.
+
 #### 1.6.10 (2023-07-14)
 *	Add support for jQuery's no Conflict mode. (Contributor: [Squibler](https://github.com/Squibler))
 *	Add [data-bind] event for textarea elements. (Contributor: [Squibler](https://github.com/Squibler))

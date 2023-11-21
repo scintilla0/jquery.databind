@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.10 - 2023-07-14
+ * jquery.databind.js - version 1.6.11 - 2023-11-21
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -41,6 +41,8 @@
 		.on("change", "select[" + CORE.BIND + "]", bindAction)
 		.on("click", "input:radio[" + CORE.BIND + "]", bindAction)
 		.on("click", "input[" + CORE.CHECK_FIELD + "], button[" + CORE.CHECK_FIELD + "]", checkAction);
+	$("input:text[" + CORE.BIND + "], textarea[" + CORE.BIND + "], select[" + CORE.BIND + "], input:radio[" + CORE.BIND + "]:checked")
+			.each((_, item) => bindAction({target: $(item)[0]}));
 	$("input:checkbox[" + CORE.CHECK_FIELD + "]").each(prepareCheckReverseLinkage);
 	CommonUtil.initAndDeployListener("input." + CORE.DISPLAY_ONLY + ", select." + CORE.DISPLAY_ONLY + ", textarea." + CORE.DISPLAY_ONLY, prepareDisplayOnlyContent);
 	CommonUtil.initAndDeployListener("[" + CORE.DISPLAY + "]", prepareDisplayControlEvent);
