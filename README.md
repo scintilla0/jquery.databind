@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.12 (2023-12-04)
+*	[data-display] event can accept multiple target values.
+
 #### 1.6.11 (2023-11-21)
 *	Add initial refresh for [data-bind] elements.
 

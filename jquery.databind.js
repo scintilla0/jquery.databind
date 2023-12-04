@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.11 - 2023-11-21
+ * jquery.databind.js - version 1.6.12 - 2023-12-04
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -182,6 +182,9 @@
 		}
 		for (let field of dataBindField.split(';')) {
 			field = field.split(':')
+			if (CommonUtil.isBlank(field[1])) {
+				continue;
+			}
 			let impactArray = displayControlInitiator[field[0]];
 			let hasBound = true;
 			if (!CommonUtil.exists(impactArray)) {
@@ -190,8 +193,20 @@
 				impactArray = displayControlInitiator[field[0]];
 			}
 			impactArray.push(itemId);
-			initiatorArray[field[0]] = field[1];
-			if (hasBound === true) {
+			if (!CommonUtil.exists(initiatorArray[field[0]])) {
+				initiatorArray[field[0]] = [];
+			}
+			if (field[1].startsWith('[') && field[1].endsWith(']')) {
+				for (let singleFieldValue of field[1].substring(1, field[1].length - 1).split(',')) {
+					if (CommonUtil.isBlank(singleFieldValue)) {
+						continue;
+					}
+					initiatorArray[field[0]].push(singleFieldValue);
+				}
+			} else {
+				initiatorArray[field[0]].push(field[1]);
+			}
+			if (hasBound === true || initiatorArray[field[0]].length === 0) {
 				continue;
 			}
 			let bindDisplayControlEvent = (_, eventItem) => {
@@ -201,16 +216,22 @@
 						let show = true;
 						for (let initiator in initiators) {
 							let initiatorSelector = $(nameSelector(initiator));
-							let value = initiators[initiator];
-							if ($(initiatorSelector).is("input:checkbox, input:radio")) {
-								show = $(initiatorSelector).filter("[value='" + value+ "']:checked").length === 1;
-							} else if ($(initiatorSelector).is("select")) {
-								show = $(initiatorSelector).find("option[value='" + value + "']:selected").length === 1;
-							} else if ($(initiatorSelector).is("input:text, input:hidden, textarea")) {
-								show = $(initiatorSelector).val() === value;
-							} else if ($(initiatorSelector).is("label, span")) {
-								show = $(initiatorSelector).text() === value;
+							let showTest = false;
+							for (let value of initiators[initiator]) {
+								if ($(initiatorSelector).is("input:checkbox, input:radio")) {
+									showTest = $(initiatorSelector).filter("[value='" + value+ "']:checked").length === 1;
+								} else if ($(initiatorSelector).is("select")) {
+									showTest = $(initiatorSelector).find("option[value='" + value + "']:selected").length === 1;
+								} else if ($(initiatorSelector).is("input:text, input:hidden, textarea")) {
+									showTest = $(initiatorSelector).val() === value;
+								} else if ($(initiatorSelector).is("label, span")) {
+									showTest = $(initiatorSelector).text() === value;
+								}
+								if (showTest === true) {
+									break;
+								}
 							}
+							show = showTest;
 							if (show === false) {
 								break;
 							}
