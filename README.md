@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.13 (2023-12-05)
+*	[data-display] event not work properly with [data-display-hide-callback] assigned fixed.
+
 #### 1.6.12 (2023-12-04)
 *	[data-display] event can accept multiple target values.
 

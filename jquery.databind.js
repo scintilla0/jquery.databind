@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.12 - 2023-12-04
+ * jquery.databind.js - version 1.6.13 - 2023-12-05
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -215,6 +215,9 @@
 						let initiators = displayControlImpacted[impacted];
 						let show = true;
 						for (let initiator in initiators) {
+							if (initiator === CORE.CALLBACK_FUNCTION_NAME) {
+								continue;
+							}
 							let initiatorSelector = $(nameSelector(initiator));
 							let showTest = false;
 							for (let value of initiators[initiator]) {
