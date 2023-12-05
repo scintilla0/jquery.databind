@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.14 (2023-12-05)
+*	[data-display-hide-callback] event not work properly fixed.
+
 #### 1.6.13 (2023-12-05)
 *	[data-display] event not work properly with [data-display-hide-callback] assigned fixed.
 

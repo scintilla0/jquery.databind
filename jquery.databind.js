@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.13 - 2023-12-05
+ * jquery.databind.js - version 1.6.14 - 2023-12-05
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -49,8 +49,8 @@
 	for (let initiator in displayControlInitiator) {
 		let selectorString = nameSelector(initiator);
 		$(selectorString).filter(":not(:checkbox):not(:radio), :checkbox:checked, :radio:checked").change();
-		setTimeout(() => displayControlFirstChange = false);
 	}
+	setTimeout(() => displayControlFirstChange = false);
 
 	function bindAction({target: dom}) {
 		activeItem = dom.id;
