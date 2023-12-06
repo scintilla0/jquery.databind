@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.14 - 2023-12-05
+ * jquery.databind.js - version 1.6.15 - 2023-12-06
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -242,8 +242,10 @@
 						let targetSelector = $("[id='" + impacted + "']");
 						if (show === true) {
 							$(targetSelector).show();
+							$(targetSelector).find("input, textarea, select").prop("disabled", false);
 						} else {
 							$(targetSelector).hide();
+							$(targetSelector).find("input, textarea, select").prop("disabled", true);
 							if (displayControlFirstChange === false && CommonUtil.exists(initiators[CORE.CALLBACK_FUNCTION_NAME])) {
 								eval(initiators[CORE.CALLBACK_FUNCTION_NAME] + '(\"[id=\'' + impacted + '\']\")');
 							}

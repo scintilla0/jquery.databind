@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.15 (2023-12-06)
+*	[data-display] event now disabled all elements when hidden.
+
 #### 1.6.14 (2023-12-05)
 *	[data-display-hide-callback] event not work properly fixed.
 
