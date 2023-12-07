@@ -11,6 +11,10 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.16 (2023-12-07)
+*	[data-check-field] event now can be chained-triggered.
+*	[data-check-field]'s reverse event now can only be triggered by change action.
+
 #### 1.6.15 (2023-12-06)
 *	[data-display] event now disabled all elements when hidden.
 

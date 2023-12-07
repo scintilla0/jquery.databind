@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.15 - 2023-12-06
+ * jquery.databind.js - version 1.6.16 - 2023-12-07
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -129,7 +129,9 @@
 		let name = $(dom).attr(CORE.CHECK_FIELD);
 		if (!CommonUtil.isBlank(name)) {
 			let nameSet = extractName(name);
-			$("input:checkbox[name" + nameSet[0] + "='" + nameSet[1] + "']").prop("checked", CommonUtil.exists(dom.checked) ? dom.checked : false);
+			let targetDom = $("input:checkbox[name" + nameSet[0] + "='" + nameSet[1] + "']");
+			$(targetDom).prop("checked", CommonUtil.exists(dom.checked) ? dom.checked : false);
+			$(targetDom).filter("[" + CORE.CHECK_FIELD + "]").each((_, item) => checkAction({target: $(item)[0]}));
 		}
 	}
 
@@ -137,14 +139,11 @@
 		let name = $(item).attr(CORE.CHECK_FIELD);
 		if (!CommonUtil.isBlank(name)) {
 			let nameSet = extractName(name);
-			let selector = $("input:checkbox[name" + nameSet[0] + "='" + nameSet[1] + "']");
-			let bindReverseLinkageEvent = () => {
-				$(selector).on("click", function() {
-					$(item).prop("checked", $(selector).filter(":checked").length === $(selector).length);
-				});
-			};
-			bindReverseLinkageEvent.apply();
-			CommonUtil.deployNodeAppendListener(selector, bindReverseLinkageEvent);
+			let selectorString = "input:checkbox[name" + nameSet[0] + "='" + nameSet[1] + "']";
+			$(document).on("change", selectorString, () => {
+				let selector = $(selectorString);
+				$("[" + CORE.CHECK_FIELD + "='" + name +"']").prop("checked", $(selector).filter(":checked").length === $(selector).length).change();
+			});
 		}
 	}
 
@@ -210,7 +209,7 @@
 				continue;
 			}
 			let bindDisplayControlEvent = (_, eventItem) => {
-				$(eventItem).on("change", function() {
+				$(eventItem).on("change", () => {
 					for (let impacted of displayControlInitiator[field[0]]) {
 						let initiators = displayControlImpacted[impacted];
 						let show = true;
