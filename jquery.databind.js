@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.16 - 2023-12-07
+ * jquery.databind.js - version 1.6.17 - 2023-12-12
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -49,6 +49,14 @@
 	for (let initiator in displayControlInitiator) {
 		let selectorString = nameSelector(initiator);
 		$(selectorString).filter(":not(:checkbox):not(:radio), :checkbox:checked, :radio:checked").change();
+		let processedName = [];
+		$(selectorString).filter("input:checkbox:not(:checked)").each((_, item) => {
+			let name = $(item).attr("name");
+			if (!processedName.includes(name) && $("input:checkbox[name='" + name + "']:checked").length === 0) {
+				$(item).change();
+				processedName.push(name);
+			}
+		});
 	}
 	setTimeout(() => displayControlFirstChange = false);
 
@@ -181,9 +189,6 @@
 		}
 		for (let field of dataBindField.split(';')) {
 			field = field.split(':')
-			if (CommonUtil.isBlank(field[1])) {
-				continue;
-			}
 			let impactArray = displayControlInitiator[field[0]];
 			let hasBound = true;
 			if (!CommonUtil.exists(impactArray)) {
@@ -197,9 +202,6 @@
 			}
 			if (field[1].startsWith('[') && field[1].endsWith(']')) {
 				for (let singleFieldValue of field[1].substring(1, field[1].length - 1).split(',')) {
-					if (CommonUtil.isBlank(singleFieldValue)) {
-						continue;
-					}
 					initiatorArray[field[0]].push(singleFieldValue);
 				}
 			} else {
@@ -220,7 +222,9 @@
 							let initiatorSelector = $(nameSelector(initiator));
 							let showTest = false;
 							for (let value of initiators[initiator]) {
-								if ($(initiatorSelector).is("input:checkbox, input:radio")) {
+								if (CommonUtil.isBlank(value) && $(initiatorSelector).is("input:checkbox")) {
+									showTest = $(initiatorSelector).filter(":checked").length === 0;
+								} else if ($(initiatorSelector).is("input:checkbox, input:radio")) {
 									showTest = $(initiatorSelector).filter("[value='" + value+ "']:checked").length === 1;
 								} else if ($(initiatorSelector).is("select")) {
 									showTest = $(initiatorSelector).find("option[value='" + value + "']:selected").length === 1;

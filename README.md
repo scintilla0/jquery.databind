@@ -1,4 +1,4 @@
-# jquery.databind
+# jquery.databind.js
 A plugin for data binding and related auto-configuration.
 
 CDN URL:
@@ -10,6 +10,9 @@ CDN URL(min.js):
 ### [Demo](https://codepen.io/scintilla_0/full/XWxyoLM)
 
 ### Change log
+
+#### 1.6.16 (2023-12-07)
+*	[data-display] event cannot be triggered when assigned an empty value for checkbox elements fixed.
 
 #### 1.6.16 (2023-12-07)
 *	[data-check-field] event now can be chained-triggered.
