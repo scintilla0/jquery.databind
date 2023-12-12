@@ -11,7 +11,7 @@ CDN URL(min.js):
 
 ### Change log
 
-#### 1.6.16 (2023-12-07)
+#### 1.6.17 (2023-12-12)
 *	[data-display] event cannot be triggered when assigned an empty value for checkbox elements fixed.
 
 #### 1.6.16 (2023-12-07)
