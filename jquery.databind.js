@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.17 - 2023-12-12
+ * jquery.databind.js - version 1.6.18 - 2023-12-15
  * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -211,7 +211,7 @@
 				continue;
 			}
 			let bindDisplayControlEvent = (_, eventItem) => {
-				$(eventItem).on("change", () => {
+				$(document).on("change", eventItem, () => {
 					for (let impacted of displayControlInitiator[field[0]]) {
 						let initiators = displayControlImpacted[impacted];
 						let show = true;

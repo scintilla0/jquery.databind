@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.18 (2023-12-15)
+*	[data-display] now bind event on $(document) instead of the very elements.
+
 #### 1.6.17 (2023-12-12)
 *	[data-display] event cannot be triggered when assigned an empty value for checkbox elements fixed.
 
