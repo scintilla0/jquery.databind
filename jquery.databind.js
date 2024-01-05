@@ -1,6 +1,6 @@
 /*!
- * jquery.databind.js - version 1.6.18 - 2023-12-15
- * Copyright (c) 2023 scintilla0 (https://github.com/scintilla0)
+ * jquery.databind.js - version 1.6.19 - 2024-01-05
+ * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
  * @license GPL2 License http://www.gnu.org/licenses/gpl.html
@@ -15,6 +15,7 @@
  * 	according to the value of the specified DOM elements, e.g. [data-display="gender:1"].
  * Add the attribute [data-display-hide-callback="$functionName"] to invoke the specified function as a callback when the DOM element is hidden.
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
+ * Invoke $(selector).readonlyCheckable() to make checkbox or radio elements readonly if they are unmodifiable.
  * For a better visual effect, please add the CSS rule [.display-only, [data-display] { display: none; }] to your main stylesheet.
  */
 (function($) {
@@ -34,6 +35,7 @@
 	let nonIdIndex = 0;
 	let activeItem;
 	let displayControlFirstChange = true;
+	$.fn.extend({readonlyCheckable: readonlyCheckable});
 
 	$("[" + CORE.BIND + "]").each(prepareGroup);
 	$(document)
@@ -271,8 +273,7 @@
 			return;
 		}
 		if ($(item).is("input:checkbox, input:radio")) {
-			$(item).on("click", () => false);
-			$(item).parent("label, span, div").css("cursor", 'default').css("opacity", DEFAULT_CSS.NON_SELECTABLE_OPACITY);
+			readonlyCheckable(item);
 		} else {
 			let value = $(item).val();
 			let dataBindField = $(item).attr(CORE.BIND);
@@ -284,6 +285,11 @@
 			$(item).css("display", 'none');
 		}
 		$(item).addClass(CORE.DISPLAY_ONLY_DEPLOYED);
+	}
+
+	function readonlyCheckable(item = this) {
+		$(item).on("click", () => false);
+		$(item).parent("label, span, div").css("cursor", 'default').css("opacity", DEFAULT_CSS.NON_SELECTABLE_OPACITY);
 	}
 
 	function _CommonUtil() {

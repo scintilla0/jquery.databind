@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.19 (2024-01-05)
+*	Add $(selector).readonlyCheckable() to make checkbox or radio elements readonly if they are unmodifiable.
+
 #### 1.6.18 (2023-12-15)
 *	[data-display] now bind event on $(document) instead of the very elements.
 
