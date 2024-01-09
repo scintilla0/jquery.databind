@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.19 - 2024-01-05
+ * jquery.databind.js - version 1.6.20 - 2024-01-09
  * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -15,8 +15,10 @@
  * 	according to the value of the specified DOM elements, e.g. [data-display="gender:1"].
  * Add the attribute [data-display-hide-callback="$functionName"] to invoke the specified function as a callback when the DOM element is hidden.
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
- * Invoke $(selector).readonlyCheckable() to make checkbox or radio elements readonly if they are unmodifiable.
+ * Invoke $("$selector").readonlyCheckable() to make checkbox or radio elements readonly via js code if they are unmodifiable.
  * For a better visual effect, please add the CSS rule [.display-only, [data-display] { display: none; }] to your main stylesheet.
+ * Invoke $("$selector").boolean() to evaluate the boolean value of an element. Returns null if it is unparseable.
+ * A boolean test value can be passed in when evaluate whether the element reserves the target boolean value, e.g. $("$selector").boolean(false).
  */
 (function($) {
 	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: 'activeItem', BIND: "data-bind",
@@ -27,6 +29,10 @@
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
 	const DEFAULT_CSS = {NON_SELECTABLE_OPACITY: '0.5'};
 	const CommonUtil = _CommonUtil();
+	$.fn.extend({
+		readonlyCheckable: readonlyCheckable,
+		boolean: boolean
+	});
 
 	let dataBindContainer = {};
 	let dataBindFields = [];
@@ -35,7 +41,6 @@
 	let nonIdIndex = 0;
 	let activeItem;
 	let displayControlFirstChange = true;
-	$.fn.extend({readonlyCheckable: readonlyCheckable});
 
 	$("[" + CORE.BIND + "]").each(prepareGroup);
 	$(document)
@@ -273,7 +278,7 @@
 			return;
 		}
 		if ($(item).is("input:checkbox, input:radio")) {
-			readonlyCheckable(item);
+			$(item).readonlyCheckable();
 		} else {
 			let value = $(item).val();
 			let dataBindField = $(item).attr(CORE.BIND);
@@ -287,9 +292,30 @@
 		$(item).addClass(CORE.DISPLAY_ONLY_DEPLOYED);
 	}
 
-	function readonlyCheckable(item = this) {
-		$(item).on("click", () => false);
-		$(item).parent("label, span, div").css("cursor", 'default').css("opacity", DEFAULT_CSS.NON_SELECTABLE_OPACITY);
+	function readonlyCheckable() {
+		$(this).on("click", () => false);
+		$(this).parent("label, span, div").css("cursor", 'default').css("opacity", DEFAULT_CSS.NON_SELECTABLE_OPACITY);
+	}
+
+	function boolean(testValue) {
+		let value = null;
+		let valueString = $(this).val();
+		if (CommonUtil.exists(valueString)) {
+			valueString = valueString.toLocaleLowerCase();
+			if (valueString === "true") {
+				value = true;
+			} else if (valueString === "false") {
+				value = false;
+			}
+		}
+		if (CommonUtil.exists(testValue)) {
+			if (typeof testValue !== "boolean") {
+				throw 'Invalid type of argument. Expected: boolean. Received: ' + typeof testValue + '.';
+			}
+			return testValue === value;
+		} else {
+			return value;
+		}
 	}
 
 	function _CommonUtil() {

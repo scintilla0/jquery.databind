@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.20 (2024-01-09)
+*	Add $(selector).boolean() to evaluate the boolean value of an element.
+
 #### 1.6.19 (2024-01-05)
 *	Add $(selector).readonlyCheckable() to make checkbox or radio elements readonly if they are unmodifiable.
 
