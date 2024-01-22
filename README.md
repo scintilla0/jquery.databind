@@ -11,6 +11,10 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.21 (2024-01-22)
+*	Add $(selector).isEmpty() and $.isEmpty() to evaluate whether parameter or the value of the target dom is undefined, null or blank.
+*	Prevent elements being re-enabled if they are not disabled by [data-display] event.
+
 #### 1.6.20 (2024-01-09)
 *	Add $(selector).boolean() to evaluate the boolean value of an element.
 

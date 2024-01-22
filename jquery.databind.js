@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.20 - 2024-01-09
+ * jquery.databind.js - version 1.6.21 - 2024-01-22
  * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -19,20 +19,26 @@
  * For a better visual effect, please add the CSS rule [.display-only, [data-display] { display: none; }] to your main stylesheet.
  * Invoke $("$selector").boolean() to evaluate the boolean value of an element. Returns null if it is unparseable.
  * A boolean test value can be passed in when evaluate whether the element reserves the target boolean value, e.g. $("$selector").boolean(false).
+ * Invoke $.isBlank() or $("$selector").isBlank() to evaluate whether parameter or the value of the target dom is undefined, null or blank.
  */
 (function($) {
 	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: 'activeItem', BIND: "data-bind",
 			OPTION_TEXT: "data-bind-option-text", CHECK_FIELD: "data-check-field",
 			DISPLAY: "data-display", DISPLAY_HIDE_CALLBACK: "data-display-hide-callback",
 			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
-			TEMPLATE_ID_SELECTOR: "[id*='emplate']", CALLBACK_FUNCTION_NAME: '_callback_function_name'};
+			MAINTAIN_DISABLED: "maintain-disabled", TEMPLATE_ID_SELECTOR: "[id*='emplate']",
+			CALLBACK_FUNCTION_NAME: '_callback_function_name'};
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
 	const DEFAULT_CSS = {NON_SELECTABLE_OPACITY: '0.5'};
 	const CommonUtil = _CommonUtil();
 	$.fn.extend({
 		readonlyCheckable: readonlyCheckable,
-		boolean: boolean
+		boolean: boolean,
+		isBlank: isBlank
 	});
+	$.extend({
+		isBlank: CommonUtil.isBlank
+	})
 
 	let dataBindContainer = {};
 	let dataBindFields = [];
@@ -51,6 +57,7 @@
 	$("input:text[" + CORE.BIND + "], textarea[" + CORE.BIND + "], select[" + CORE.BIND + "], input:radio[" + CORE.BIND + "]:checked")
 			.each((_, item) => bindAction({target: $(item)[0]}));
 	$("input:checkbox[" + CORE.CHECK_FIELD + "]").each(prepareCheckReverseLinkage);
+	$("input[disabled], textarea[disabled], select[disabled]").addClass(CORE.MAINTAIN_DISABLED);
 	CommonUtil.initAndDeployListener("input." + CORE.DISPLAY_ONLY + ", select." + CORE.DISPLAY_ONLY + ", textarea." + CORE.DISPLAY_ONLY, prepareDisplayOnlyContent);
 	CommonUtil.initAndDeployListener("[" + CORE.DISPLAY + "]", prepareDisplayControlEvent);
 	for (let initiator in displayControlInitiator) {
@@ -250,12 +257,13 @@
 							}
 						}
 						let targetSelector = $("[id='" + impacted + "']");
+						let impactedElements = $(targetSelector).find("input, textarea, select");
 						if (show === true) {
 							$(targetSelector).show();
-							$(targetSelector).find("input, textarea, select").prop("disabled", false);
+							$(impactedElements).find(":not(." + CORE.MAINTAIN_DISABLED + ")").prop("disabled", false);
 						} else {
 							$(targetSelector).hide();
-							$(targetSelector).find("input, textarea, select").prop("disabled", true);
+							$(impactedElements).find("." + CORE.MAINTAIN_DISABLED).prop("disabled", true);
 							if (displayControlFirstChange === false && CommonUtil.exists(initiators[CORE.CALLBACK_FUNCTION_NAME])) {
 								eval(initiators[CORE.CALLBACK_FUNCTION_NAME] + '(\"[id=\'' + impacted + '\']\")');
 							}
@@ -316,6 +324,17 @@
 		} else {
 			return value;
 		}
+	}
+
+	function isBlank() {
+		let isBlank = true;
+		$(this).each((_, item) => {
+			if (($(item).is("input:radio, input:checkbox") && $(item).is(":checked")) ||
+				(!$(item).is("input:radio, input:checkbox") && !CommonUtil.isBlank($(item).val()))) {
+				return isBlank = false;
+			}
+		});
+		return isBlank;
 	}
 
 	function _CommonUtil() {
