@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.22 (2024-01-27)
+*	Changing status triggers every single [data-display] event fixed.
+
 #### 1.6.21 (2024-01-22)
 *	Add $(selector).isEmpty() and $.isEmpty() to evaluate whether parameter or the value of the target dom is undefined, null or blank.
 *	Prevent elements being re-enabled if they are not disabled by [data-display] event.

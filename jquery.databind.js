@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.21 - 2024-01-22
+ * jquery.databind.js - version 1.6.22 - 2024-01-27
  * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -225,7 +225,7 @@
 				continue;
 			}
 			let bindDisplayControlEvent = (_, eventItem) => {
-				$(document).on("change", eventItem, () => {
+				$(document).on("change", "#" + $(eventItem).attr("id"), () => {
 					for (let impacted of displayControlInitiator[field[0]]) {
 						let initiators = displayControlImpacted[impacted];
 						let show = true;
@@ -271,6 +271,11 @@
 					}
 				});
 			};
+			$(nameSelector(field[0])).each((_, initiatorItem) => {
+				if (CommonUtil.isBlank($(initiatorItem).attr("id"))) {
+					$(initiatorItem).attr("id", CORE.DEFAULT_ID + nonIdIndex ++);
+				}
+			});
 			CommonUtil.initAndDeployListener($(nameSelector(field[0])), bindDisplayControlEvent);
 		}
 	}
