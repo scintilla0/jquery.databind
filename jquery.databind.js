@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.22 - 2024-01-27
+ * jquery.databind.js - version 1.6.23 - 2024-01-27
  * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -62,7 +62,7 @@
 	CommonUtil.initAndDeployListener("[" + CORE.DISPLAY + "]", prepareDisplayControlEvent);
 	for (let initiator in displayControlInitiator) {
 		let selectorString = nameSelector(initiator);
-		$(selectorString).filter(":not(:checkbox):not(:radio), :checkbox:checked, :radio:checked").change();
+		$(selectorString).filter(":not(:checkbox):not(:radio), input:checkbox:checked, input:radio:checked").change();
 		let processedName = [];
 		$(selectorString).filter("input:checkbox:not(:checked)").each((_, item) => {
 			let name = $(item).attr("name");

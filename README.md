@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.23 (2024-01-27)
+*	Minor optimization.
+
 #### 1.6.22 (2024-01-27)
 *	Changing status triggers every single [data-display] event fixed.
 
