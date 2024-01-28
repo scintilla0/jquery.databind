@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.23 - 2024-01-27
+ * jquery.databind.js - version 1.6.24 - 2024-01-28
  * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -38,7 +38,7 @@
 	});
 	$.extend({
 		isBlank: CommonUtil.isBlank
-	})
+	});
 
 	let dataBindContainer = {};
 	let dataBindFields = [];
@@ -54,27 +54,17 @@
 		.on("change", "select[" + CORE.BIND + "]", bindAction)
 		.on("click", "input:radio[" + CORE.BIND + "]", bindAction)
 		.on("click", "input[" + CORE.CHECK_FIELD + "], button[" + CORE.CHECK_FIELD + "]", checkAction);
-	$("input:text[" + CORE.BIND + "], textarea[" + CORE.BIND + "], select[" + CORE.BIND + "], input:radio[" + CORE.BIND + "]:checked")
-			.each((_, item) => bindAction({target: $(item)[0]}));
-	$("input:checkbox[" + CORE.CHECK_FIELD + "]").each(prepareCheckReverseLinkage);
-	$("input[disabled], textarea[disabled], select[disabled]").addClass(CORE.MAINTAIN_DISABLED);
-	CommonUtil.initAndDeployListener("input." + CORE.DISPLAY_ONLY + ", select." + CORE.DISPLAY_ONLY + ", textarea." + CORE.DISPLAY_ONLY, prepareDisplayOnlyContent);
-	CommonUtil.initAndDeployListener("[" + CORE.DISPLAY + "]", prepareDisplayControlEvent);
-	for (let initiator in displayControlInitiator) {
-		let selectorString = nameSelector(initiator);
-		$(selectorString).filter(":not(:checkbox):not(:radio), input:checkbox:checked, input:radio:checked").change();
-		let processedName = [];
-		$(selectorString).filter("input:checkbox:not(:checked)").each((_, item) => {
-			let name = $(item).attr("name");
-			if (!processedName.includes(name) && $("input:checkbox[name='" + name + "']:checked").length === 0) {
-				$(item).change();
-				processedName.push(name);
-			}
-		});
-	}
-	setTimeout(() => displayControlFirstChange = false);
+	$("input:text, textarea, select, input:radio:checked").filter("[" + CORE.BIND + "]").each(bindAction);
+	$("input:checkbox").filter("[" + CORE.CHECK_FIELD + "]").each(prepareCheckReverseLinkage);
+	$("input, textarea, select").filter("[disabled]").addClass(CORE.MAINTAIN_DISABLED);
+	CommonUtil.initAndDeployListener($("input, select, textarea").filter("." + CORE.DISPLAY_ONLY), prepareDisplayOnlyContent);
+	CommonUtil.initAndDeployListener($("[" + CORE.DISPLAY + "]"), prepareDisplayControlEvent);
+	triggerDisplayControlEventAtReady();
 
-	function bindAction({target: dom}) {
+	function bindAction({target: dom}, item) {
+		if (!CommonUtil.exists(dom) && CommonUtil.exists(item)) {
+			dom = $(item)[0];
+		}
 		activeItem = dom.id;
 		let fieldName = $(dom).attr(CORE.BIND);
 		if (!CommonUtil.exists(dataBindContainer[fieldName])) {
@@ -280,6 +270,22 @@
 		}
 	}
 
+	function triggerDisplayControlEventAtReady() {
+		for (let initiator in displayControlInitiator) {
+			let selectorString = nameSelector(initiator);
+			$(selectorString).filter(":not(:checkbox):not(:radio), input:checkbox:checked, input:radio:checked").change();
+			let processedName = [];
+			$(selectorString).filter("input:checkbox:not(:checked)").each((_, item) => {
+				let name = $(item).attr("name");
+				if (!processedName.includes(name) && $("input:checkbox[name='" + name + "']:checked").length === 0) {
+					$(item).change();
+					processedName.push(name);
+				}
+			});
+		}
+		setTimeout(() => displayControlFirstChange = false);
+	}
+
 	function nameSelector(name) {
 		return "[name='" + name + "']";
 	}
@@ -410,7 +416,6 @@
 			exists: exists,
 			isBlank: isBlank,
 			wrapQuotes: wrapQuotes,
-			deployNodeAppendListener: deployNodeAppendListener,
 			initAndDeployListener: initAndDeployListener,
 			setValue: setValue
 		};
