@@ -11,6 +11,10 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.25 (2024-01-30)
+*	[data-display] event cannot listen to the newly added elements due to a wrong modification fixed.
+*	[data-display] event cannot be triggered when target dom's id contains "." or other special characters that can be used for jquery selectors fixed.
+
 #### 1.6.24 (2024-01-28)
 *	Minor optimization.
 

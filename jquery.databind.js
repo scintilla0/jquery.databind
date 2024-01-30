@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.24 - 2024-01-28
+ * jquery.databind.js - version 1.6.25 - 2024-01-30
  * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -57,8 +57,8 @@
 	$("input:text, textarea, select, input:radio:checked").filter("[" + CORE.BIND + "]").each(bindAction);
 	$("input:checkbox").filter("[" + CORE.CHECK_FIELD + "]").each(prepareCheckReverseLinkage);
 	$("input, textarea, select").filter("[disabled]").addClass(CORE.MAINTAIN_DISABLED);
-	CommonUtil.initAndDeployListener($("input, select, textarea").filter("." + CORE.DISPLAY_ONLY), prepareDisplayOnlyContent);
-	CommonUtil.initAndDeployListener($("[" + CORE.DISPLAY + "]"), prepareDisplayControlEvent);
+	CommonUtil.initAndDeployListener("input." + CORE.DISPLAY_ONLY + ", select." + CORE.DISPLAY_ONLY + ", textarea." + CORE.DISPLAY_ONLY, prepareDisplayOnlyContent);
+	CommonUtil.initAndDeployListener("[" + CORE.DISPLAY + "]", prepareDisplayControlEvent);
 	triggerDisplayControlEventAtReady();
 
 	function bindAction({target: dom}, item) {
@@ -215,7 +215,7 @@
 				continue;
 			}
 			let bindDisplayControlEvent = (_, eventItem) => {
-				$(document).on("change", "#" + $(eventItem).attr("id"), () => {
+				$(document).on("change", "[id='" + $(eventItem).attr("id") + "']", () => {
 					for (let impacted of displayControlInitiator[field[0]]) {
 						let initiators = displayControlImpacted[impacted];
 						let show = true;
