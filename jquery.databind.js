@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.25 - 2024-01-30
+ * jquery.databind.js - version 1.6.26 - 2024-02-01
  * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -20,6 +20,8 @@
  * Invoke $("$selector").boolean() to evaluate the boolean value of an element. Returns null if it is unparseable.
  * A boolean test value can be passed in when evaluate whether the element reserves the target boolean value, e.g. $("$selector").boolean(false).
  * Invoke $.isBlank() or $("$selector").isBlank() to evaluate whether parameter or the value of the target dom is undefined, null or blank.
+ * Invoke $("$selector").modify($function) or $("$selector").modify($prependString, $appendString) to quickly modify the value or text of the target element.
+ * Invoke $("$selector").increase() or $("$selector").increase($increaseValue) to quickly modify the numeric value or text of the target element.
  */
 (function($) {
 	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: 'activeItem', BIND: "data-bind",
@@ -34,7 +36,9 @@
 	$.fn.extend({
 		readonlyCheckable: readonlyCheckable,
 		boolean: boolean,
-		isBlank: isBlank
+		isBlank: isBlank,
+		increase: increase,
+		modify: modify
 	});
 	$.extend({
 		isBlank: CommonUtil.isBlank
@@ -317,6 +321,9 @@
 	}
 
 	function boolean(testValue) {
+		if ($(this).length > 1) {
+			throw 'Multiple elements selected is not permitted.';
+		}
 		let value = null;
 		let valueString = $(this).val();
 		if (CommonUtil.exists(valueString)) {
@@ -346,6 +353,50 @@
 			}
 		});
 		return isBlank;
+	}
+
+	function modify(operation, appendString) {
+		if (CommonUtil.exists(operation) && typeof operation === "function" && !CommonUtil.exists(appendString)) {
+			modifyCore(operation, this, false);
+		} else if (CommonUtil.exists(operation) && CommonUtil.exists(appendString)
+				&& (typeof operation === "string" || typeof operation === "number")
+				&& (typeof appendString === "string" || typeof appendString === "number")) {
+			modifyCore([operation, appendString], this, false);
+		} else {
+			throw 'Invalid type of argument. Expected: function; string/number, string/number. Received: ' +
+					typeof operation + (CommonUtil.exists(appendString) ? (', ' + typeof appendString) : '') +'.';
+		}
+	}
+
+	function increase(increaseValue = 1) {
+		if (!isNaN(increaseValue) && typeof increaseValue !== "boolean") {
+			modifyCore(value => Number(value) + Number(increaseValue), this, true);
+		} else {
+			throw 'Invalid numeric increase value. Expected: number/string. Received: ' +
+					typeof increaseValue + (typeof increaseValue === "string" ? '(NaN)' : '') + '.';
+		}
+	}
+
+	function modifyCore(operation, target, isIncreasing) {
+		if (Array.isArray(operation)) {
+			let appendString = operation;
+			operation = value => appendString[0] + value + appendString[1];
+		}
+		$(target).each((_, item) => {
+			let domChanger;
+			if ($(item).is("input:text, input:hidden, textarea")) {
+				domChanger = $.fn.val;
+			} else if ($(item).is("span, label")) {
+				domChanger = $.fn.text;
+			} else {
+				throw 'Unmodifiable element type. Target: ' + $(item).attr("id") + '. Type: ' +
+						$(item).prop("tagName").toLocaleLowerCase() + ($(item).prop("tagName") === "INPUT" ? ':' + $(item).prop("type") : '') + '.';
+			}
+			let originalValue = domChanger.apply($(item));
+			if (isIncreasing === false || !isNaN(originalValue)) {
+				domChanger.apply($(item), [operation.apply(null, [originalValue])]);
+			}
+		});
 	}
 
 	function _CommonUtil() {
