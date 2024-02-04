@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.26 - 2024-02-01
+ * jquery.databind.js - version 1.6.27 - 2024-02-04
  * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * Contributors: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -7,7 +7,7 @@
  *
  * A plugin for data binding and related auto-configuration.
  * Requires jQuery.
- * Add the attribute [data-bind="$fieldName"] to enable automatic configuration, e.g. [data-bind="userName"]．
+ * Add the attribute [data-bind="$fieldName"] to enable automatic configuration, e.g. [data-bind="userName"].
  * Add the attribute [data-bind-option-text] to bind the option text of the other source in group instead of its exact value to this DOM element.
  * Add the attribute [data-check-field="$name"] to a button or a checkbox to control the check status of a set of checkboxes, e.g. [data-check-field="retired"].
  * Support [*], [^] and [$] characters for a more flexible way to specify the name of the target checkboxes, e.g. [data-check-field=".retired$"].
@@ -251,13 +251,13 @@
 							}
 						}
 						let targetSelector = $("[id='" + impacted + "']");
-						let impactedElements = $(targetSelector).find("input, textarea, select");
+						let impactedElements = $(targetSelector).find("input, textarea, select").filter(":not(." + CORE.MAINTAIN_DISABLED + ")");
 						if (show === true) {
 							$(targetSelector).show();
-							$(impactedElements).find(":not(." + CORE.MAINTAIN_DISABLED + ")").prop("disabled", false);
+							$(impactedElements).prop("disabled", false);
 						} else {
 							$(targetSelector).hide();
-							$(impactedElements).find("." + CORE.MAINTAIN_DISABLED).prop("disabled", true);
+							$(impactedElements).prop("disabled", true);
 							if (displayControlFirstChange === false && CommonUtil.exists(initiators[CORE.CALLBACK_FUNCTION_NAME])) {
 								eval(initiators[CORE.CALLBACK_FUNCTION_NAME] + '(\"[id=\'' + impacted + '\']\")');
 							}

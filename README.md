@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.6.27 (2024-02-07)
+*	Malfunction of property [disabled] of the elements impacted by [data-display] event fixed.
+
 #### 1.6.26 (2024-02-01)
 *	Add $(selector).modify() and $(selector).increase() to quickly modify the value or text of the target element.
 *	$(selector).boolean() now permits only one element selected.
