@@ -11,7 +11,7 @@ CDN URL(min.js):
 
 ### Change log
 
-#### 1.6.27 (2024-02-07)
+#### 1.6.27 (2024-02-04)
 *	Malfunction of property [disabled] of the elements impacted by [data-display] event fixed.
 
 #### 1.6.26 (2024-02-01)
