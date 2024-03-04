@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.27 - 2024-02-04
+ * jquery.databind.js - version 1.6.28 - 2024-03-04
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
