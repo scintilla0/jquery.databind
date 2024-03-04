@@ -1,10 +1,11 @@
 /*!
  * jquery.databind.js - version 1.6.27 - 2024-02-04
- * Copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
- * Contributors: Squibler
+ * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
+ * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
  * @license GPL2 License http://www.gnu.org/licenses/gpl.html
- *
+ */
+/**
  * A plugin for data binding and related auto-configuration.
  * Requires jQuery.
  * Add the attribute [data-bind="$fieldName"] to enable automatic configuration, e.g. [data-bind="userName"].
@@ -54,10 +55,10 @@
 
 	$("[" + CORE.BIND + "]").each(prepareGroup);
 	$(document)
-		.on("keyup change", "input:text[" + CORE.BIND + "], textarea[" + CORE.BIND + "]", bindAction)
-		.on("change", "select[" + CORE.BIND + "]", bindAction)
-		.on("click", "input:radio[" + CORE.BIND + "]", bindAction)
-		.on("click", "input[" + CORE.CHECK_FIELD + "], button[" + CORE.CHECK_FIELD + "]", checkAction);
+			.on("keyup change", "input:text[" + CORE.BIND + "], textarea[" + CORE.BIND + "]", bindAction)
+			.on("change", "select[" + CORE.BIND + "]", bindAction)
+			.on("click", "input:radio[" + CORE.BIND + "]", bindAction)
+			.on("click", "input[" + CORE.CHECK_FIELD + "], button[" + CORE.CHECK_FIELD + "]", checkAction);
 	$("input:text, textarea, select, input:radio:checked").filter("[" + CORE.BIND + "]").each(bindAction);
 	$("input:checkbox").filter("[" + CORE.CHECK_FIELD + "]").each(prepareCheckReverseLinkage);
 	$("input, textarea, select").filter("[disabled]").addClass(CORE.MAINTAIN_DISABLED);
@@ -309,7 +310,7 @@
 			if ($(item).is("select")) {
 				value = $(item).find("option[value='" + value + "']").html();
 			}
-			$(item).after('<span' + dataBindProperty + '>' + value + '</span>');
+			$(item).after('<span' + dataBindProperty + ' style="white-space: pre-wrap">' + value + '</span>');
 			$(item).css("display", 'none');
 		}
 		$(item).addClass(CORE.DISPLAY_ONLY_DEPLOYED);
