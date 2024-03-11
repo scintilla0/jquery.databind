@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.28 - 2024-03-04
+ * jquery.databind.js - version 1.6.29 - 2024-03-11
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -310,7 +310,9 @@
 			if ($(item).is("select")) {
 				value = $(item).find("option[value='" + value + "']").html();
 			}
-			$(item).after('<span' + dataBindProperty + ' style="white-space: pre-wrap">' + value + '</span>');
+			let span = $('<span' + dataBindProperty + ' style="white-space: pre-wrap"></span>');
+			$(span).text(value);
+			$(item).after(span);
 			$(item).css("display", 'none');
 		}
 		$(item).addClass(CORE.DISPLAY_ONLY_DEPLOYED);
