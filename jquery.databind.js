@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.6.29 - 2024-03-11
+ * jquery.databind.js - version 1.7.0 - 2024-03-11
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -12,8 +12,8 @@
  * Add the attribute [data-bind-option-text] to bind the option text of the other source in group instead of its exact value to this DOM element.
  * Add the attribute [data-check-field="$name"] to a button or a checkbox to control the check status of a set of checkboxes, e.g. [data-check-field="retired"].
  * Support [*], [^] and [$] characters for a more flexible way to specify the name of the target checkboxes, e.g. [data-check-field=".retired$"].
- * Add the attribute [data-display="$name:$value"] to a DOM element to control its display status
- * 	according to the value of the specified DOM elements, e.g. [data-display="gender:1"].
+ * Add the attribute [data-display="$name:$value"] or [data-hide="$name:$value"] to a DOM element to control its display status
+ * 	according to the value of the specified DOM elements, e.g. [data-display="gender:1"]. Notice that display is executed in preference to hide.
  * Add the attribute [data-display-hide-callback="$functionName"] to invoke the specified function as a callback when the DOM element is hidden.
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
  * Invoke $("$selector").readonlyCheckable() to make checkbox or radio elements readonly via js code if they are unmodifiable.
@@ -27,7 +27,7 @@
 (function($) {
 	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: 'activeItem', BIND: "data-bind",
 			OPTION_TEXT: "data-bind-option-text", CHECK_FIELD: "data-check-field",
-			DISPLAY: "data-display", DISPLAY_HIDE_CALLBACK: "data-display-hide-callback",
+			DISPLAY: "data-display", HIDE: "data-hide", DISPLAY_HIDE_CALLBACK: "data-display-hide-callback",
 			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
 			MAINTAIN_DISABLED: "maintain-disabled", TEMPLATE_ID_SELECTOR: "[id*='emplate']",
 			CALLBACK_FUNCTION_NAME: '_callback_function_name'};
@@ -63,7 +63,7 @@
 	$("input:checkbox").filter("[" + CORE.CHECK_FIELD + "]").each(prepareCheckReverseLinkage);
 	$("input, textarea, select").filter("[disabled]").addClass(CORE.MAINTAIN_DISABLED);
 	CommonUtil.initAndDeployListener("input." + CORE.DISPLAY_ONLY + ", select." + CORE.DISPLAY_ONLY + ", textarea." + CORE.DISPLAY_ONLY, prepareDisplayOnlyContent);
-	CommonUtil.initAndDeployListener("[" + CORE.DISPLAY + "]", prepareDisplayControlEvent);
+	CommonUtil.initAndDeployListener("[" + CORE.DISPLAY + "], [" + CORE.HIDE + "]", prepareDisplayControlEvent);
 	triggerDisplayControlEventAtReady();
 
 	function bindAction({target: dom}, item) {
@@ -178,9 +178,14 @@
 	}
 
 	function prepareDisplayControlEvent(_, item) {
+		let isHide = false;
 		let dataBindField = $(item).attr(CORE.DISPLAY);
 		if (!CommonUtil.exists(dataBindField)) {
-			return;
+			dataBindField = $(item).attr(CORE.HIDE);
+			if (!CommonUtil.exists(dataBindField)) {
+				return;
+			}
+			isHide = true;
 		}
 		let itemId = $(item).attr("id");
 		if (CommonUtil.isBlank(itemId)) {
@@ -207,16 +212,16 @@
 			}
 			impactArray.push(itemId);
 			if (!CommonUtil.exists(initiatorArray[field[0]])) {
-				initiatorArray[field[0]] = [];
+				initiatorArray[field[0]] = {isHide: isHide, value: []};
 			}
 			if (field[1].startsWith('[') && field[1].endsWith(']')) {
 				for (let singleFieldValue of field[1].substring(1, field[1].length - 1).split(',')) {
-					initiatorArray[field[0]].push(singleFieldValue);
+					initiatorArray[field[0]].value.push(singleFieldValue);
 				}
 			} else {
-				initiatorArray[field[0]].push(field[1]);
+				initiatorArray[field[0]].value.push(field[1]);
 			}
-			if (hasBound === true || initiatorArray[field[0]].length === 0) {
+			if (hasBound === true || initiatorArray[field[0]].value.length === 0) {
 				continue;
 			}
 			let bindDisplayControlEvent = (_, eventItem) => {
@@ -230,7 +235,7 @@
 							}
 							let initiatorSelector = $(nameSelector(initiator));
 							let showTest = false;
-							for (let value of initiators[initiator]) {
+							for (let value of initiators[initiator].value) {
 								if (CommonUtil.isBlank(value) && $(initiatorSelector).is("input:checkbox")) {
 									showTest = $(initiatorSelector).filter(":checked").length === 0;
 								} else if ($(initiatorSelector).is("input:checkbox, input:radio")) {
@@ -241,6 +246,9 @@
 									showTest = $(initiatorSelector).val() === value;
 								} else if ($(initiatorSelector).is("label, span")) {
 									showTest = $(initiatorSelector).text() === value;
+								}
+								if (initiators[initiator].isHide === true) {
+									showTest = !showTest;
 								}
 								if (showTest === true) {
 									break;
