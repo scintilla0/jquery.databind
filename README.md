@@ -7,7 +7,7 @@ CDN URL:
 CDN URL(min.js):
 `https://cdn.jsdelivr.net/gh/scintilla0/jquery.databind@latest/jquery.databind.min.js`
 
-### [Demo](https://codepen.io/scintilla_0/full/XWxyoLM)
+### [Demo](https://scintilla0.github.io/jquery.databind/)
 
 ### Change log
 
