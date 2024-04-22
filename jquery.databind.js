@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.7.0 - 2024-03-11
+ * jquery.databind.js - version 1.7.1 - 2024-04-22
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -236,7 +236,7 @@
 							let initiatorSelector = $(nameSelector(initiator));
 							let showTest = false;
 							for (let value of initiators[initiator].value) {
-								if (CommonUtil.isBlank(value) && $(initiatorSelector).is("input:checkbox")) {
+								if (CommonUtil.isBlank(value) && $(initiatorSelector).is("input:checkbox, input:radio")) {
 									showTest = $(initiatorSelector).filter(":checked").length === 0;
 								} else if ($(initiatorSelector).is("input:checkbox, input:radio")) {
 									showTest = $(initiatorSelector).filter("[value='" + value+ "']:checked").length === 1;
@@ -286,11 +286,11 @@
 	function triggerDisplayControlEventAtReady() {
 		for (let initiator in displayControlInitiator) {
 			let selectorString = nameSelector(initiator);
-			$(selectorString).filter(":not(:checkbox):not(:radio), input:checkbox:checked, input:radio:checked").change();
+			$(selectorString).filter(":not(:checkbox):not(:radio)").change();
 			let processedName = [];
-			$(selectorString).filter("input:checkbox:not(:checked)").each((_, item) => {
+			$(selectorString).filter("input:checkbox, input:radio").each((_, item) => {
 				let name = $(item).attr("name");
-				if (!processedName.includes(name) && $("input:checkbox[name='" + name + "']:checked").length === 0) {
+				if (!processedName.includes(name)) {
 					$(item).change();
 					processedName.push(name);
 				}

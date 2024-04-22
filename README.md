@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.7.1 (2024-04-22)
+*	[data-display] event on checkbox and radio elements not triggered when no item selected fixed.
+
 #### 1.7.0 (2024-03-11)
 *	Add event [data-hide] to do the opposite of [data-display].
 
