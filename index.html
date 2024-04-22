@@ -192,21 +192,22 @@
 
 				<div class="content">
 					<p class="brief">
-						Add the attribute <span class="expression">[data-bind-option-text]</span> to bind the option text of the other source in group instead of its exact value to this DOM element.
+						Add the attribute <span class="expression">[data-bind-option-text]</span> to bind the option text of the other source in group instead of its exact value to this DOM element.<br>
+                        　You can also use a specified element property as binding text using <span class="expression">[data-bind-option-text="<span class="varName">[$propertyName]</span>"]</span>.
 					</p>
 					<div class="item select">
 						<select data-bind="field2">
 							<option value=""></option>
-							<option value="1">label 1</option>
-							<option value="2">label 2</option>
-							<option value="3">label 3</option>
+							<option value="1" data-display-content="display content 1">label 1</option>
+							<option value="2" data-display-content="display content 2">label 2</option>
+							<option value="3" data-display-content="display content 3">label 3</option>
 						</select>
 						<pre class="code">
 							<code class="language-html">&lt;select data-bind="field2"&gt;
 	&lt;option value=""&gt;&lt;/option&gt;
-	&lt;option value="1"&gt;label 1&lt;/option&gt;
-	&lt;option value="2"&gt;label 2&lt;/option&gt;
-	&lt;option value="3"&gt;label 3&lt;/option&gt;
+	&lt;option value="1" data-display-content="display content 1"&gt;label 1&lt;/option&gt;
+	&lt;option value="2" data-display-content="display content 2"&gt;label 2&lt;/option&gt;
+	&lt;option value="3" data-display-content="display content 3"&gt;label 3&lt;/option&gt;
 &lt;/select&gt;</code>
 						</pre>
 					</div>
@@ -220,6 +221,12 @@
 						<input type="text" data-bind="field2" data-bind-option-text>
 						<pre class="code">
 							<code class="language-html">&lt;input type="text" data-bind="field2" data-bind-option-text&gt;</code>
+						</pre>
+					</div>
+					<div class="item">
+						<input type="text" data-bind="field2" data-bind-option-text="data-display-content">
+						<pre class="code">
+							<code class="language-html">&lt;input type="text" data-bind="field2" data-bind-option-text="data-display-content"&gt;</code>
 						</pre>
 					</div>
 				</div>

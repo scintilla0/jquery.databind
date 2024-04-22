@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.7.1 - 2024-04-22
+ * jquery.databind.js - version 1.7.2 - 2024-04-22
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -10,6 +10,7 @@
  * Requires jQuery.
  * Add the attribute [data-bind="$fieldName"] to enable automatic configuration, e.g. [data-bind="userName"].
  * Add the attribute [data-bind-option-text] to bind the option text of the other source in group instead of its exact value to this DOM element.
+ * You can also use a specified element property as binding text using [data-bind-option-text="$propertyName"].
  * Add the attribute [data-check-field="$name"] to a button or a checkbox to control the check status of a set of checkboxes, e.g. [data-check-field="retired"].
  * Support [*], [^] and [$] characters for a more flexible way to specify the name of the target checkboxes, e.g. [data-check-field=".retired$"].
  * Add the attribute [data-display="$name:$value"] or [data-hide="$name:$value"] to a DOM element to control its display status
@@ -99,12 +100,15 @@
 				let activeItemDom = $("[id='" + CommonUtil.wrapQuotes(activeItem) + "']");
 				let fontColor = $(activeItemDom).css("color");
 				// maxlength highlight minus adapt end
-				if (CommonUtil.exists($(activeItemDom).attr(CORE.OPTION_TEXT))) {
-					let reverseOption = $(dataBindDoms).filter("select").find("option:contains('" + value + "')")
-							.filter((_, item) => $(item).text() === value);
+				let activeOptionTextName = $(activeItemDom).attr(CORE.OPTION_TEXT);
+				if (CommonUtil.exists(activeOptionTextName)) {
+					let activeOptionTextGetter = getOptionTextGetter(activeOptionTextName);
+					let reverseOption = $(dataBindDoms).filter("select").find("option")
+						.filter((_, item) => activeOptionTextGetter.apply(null, [$(item)]) === value);
 					value = $(reverseOption).length === 1 ? $(reverseOption).val() : '';
 				}
 				$(dataBindDoms).each((_, item) => {
+					let setValue = value;
 					let notCurrentDom = activeItem !== $(item).attr("id");
 					if (notCurrentDom) {
 						// select2Used adapt
@@ -112,24 +116,27 @@
 							let option = $(item).find("option[value='" + value + "']");
 							if ($(option).length === 0) {
 								value = '';
+								setValue = value;
 								option = $(item).find("option[value='" + value + "']");
 							}
 							let optionText = $(option).text();
-							$(item).next().find("span.select2-selection__rendered").html(optionText).attr("title", optionText);
+							$(item).next().find("span.select2-selection__rendered").text(optionText).attr("title", optionText);
 						}
 						// select2Used adapt end
-						if (CommonUtil.exists($(item).attr(CORE.OPTION_TEXT))) {
+						let optionTextName = $(item).attr(CORE.OPTION_TEXT);
+						if (CommonUtil.exists(optionTextName)) {
+							let optionTextGetter = getOptionTextGetter(optionTextName);
 							for (let index = 0; index < dataBindDoms.length; index ++) {
 								if (notCurrentDom) {
 									let sourceItem = $(dataBindDoms).eq(index);
 									if ($(sourceItem).is("select")) {
-										value = $(sourceItem).find("option[value='" + value + "']").html();
+										setValue = optionTextGetter.apply(null, [$(sourceItem).find("option[value='" + value + "']")]);
 										break;
 									}
 								}
 							}
 						}
-						CommonUtil.setValue(value, false, $(item));
+						CommonUtil.setValue(setValue, false, $(item));
 						$(item).blur();
 						// maxlength highlight minus adapt
 						if (CommonUtil.exists($(activeItemDom).attr(OUTSIDE_CONSTANTS.HIGHLIGHT_MINUS)) && CommonUtil.exists(fontColor)) {
@@ -140,6 +147,10 @@
 				});
 			}
 		});
+	}
+
+	function getOptionTextGetter(optionTextName) {
+		return CommonUtil.isBlank(optionTextName) ? selector => selector.text() : selector => selector.attr(optionTextName);
 	}
 
 	function checkAction({target: dom}) {
@@ -316,7 +327,7 @@
 			let dataBindField = $(item).attr(CORE.BIND);
 			let dataBindProperty = (CommonUtil.exists(dataBindField) ? ' ' + CORE.BIND + '="' + dataBindField + '"' : '');
 			if ($(item).is("select")) {
-				value = $(item).find("option[value='" + value + "']").html();
+				value = $(item).find("option[value='" + value + "']").text();
 			}
 			let span = $('<span' + dataBindProperty + ' style="white-space: pre-wrap"></span>');
 			$(span).text(value);
@@ -455,6 +466,7 @@
 		}
 
 		function setValue(value, doChange, ...selectors) {
+			value = exists(value) ? value : '';
 			for (let selector of selectors) {
 				$(selector).each((_, item) => {
 					if ($(item).is("input:radio, input:checkbox")) {
@@ -462,7 +474,7 @@
 						$(item).filter("[value='" + value.toString() + "']").prop("checked", true);
 					} else if ($(item).is("input:text, input:hidden, textarea, select")) {
 						$(item).val(value);
-					} else if ($(item).is("label, span")) {
+					} else if ($(item).is("label, span, p")) {
 						$(item).text(value);
 					} else if ($(item).is("a")) {
 						$(item).attr("href", value);

@@ -11,6 +11,11 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.7.2 (2024-04-22)
+*	[data-bind-option-text] now can be assigned to a specified element property.
+*	[data-bind] not working when multiple elements using [data-bind-option-text] fixed.
+*	Some elements not cleared when value is empty in [data-bind] event fixed.
+
 #### 1.7.1 (2024-04-22)
 *	[data-display] event on checkbox and radio elements not triggered when no item selected fixed.
 
