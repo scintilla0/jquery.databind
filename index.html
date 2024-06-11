@@ -56,6 +56,10 @@
 			width: 200px;
 			font-size: 18px;
 		}
+		div.item :is(input[type='text'].inline) {
+			width: 85px;
+			margin-left: 20px;
+		}
 		div.item textarea {
 			height: 80px;
 			width: 200px;
@@ -160,10 +164,14 @@
 						</pre>
 					</div>
 				</div>
+			</div>
+
+			<div class="subject">
+				<h3>[data-bind-checkbox-text]</h3>
 
 				<div class="content">
 					<p class="brief">
-						Checkbox elements are unable to initiate this event because of their multi-selectability.
+						Checkbox elements are unable to initiate this event because of their multi-selectability, unless with <span class="expression">[data-bind-checkbox-text="<span class="varName">[$value]</span>"]</span> property.
 					</p>
 					<div class="item checkbox3">
 						<span>
@@ -184,6 +192,21 @@
 &lt;input type="checkbox" name="field1-checkbox" value="3" data-bind="field1"&gt;</code>
 						</pre>
 					</div>
+
+					<div class="item checkbox3">
+						<span>
+							<input type="checkbox" id="field2-checkbox1" name="field2-checkbox" value="1" data-bind="field2" data-bind-checkbox-text="checked">
+							<label for="field2-checkbox1">1</label>
+						</span>
+						<br>
+						<input type="text" class="inline" data-bind="field2"><br>
+
+						<pre class="code">
+							<code class="language-html">&lt;input type="checkbox" name="field2-checkbox" value="1" data-bind="field2" data-bind-checkbox-text="checked"&gt;
+&lt;input type="text" data-bind="field2"&gt;</code>
+						</pre>
+					</div>
+
 				</div>
 			</div>
 
@@ -193,17 +216,17 @@
 				<div class="content">
 					<p class="brief">
 						Add the attribute <span class="expression">[data-bind-option-text]</span> to bind the option text of the other source in group instead of its exact value to this DOM element.<br>
-                        　You can also use a specified element property as binding text using <span class="expression">[data-bind-option-text="<span class="varName">[$propertyName]</span>"]</span>.
+						　You can also use a specified element property as binding text using <span class="expression">[data-bind-option-text="<span class="varName">[$propertyName]</span>"]</span>.
 					</p>
 					<div class="item select">
-						<select data-bind="field2">
+						<select data-bind="field3">
 							<option value=""></option>
 							<option value="1" data-display-content="display content 1">label 1</option>
 							<option value="2" data-display-content="display content 2">label 2</option>
 							<option value="3" data-display-content="display content 3">label 3</option>
 						</select>
 						<pre class="code">
-							<code class="language-html">&lt;select data-bind="field2"&gt;
+							<code class="language-html">&lt;select data-bind="field3"&gt;
 	&lt;option value=""&gt;&lt;/option&gt;
 	&lt;option value="1" data-display-content="display content 1"&gt;label 1&lt;/option&gt;
 	&lt;option value="2" data-display-content="display content 2"&gt;label 2&lt;/option&gt;
@@ -212,21 +235,21 @@
 						</pre>
 					</div>
 					<div class="item">
-						<input type="text" data-bind="field2">
+						<input type="text" data-bind="field3">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" data-bind="field2"&gt;</code>
+							<code class="language-html">&lt;input type="text" data-bind="field3"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
-						<input type="text" data-bind="field2" data-bind-option-text>
+						<input type="text" data-bind="field3" data-bind-option-text>
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" data-bind="field2" data-bind-option-text&gt;</code>
+							<code class="language-html">&lt;input type="text" data-bind="field3" data-bind-option-text&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
-						<input type="text" data-bind="field2" data-bind-option-text="data-display-content">
+						<input type="text" data-bind="field3" data-bind-option-text="data-display-content">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" data-bind="field2" data-bind-option-text="data-display-content"&gt;</code>
+							<code class="language-html">&lt;input type="text" data-bind="field3" data-bind-option-text="data-display-content"&gt;</code>
 						</pre>
 					</div>
 				</div>
@@ -241,44 +264,11 @@
 					</p>
 					<div class="item checkboxControl">
 						<span>
-							<input type="checkbox" id="field3-checkbox-control" data-check-field="field3">
-							<label for="field3-checkbox-control">control</label>
+							<input type="checkbox" id="field4-checkbox-control" data-check-field="field4">
+							<label for="field4-checkbox-control">control</label>
 						</span>
 						<pre class="code">
-							<code class="language-html">&lt;input type="checkbox" data-check-field="field3"&gt;</code>
-						</pre>
-					</div>
-					<div class="item checkbox3">
-						<span>
-							<input type="checkbox" id="field3-checkbox1" name="field3" value="1">
-							<label for="field3-checkbox1">1</label>
-						</span>
-						<span>
-							<input type="checkbox" id="field3-checkbox2" name="field3" value="2">
-							<label for="field3-checkbox2">2</label>
-						</span>
-						<span>
-							<input type="checkbox" id="field3-checkbox3" name="field3" value="3">
-							<label for="field3-checkbox3">3</label>
-						</span>
-						<pre class="code">
-							<code class="language-html">&lt;input type="checkbox" name="field3" value="1"&gt;
-&lt;input type="checkbox" name="field3" value="2"&gt;
-&lt;input type="checkbox" name="field3" value="3"&gt;</code>
-						</pre>
-					</div>
-				</div>
-
-				<div class="content">
-					<p class="brief">
-						Add the attribute <span class="expression">[checked]</span> to specify the check action when using a <span class="expression">button</span> as the controlling element.
-					</p>
-					<div class="item">
-						<input type="button" data-check-field="field4" checked value="check" style="margin: 10px;">
-						<button type="button" data-check-field="field4" style="margin: 10px;">uncheck</button>
-						<pre class="code" style="margin-left: 53px;">
-							<code class="language-html">&lt;input type="button" data-check-field="field4" checked value="check"&gt;
-&lt;button type="button" data-check-field="field4"&gt;uncheck&lt;/button&gt;</code>
+							<code class="language-html">&lt;input type="checkbox" data-check-field="field4"&gt;</code>
 						</pre>
 					</div>
 					<div class="item checkbox3">
@@ -304,15 +294,14 @@
 
 				<div class="content">
 					<p class="brief">
-						Support <span class="expression">[*]</span>, <span class="expression">[^]</span> and <span class="expression">[$]</span> characters for a more flexible way to specify the name of the target checkboxes.
+						Add the attribute <span class="expression">[checked]</span> to specify the check action when using a <span class="expression">button</span> as the controlling element.
 					</p>
-					<div class="item checkboxControl">
-						<span>
-							<input type="checkbox" id="field5-checkbox-control" data-check-field="5$">
-							<label for="field5-checkbox-control">control</label>
-						</span>
-						<pre class="code">
-							<code class="language-html">&lt;input type="checkbox" data-check-field="5$"&gt;</code>
+					<div class="item">
+						<input type="button" data-check-field="field5" checked value="check" style="margin: 10px;">
+						<button type="button" data-check-field="field5" style="margin: 10px;">uncheck</button>
+						<pre class="code" style="margin-left: 53px;">
+							<code class="language-html">&lt;input type="button" data-check-field="field5" checked value="check"&gt;
+&lt;button type="button" data-check-field="field5"&gt;uncheck&lt;/button&gt;</code>
 						</pre>
 					</div>
 					<div class="item checkbox3">
@@ -335,10 +324,44 @@
 						</pre>
 					</div>
 				</div>
+
+				<div class="content">
+					<p class="brief">
+						Support <span class="expression">[*]</span>, <span class="expression">[^]</span> and <span class="expression">[$]</span> characters for a more flexible way to specify the name of the target checkboxes.
+					</p>
+					<div class="item checkboxControl">
+						<span>
+							<input type="checkbox" id="field6-checkbox-control" data-check-field="5$">
+							<label for="field6-checkbox-control">control</label>
+						</span>
+						<pre class="code">
+							<code class="language-html">&lt;input type="checkbox" data-check-field="5$"&gt;</code>
+						</pre>
+					</div>
+					<div class="item checkbox3">
+						<span>
+							<input type="checkbox" id="field6-checkbox1" name="field6" value="1">
+							<label for="field6-checkbox1">1</label>
+						</span>
+						<span>
+							<input type="checkbox" id="field6-checkbox2" name="field6" value="2">
+							<label for="field6-checkbox2">2</label>
+						</span>
+						<span>
+							<input type="checkbox" id="field6-checkbox3" name="field6" value="3">
+							<label for="field6-checkbox3">3</label>
+						</span>
+						<pre class="code">
+							<code class="language-html">&lt;input type="checkbox" name="field6" value="1"&gt;
+&lt;input type="checkbox" name="field6" value="2"&gt;
+&lt;input type="checkbox" name="field6" value="3"&gt;</code>
+						</pre>
+					</div>
+				</div>
 			</div>
 
 			<div class="subject">
-				<h3>[data-display]</h3>
+				<h3>[data-display] / [data-hide]</h3>
 
 				<div class="content">
 					<p class="brief">
@@ -346,68 +369,11 @@
 						　This function does not support fuzzy match as the function <span class="expression">[data-check-field]</span>.
 					</p>
 					<div class="item">
-						<span data-display="field6:1">display content 1: abcd</span>
-						<span data-display="field6:2">display content 2: dcba</span>
+						<span data-display="field7:1">display content 1: abcd</span>
+						<span data-display="field7:2">display content 2: dcba</span>
 						<pre class="code" style="margin-left: 33px;">
-							<code class="language-html">&lt;span data-display="field6:1"&gt;display content 1: abcd&lt;/span&gt;
-&lt;span data-display="field6:2"&gt;display content 2: dcba&lt;/span&gt;</code>
-						</pre>
-					</div>
-					<div class="item radio2">
-						<span>
-							<input type="radio" id="field6-radio1" name="field6" value="1" checked>
-							<label for="field6-radio1">1</label>
-						</span>
-						<span>
-							<input type="radio" id="field6-radio2" name="field6" value="2">
-							<label for="field6-radio2">2</label>
-						</span>
-						<pre class="code">
-							<code class="language-html">&lt;input type="radio" name="field6" value="1" checked&gt;
-&lt;input type="radio" name="field6" value="2"&gt;</code>
-						</pre>
-					</div>
-				</div>
-
-				<div class="content">
-					<p class="brief">
-						Use the attribute <span class="expression">[data-hide="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span> to do the opposite.<br>
-						　Notice that if both exist, display is executed in preference to hide.
-					</p>
-					<div class="item">
-						<span data-hide="field25:1">hide content 1: abcd</span>
-						<span data-display="field25:1" data-hide="field25:1">hide content 2: dcba</span>
-						<pre class="code" style="margin-left: 53px;">
-							<code class="language-html">&lt;span data-hide="field25:1"&gt;hide content 1: abcd&lt;/span&gt;
-&lt;span data-display="field25:1 data-hide="field25:1"&gt;hide content 2: dcba&lt;/span&gt;</code>
-						</pre>
-					</div>
-					<div class="item radio2">
-						<span>
-							<input type="radio" id="field25-radio1" name="field25" value="1" checked>
-							<label for="field25-radio1">1</label>
-						</span>
-						<span>
-							<input type="radio" id="field25-radio2" name="field25" value="2">
-							<label for="field25-radio2">2</label>
-						</span>
-						<pre class="code">
-							<code class="language-html">&lt;input type="radio" name="field25" value="1" checked&gt;
-&lt;input type="radio" name="field25" value="2"&gt;</code>
-						</pre>
-					</div>
-				</div>
-
-				<div class="content">
-					<p class="brief">
-						This attribute supports multiple target values in the format of <span class="expression">[data-display="<span class="varName">[$name]</span>:[<span class="varName">[$value1]</span>,<span class="varName">[$value2]</span>]"]</span>.
-					</p>
-					<div class="item">
-						<span data-display="field7:[1,3]">display content 1,3: abcd</span>
-						<span data-display="field7:[2]">display content 2: dcba</span>
-						<pre class="code" style="margin-left: 33px;">
-							<code class="language-html">&lt;span data-display="field7:[1,3]"&gt;display content 1,3: abcd&lt;/span&gt;
-&lt;span data-display="field7:[2]"&gt;display content 2: dcba&lt;/span&gt;</code>
+							<code class="language-html">&lt;span data-display="field7:1"&gt;display content 1: abcd&lt;/span&gt;
+&lt;span data-display="field7:2"&gt;display content 2: dcba&lt;/span&gt;</code>
 						</pre>
 					</div>
 					<div class="item radio2">
@@ -419,28 +385,24 @@
 							<input type="radio" id="field7-radio2" name="field7" value="2">
 							<label for="field7-radio2">2</label>
 						</span>
-						<span>
-							<input type="radio" id="field7-radio3" name="field7" value="3">
-							<label for="field7-radio3">3</label>
-						</span>
 						<pre class="code">
 							<code class="language-html">&lt;input type="radio" name="field7" value="1" checked&gt;
-&lt;input type="radio" name="field7" value="2"&gt;
-&lt;input type="radio" name="field7" value="3"&gt;</code>
+&lt;input type="radio" name="field7" value="2"&gt;</code>
 						</pre>
 					</div>
 				</div>
 
 				<div class="content">
 					<p class="brief">
-						Add the attribute <span class="expression">[data-display-hide-callback="<span class="varName">[$functionName]</span>"]</span> to invoke the specified function as a callback when the DOM element is hidden.
+						Use the attribute <span class="expression">[data-hide="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span> to do the opposite.<br>
+						　Notice that if both exist, display is executed in preference to hide.
 					</p>
 					<div class="item">
-						<span data-display="field8:1" data-display-hide-callback="test1">display content 1: abcd</span>
-						<span data-display="field8:2">display content 2: dcba</span>
-						<pre class="code" style="margin-left: 33px;">
-							<code class="language-html">&lt;span data-display="field8:1" data-display-hide-callback="test1"&gt;display content 1: abcd&lt;/span&gt;
-&lt;span data-display="field8:2"&gt;display content 2: dcba&lt;/span&gt;</code>
+						<span data-hide="field8:1">hide content 1: abcd</span>
+						<span data-display="field8:1" data-hide="field8:1">hide content 2: dcba</span>
+						<pre class="code" style="margin-left: 53px;">
+							<code class="language-html">&lt;span data-hide="field8:1"&gt;hide content 1: abcd&lt;/span&gt;
+&lt;span data-display="field8:1 data-hide="field8:1"&gt;hide content 2: dcba&lt;/span&gt;</code>
 						</pre>
 					</div>
 					<div class="item radio2">
@@ -457,6 +419,71 @@
 &lt;input type="radio" name="field8" value="2"&gt;</code>
 						</pre>
 					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief">
+						This attribute supports multiple target values in the format of <span class="expression">[data-display="<span class="varName">[$name]</span>:[<span class="varName">[$value1]</span>,<span class="varName">[$value2]</span>]"]</span>.
+					</p>
+					<div class="item">
+						<span data-display="field9:[1,3]">display content 1,3: abcd</span>
+						<span data-display="field9:[2]">display content 2: dcba</span>
+						<pre class="code" style="margin-left: 33px;">
+							<code class="language-html">&lt;span data-display="field9:[1,3]"&gt;display content 1,3: abcd&lt;/span&gt;
+&lt;span data-display="field9:[2]"&gt;display content 2: dcba&lt;/span&gt;</code>
+						</pre>
+					</div>
+					<div class="item radio2">
+						<span>
+							<input type="radio" id="field9-radio1" name="field9" value="1" checked>
+							<label for="field9-radio1">1</label>
+						</span>
+						<span>
+							<input type="radio" id="field9-radio2" name="field9" value="2">
+							<label for="field9-radio2">2</label>
+						</span>
+						<span>
+							<input type="radio" id="field9-radio3" name="field9" value="3">
+							<label for="field9-radio3">3</label>
+						</span>
+						<pre class="code">
+							<code class="language-html">&lt;input type="radio" name="field9" value="1" checked&gt;
+&lt;input type="radio" name="field9" value="2"&gt;
+&lt;input type="radio" name="field9" value="3"&gt;</code>
+						</pre>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3>[data-display-hide-callback]</h3>
+
+				<div class="content">
+					<p class="brief">
+						Add the attribute <span class="expression">[data-display-hide-callback="<span class="varName">[$functionName]</span>"]</span> to invoke the specified function as a callback when the DOM element is hidden.
+					</p>
+					<div class="item">
+						<span data-display="field10:1" data-display-hide-callback="test1">display content 1: abcd</span>
+						<span data-display="field10:2">display content 2: dcba</span>
+						<pre class="code" style="margin-left: 33px;">
+							<code class="language-html">&lt;span data-display="field10:1" data-display-hide-callback="test1"&gt;display content 1: abcd&lt;/span&gt;
+&lt;span data-display="field10:2"&gt;display content 2: dcba&lt;/span&gt;</code>
+						</pre>
+					</div>
+					<div class="item radio2">
+						<span>
+							<input type="radio" id="field10-radio1" name="field10" value="1" checked>
+							<label for="field10-radio1">1</label>
+						</span>
+						<span>
+							<input type="radio" id="field10-radio2" name="field10" value="2">
+							<label for="field10-radio2">2</label>
+						</span>
+						<pre class="code">
+							<code class="language-html">&lt;input type="radio" name="field10" value="1" checked&gt;
+&lt;input type="radio" name="field10" value="2"&gt;</code>
+						</pre>
+					</div>
 					<div class="item">
 						times content1 hidden: <span id="test1Result" style="font-weight: bold">0</span>
 						<pre class="code" style="margin-left: 22px;">
@@ -470,6 +497,55 @@ function test1() {
 			</div>
 
 			<div class="subject">
+				<h3>[data-enable] / [data-disable]</h3>
+
+				<div class="content">
+					<p class="brief">
+						Add the attribute <span class="expression">[data-enable="<span class="varName">$name</span>:<span class="varName">$value</span>"]</span> or <span class="expression">[data-disable="<span class="varName">$name</span>:<span class="varName">$value</span>"]</span> to do similar as display and hide event, but only affect <span class="expression">[disabled]</span> property instead of display status.
+					</p>
+					<div class="item">
+						<input type="text" data-enable="field11:1">
+						<pre class="code">
+							<code class="language-html">&lt;input type="text" data-enable="field11:1"&gt;</code>
+						</pre>
+					</div>
+					<div class="item radio2">
+						<span>
+							<input type="radio" id="field11-radio1" name="field11" value="1" checked>
+							<label for="field11-radio1">1</label>
+						</span>
+						<span>
+							<input type="radio" id="field11-radio2" name="field11" value="2">
+							<label for="field11-radio2">2</label>
+						</span>
+						<pre class="code">
+							<code class="language-html">&lt;input type="radio" name="field11" value="1" checked&gt;
+&lt;input type="radio" name="field11" value="2"&gt;</code>
+						</pre>
+					</div>
+					<div class="item">
+						<input type="text" data-disable="field12:1">
+						<pre class="code">
+							<code class="language-html">&lt;input type="text" data-disable="field12:1"&gt;</code>
+						</pre>
+					</div>
+					<div class="item radio2">
+						<span>
+							<input type="radio" id="field12-radio1" name="field12" value="1" checked>
+							<label for="field12-radio1">1</label>
+						</span>
+						<span>
+							<input type="radio" id="field12-radio2" name="field12" value="2">
+							<label for="field12-radio2">2</label>
+						</span>
+						<pre class="code">
+							<code class="language-html">&lt;input type="radio" name="field12" value="1" checked&gt;
+&lt;input type="radio" name="field12" value="2"&gt;</code>
+						</pre>
+					</div>
+				</div>
+
+				<div class="subject">
 				<h3>.display-only</h3>
 
 				<div class="content">
@@ -500,40 +576,40 @@ function test1() {
 					</div>
 					<div class="item radio3">
 						<span>
-							<input type="radio" id="field9-radio1" name="field9" class="display-only" value="1">
-							<label for="field9-radio1">1</label>
+							<input type="radio" id="field13-radio1" name="field13" class="display-only" value="1">
+							<label for="field13-radio1">1</label>
 						</span>
 						<span>
-							<input type="radio" id="field9-radio2" name="field9" class="display-only" value="2" checked>
-							<label for="field9-radio2">2</label>
+							<input type="radio" id="field13-radio2" name="field13" class="display-only" value="2" checked>
+							<label for="field13-radio2">2</label>
 						</span>
 						<span>
-							<input type="radio" id="field9-radio3" name="field9" class="display-only" value="3">
-							<label for="field9-radio3">3</label>
+							<input type="radio" id="field13-radio3" name="field13" class="display-only" value="3">
+							<label for="field13-radio3">3</label>
 						</span>
 						<pre class="code">
-							<code class="language-html">&lt;input type="radio" name="field9" class="display-only" value="1"&gt;
-&lt;input type="radio" name="field9" class="display-only" value="2" checked&gt;
-&lt;input type="radio" name="field9" class="display-only" value="3"&gt;</code>
+							<code class="language-html">&lt;input type="radio" name="field13" class="display-only" value="1"&gt;
+&lt;input type="radio" name="field13" class="display-only" value="2" checked&gt;
+&lt;input type="radio" name="field13" class="display-only" value="3"&gt;</code>
 						</pre>
 					</div>
 					<div class="item checkbox3">
 						<span>
-							<input type="checkbox" id="field10-checkbox1" name="field10" class="display-only" value="1">
-							<label for="field10-checkbox1">1</label>
+							<input type="checkbox" id="field14-checkbox1" name="field14" class="display-only" value="1">
+							<label for="field14-checkbox1">1</label>
 						</span>
 						<span>
-							<input type="checkbox" id="field10-checkbox2" name="field10" class="display-only" value="2" checked>
-							<label for="field10-checkbox2">2</label>
+							<input type="checkbox" id="field14-checkbox2" name="field14" class="display-only" value="2" checked>
+							<label for="field14-checkbox2">2</label>
 						</span>
 						<span>
-							<input type="checkbox" id="field10-checkbox3" name="field10" class="display-only" value="3" checked>
-							<label for="field10-checkbox3">3</label>
+							<input type="checkbox" id="field14-checkbox3" name="field14" class="display-only" value="3" checked>
+							<label for="field14-checkbox3">3</label>
 						</span>
 						<pre class="code">
-							<code class="language-html">&lt;input type="checkbox" name="field10" class="display-only" value="1"&gt;
-&lt;input type="checkbox" name="field10" class="display-only" value="2" checked&gt;
-&lt;input type="checkbox" name="field10" class="display-only" value="3" checked&gt;</code>
+							<code class="language-html">&lt;input type="checkbox" name="field14" class="display-only" value="1"&gt;
+&lt;input type="checkbox" name="field14" class="display-only" value="2" checked&gt;
+&lt;input type="checkbox" name="field14" class="display-only" value="3" checked&gt;</code>
 						</pre>
 					</div>
 				</div>
@@ -549,46 +625,46 @@ function test1() {
 					</p>
 					<div class="item radio3">
 						<span>
-							<input type="radio" id="field11-radio1" name="field11" value="1">
-							<label for="field11-radio1">1</label>
+							<input type="radio" id="field15-radio1" name="field15" value="1">
+							<label for="field15-radio1">1</label>
 						</span>
 						<span>
-							<input type="radio" id="field11-radio2" name="field11" value="2" checked>
-							<label for="field11-radio2">2</label>
+							<input type="radio" id="field15-radio2" name="field15" value="2" checked>
+							<label for="field15-radio2">2</label>
 						</span>
 						<span>
-							<input type="radio" id="field11-radio3" name="field11" value="3">
-							<label for="field11-radio3">3</label>
+							<input type="radio" id="field15-radio3" name="field15" value="3">
+							<label for="field15-radio3">3</label>
 						</span>
 						<pre class="code">
-							<code class="language-html">&lt;input type="radio" name="field11" value="1"&gt;
-&lt;input type="radio" name="field11" value="2" checked&gt;
-&lt;input type="radio" name="field11" value="3"&gt;</code>
+							<code class="language-html">&lt;input type="radio" name="field15" value="1"&gt;
+&lt;input type="radio" name="field15" value="2" checked&gt;
+&lt;input type="radio" name="field15" value="3"&gt;</code>
 						</pre>
 					</div>
 					<div class="item checkbox3">
 						<span>
-							<input type="checkbox" id="field12-checkbox1" name="field12" value="1">
-							<label for="field12-checkbox1">1</label>
+							<input type="checkbox" id="field16-checkbox1" name="field16" value="1">
+							<label for="field16-checkbox1">1</label>
 						</span>
 						<span>
-							<input type="checkbox" id="field12-checkbox2" name="field12" value="2" checked>
-							<label for="field12-checkbox2">2</label>
+							<input type="checkbox" id="field16-checkbox2" name="field16" value="2" checked>
+							<label for="field16-checkbox2">2</label>
 						</span>
 						<span>
-							<input type="checkbox" id="field12-checkbox3" name="field12" value="3" checked>
-							<label for="field12-checkbox3">3</label>
+							<input type="checkbox" id="field16-checkbox3" name="field16" value="3" checked>
+							<label for="field16-checkbox3">3</label>
 						</span>
 						<pre class="code">
-							<code class="language-html">&lt;input type="checkbox" name="field12" value="1"&gt;
-&lt;input type="checkbox" name="field12" value="2" checked&gt;
-&lt;input type="checkbox" name="field12" value="3" checked&gt;</code>
+							<code class="language-html">&lt;input type="checkbox" name="field16" value="1"&gt;
+&lt;input type="checkbox" name="field16" value="2" checked&gt;
+&lt;input type="checkbox" name="field16" value="3" checked&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
 						<pre class="code" style="margin-left: 210px;">
 							<code class="language-js">$(document).ready(() => {
-	$("[name='field11'], [name='field12']").readonlyCheckable();
+	$("[name='field15'], [name='field16']").readonlyCheckable();
 });</code>
 						</pre>
 					</div>
@@ -603,21 +679,21 @@ function test1() {
 						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).boolean()</span> to evaluate the boolean value of an element. Returns null if it is unparseable.
 					</p>
 					<div class="item">
-						<input type="text" id="field13" value="true">
+						<input type="text" id="field17" value="true">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field13" value="true"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field17" value="true"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
-						<input type="text" id="field14" value="123">
+						<input type="text" id="field18" value="123">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field14" value="123"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field18" value="123"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
 						<pre class="code" style="margin-left: 210px;">
-							<code class="language-js">let field13Boolean = $("#field13").boolean(); // field13Boolean = true
-let field14Boolean = $("#field14").boolean(); // field14Boolean = null</code>
+							<code class="language-js">let field17Boolean = $("#field17").boolean(); // field17Boolean = true
+let field18Boolean = $("#field18").boolean(); // field18Boolean = null</code>
 						</pre>
 					</div>
 				</div>
@@ -627,21 +703,21 @@ let field14Boolean = $("#field14").boolean(); // field14Boolean = null</code>
 						A boolean test value can be passed in when evaluate whether the element reserves the target boolean value.
 					</p>
 					<div class="item">
-						<input type="text" id="field15" value="false">
+						<input type="text" id="field19" value="false">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field15" value="false"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field19" value="false"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
-						<input type="text" id="field16" value="123">
+						<input type="text" id="field20" value="123">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field16" value="123"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field20" value="123"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
 						<pre class="code" style="margin-left: 210px;">
-							<code class="language-js">let field15Boolean = $("#field15").boolean(false); // field15Boolean = true
-let field16Boolean = $("#field16").boolean(true); // field16Boolean = false</code>
+							<code class="language-js">let field19Boolean = $("#field19").boolean(false); // field19Boolean = true
+let field20Boolean = $("#field20").boolean(true); // field20Boolean = false</code>
 						</pre>
 					</div>
 				</div>
@@ -655,21 +731,21 @@ let field16Boolean = $("#field16").boolean(true); // field16Boolean = false</cod
 						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).isBlank()</span> to evaluate whether the value of the target dom is <span class="expression">undefined</span>, <span class="expression">null</span> or <span class="expression">blank</span>.
 					</p>
 					<div class="item">
-						<input type="text" id="field17"><br>
+						<input type="text" id="field21">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field17"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field21"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
-						<input type="text" id="field18" value="123">
+						<input type="text" id="field22" value="123">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field18" value="123"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field22" value="123"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
 						<pre class="code" style="margin-left: 210px;">
-							<code class="language-js">let field17Empty = $("#field17").isEmpty(); // field17Empty = true
-let field18Empty = $("#field18").isEmpty(); // field18Empty = false</code>
+							<code class="language-js">let field21Blank = $("#field21").isBlank(); // field21Blank = true
+let field22Blank = $("#field22").isBlank(); // field22Blank = false</code>
 						</pre>
 					</div>
 				</div>
@@ -679,15 +755,15 @@ let field18Empty = $("#field18").isEmpty(); // field18Empty = false</code>
 						Invoke <span class="expression">$.isBlank()</span> to evaluate whether parameter is <span class="expression">undefined</span>, <span class="expression">null</span> or <span class="expression">blank</span>.
 					</p>
 					<div class="item">
-						<input type="text" id="field19">
+						<input type="text" id="field23">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field19"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field23"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
 						<pre class="code" style="margin-left: 210px;">
-							<code class="language-js">let field19Empty = $.isEmpty($("#field19").val()); // field19Empty = true
-let field20Empty = $.isEmpty('1234'); // field20Empty = false</code>
+							<code class="language-js">let field23Blank = $.isBlank($("#field23").val()); // field23Blank = true
+let field24Blank = $.isBlank('1234'); // field24Blank = false</code>
 						</pre>
 					</div>
 				</div>
@@ -701,23 +777,23 @@ let field20Empty = $.isEmpty('1234'); // field20Empty = false</code>
 						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).modify(<span class="varName">[$function]</span>)</span> or <span class="expression">$(<span class="varName">[$selector]</span>).modify(<span class="varName">[$prependString]</span>, <span class="varName">[$appendString]</span>)</span> to to quickly modify the value or text of the target element.
 					</p>
 					<div class="item">
-						<input type="text" id="field21" value="test"><br>
+						<input type="text" id="field25" value="test">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field21" value="test"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field25" value="test"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
-						<input type="text" id="field22" value="test">
+						<input type="text" id="field26" value="test">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field22" value="test"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field26" value="test"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
-						<button type="button" style="margin: 10px;" onclick="modifyField21()">modify21</button>
-						<button type="button" style="margin: 10px;" onclick="modifyField22()">modify22</button>
+						<button type="button" style="margin: 10px;" onclick="modifyField25()">modify25</button>
+						<button type="button" style="margin: 10px;" onclick="modifyField26()">modify26</button>
 						<pre class="code" style="margin-left: 30px;">
-							<code class="language-js">$("#field21").modify(value => 'prefix ' + value + ' suffix');
-$("#field22").modify('prefix ', ' suffix');</code>
+							<code class="language-js">$("#field25").modify(value => 'prefix ' + value + ' suffix');
+$("#field26").modify('prefix ', ' suffix');</code>
 						</pre>
 					</div>
 				</div>
@@ -727,23 +803,23 @@ $("#field22").modify('prefix ', ' suffix');</code>
 						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).increase()</span> or <span class="expression">$(<span class="varName">[$selector]</span>).increase(<span class="varName">[$increaseValue]</span>)</span> to to quickly modify the numeric value or text of the target element.
 					</p>
 					<div class="item">
-						<input type="text" id="field23" value="1"><br>
+						<input type="text" id="field27" value="1">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field23" value="1"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field27" value="1"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
-						<input type="text" id="field24" value="1">
+						<input type="text" id="field28" value="1">
 						<pre class="code">
-							<code class="language-html">&lt;input type="text" id="field24" value="1"&gt;</code>
+							<code class="language-html">&lt;input type="text" id="field28" value="1"&gt;</code>
 						</pre>
 					</div>
 					<div class="item">
-						<button type="button" style="margin: 10px;" onclick="increaseField23()">increase23</button>
-						<button type="button" style="margin: 10px;" onclick="increaseField24()">increase24</button>
+						<button type="button" style="margin: 10px;" onclick="increaseField27()">increase27</button>
+						<button type="button" style="margin: 10px;" onclick="increaseField28()">increase28</button>
 						<pre class="code" style="margin-left: 7px;">
-							<code class="language-js">$("#field23").increase();
-$("#field24").increase('-10');</code>
+							<code class="language-js">$("#field27").increase();
+$("#field28").increase('-10');</code>
 						</pre>
 					</div>
 				</div>
@@ -759,7 +835,7 @@ $("#field24").increase('-10');</code>
 		hljs.highlightAll();
 
 		$(document).ready(() => {
-			$("[name='field11'], [name='field12']").readonlyCheckable();
+			$("[name='field15'], [name='field16']").readonlyCheckable();
 		});
 
 		function test1() {
@@ -769,20 +845,20 @@ $("#field24").increase('-10');</code>
 			setTimeout(() => $(testSpan).css("color", ''), 500);
 		}
 
-		function modifyField21() {
-			$("#field21").modify(value => 'prefix ' + value + ' suffix');
+		function modifyField25() {
+			$("#field25").modify(value => 'prefix ' + value + ' suffix');
 		}
 
-		function modifyField22() {
-			$("#field22").modify('prefix ', ' suffix');
+		function modifyField26() {
+			$("#field26").modify('prefix ', ' suffix');
 		}
 
-		function increaseField23() {
-			$("#field23").increase();
+		function increaseField27() {
+			$("#field27").increase();
 		}
 
-		function increaseField24() {
-			$("#field24").increase('-10');
+		function increaseField28() {
+			$("#field28").increase('-10');
 		}
 
 	</script>

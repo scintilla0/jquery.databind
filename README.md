@@ -11,6 +11,11 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.8.0 (2024-06-11)
+*	Add event [data-enable]/[data-disable] to do the similar as [data-display]/[data-hide].
+*	Add event [data-unchecked-value] to offer a default value when an unchecked checkbox element is submitted.
+*	[data-bind] event now can be initiated by checkbox elements, but only when with [data-bind-checkbox-text] property.
+
 #### 1.7.2 (2024-04-22)
 *	[data-bind-option-text] now can be assigned to a specified element property.
 *	[data-bind] not working when multiple elements using [data-bind-option-text] fixed.

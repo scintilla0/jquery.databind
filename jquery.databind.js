@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.7.2 - 2024-04-22
+ * jquery.databind.js - version 1.8.0 - 2024-06-11
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -7,18 +7,22 @@
  */
 /**
  * A plugin for data binding and related auto-configuration.
- * Requires jQuery.
+ * Requires jQuery 1.7.x or higher.
  * Add the attribute [data-bind="$fieldName"] to enable automatic configuration, e.g. [data-bind="userName"].
+ * Add the attribute [data-bind-checkbox-text="$value"] to use the text as bind value when the event is initiated by a checkbox element.
  * Add the attribute [data-bind-option-text] to bind the option text of the other source in group instead of its exact value to this DOM element.
  * You can also use a specified element property as binding text using [data-bind-option-text="$propertyName"].
  * Add the attribute [data-check-field="$name"] to a button or a checkbox to control the check status of a set of checkboxes, e.g. [data-check-field="retired"].
  * Support [*], [^] and [$] characters for a more flexible way to specify the name of the target checkboxes, e.g. [data-check-field=".retired$"].
  * Add the attribute [data-display="$name:$value"] or [data-hide="$name:$value"] to a DOM element to control its display status
  * 	according to the value of the specified DOM elements, e.g. [data-display="gender:1"]. Notice that display is executed in preference to hide.
+ * Add the attribute [data-enable="$name:$value"] or [data-disable="$name:$value"] to do similar as display and hide event, but only affect [disabled] property
+ *  instead of display status.
  * Add the attribute [data-display-hide-callback="$functionName"] to invoke the specified function as a callback when the DOM element is hidden.
+ * Add the attribute [data-unchecked-value="$value"] to submit a default value when a checkbox element is not checked instead of submitting nothing.
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
+ * For a better visual effect, please add the CSS rule [.display-only, [data-display], [data-hide], [data-enable], [data-disable] { display: none; }] to your main stylesheet.
  * Invoke $("$selector").readonlyCheckable() to make checkbox or radio elements readonly via js code if they are unmodifiable.
- * For a better visual effect, please add the CSS rule [.display-only, [data-display] { display: none; }] to your main stylesheet.
  * Invoke $("$selector").boolean() to evaluate the boolean value of an element. Returns null if it is unparseable.
  * A boolean test value can be passed in when evaluate whether the element reserves the target boolean value, e.g. $("$selector").boolean(false).
  * Invoke $.isBlank() or $("$selector").isBlank() to evaluate whether parameter or the value of the target dom is undefined, null or blank.
@@ -27,13 +31,21 @@
  */
 (function($) {
 	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: 'activeItem', BIND: "data-bind",
-			OPTION_TEXT: "data-bind-option-text", CHECK_FIELD: "data-check-field",
-			DISPLAY: "data-display", HIDE: "data-hide", DISPLAY_HIDE_CALLBACK: "data-display-hide-callback",
+			CHECKBOX_TEXT: "data-bind-checkbox-text", OPTION_TEXT: "data-bind-option-text", CHECK_FIELD: "data-check-field",
+			DISPLAY: "data-display", HIDE: "data-hide", ENABLE: "data-enable", DISABLE: "data-disable",
+			DISPLAY_HIDE_CALLBACK: "data-display-hide-callback", UNCHECKED_VALUE: "data-unchecked-value",
 			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
 			MAINTAIN_DISABLED: "maintain-disabled", TEMPLATE_ID_SELECTOR: "[id*='emplate']",
+			IS_SHOW_OR_HIDE: 'isShowOrHide', IS_DISPLAY_OR_ENABLED: 'isDisplayOrEnabled',
 			CALLBACK_FUNCTION_NAME: '_callback_function_name'};
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
 	const DEFAULT_CSS = {NON_SELECTABLE_OPACITY: '0.5'};
+	const DISPLAY_CONTROL_CONFIG_PRESET = {
+		[CORE.DISPLAY]: {[CORE.IS_SHOW_OR_HIDE]: true, [CORE.IS_DISPLAY_OR_ENABLED]: true},
+		[CORE.HIDE]: {[CORE.IS_SHOW_OR_HIDE]: false, [CORE.IS_DISPLAY_OR_ENABLED]: true},
+		[CORE.ENABLE]: {[CORE.IS_SHOW_OR_HIDE]: true, [CORE.IS_DISPLAY_OR_ENABLED]: false},
+		[CORE.DISABLE]: {[CORE.IS_SHOW_OR_HIDE]: false, [CORE.IS_DISPLAY_OR_ENABLED]: false}
+	};
 	const CommonUtil = _CommonUtil();
 	$.fn.extend({
 		readonlyCheckable: readonlyCheckable,
@@ -59,12 +71,14 @@
 			.on("keyup change", "input:text[" + CORE.BIND + "], textarea[" + CORE.BIND + "]", bindAction)
 			.on("change", "select[" + CORE.BIND + "]", bindAction)
 			.on("click", "input:radio[" + CORE.BIND + "]", bindAction)
+			.on("click", "input:checkbox[" + CORE.BIND + "][" + CORE.CHECKBOX_TEXT + "]", bindAction)
 			.on("click", "input[" + CORE.CHECK_FIELD + "], button[" + CORE.CHECK_FIELD + "]", checkAction);
 	$("input:text, textarea, select, input:radio:checked").filter("[" + CORE.BIND + "]").each(bindAction);
 	$("input:checkbox").filter("[" + CORE.CHECK_FIELD + "]").each(prepareCheckReverseLinkage);
+	$("input:checkbox[" + CORE.UNCHECKED_VALUE + "]").on("click, change", uncheckedDefaultLinkAction).each(prepareUncheckedLinkDefault);
 	$("input, textarea, select").filter("[disabled]").addClass(CORE.MAINTAIN_DISABLED);
 	CommonUtil.initAndDeployListener("input." + CORE.DISPLAY_ONLY + ", select." + CORE.DISPLAY_ONLY + ", textarea." + CORE.DISPLAY_ONLY, prepareDisplayOnlyContent);
-	CommonUtil.initAndDeployListener("[" + CORE.DISPLAY + "], [" + CORE.HIDE + "]", prepareDisplayControlEvent);
+	CommonUtil.initAndDeployListener("[" + Object.keys(DISPLAY_CONTROL_CONFIG_PRESET).join("], [") + "]", prepareDisplayControlEvent);
 	triggerDisplayControlEventAtReady();
 
 	function bindAction({target: dom}, item) {
@@ -101,11 +115,16 @@
 				let fontColor = $(activeItemDom).css("color");
 				// maxlength highlight minus adapt end
 				let activeOptionTextName = $(activeItemDom).attr(CORE.OPTION_TEXT);
+				let initiatingCheckbox = $(dataBindDoms).filter("input:checkbox[" + CORE.CHECKBOX_TEXT + "]");
 				if (CommonUtil.exists(activeOptionTextName)) {
 					let activeOptionTextGetter = getOptionTextGetter(activeOptionTextName);
 					let reverseOption = $(dataBindDoms).filter("select").find("option")
-						.filter((_, item) => activeOptionTextGetter.apply(null, [$(item)]) === value);
+							.filter((_, item) => activeOptionTextGetter.apply(null, [$(item)]) === value);
 					value = $(reverseOption).length === 1 ? $(reverseOption).val() : '';
+				} else if ($(initiatingCheckbox).length === 1) {
+					if ($(initiatingCheckbox).is(activeItemDom)) {
+						value = $(initiatingCheckbox).is(":checked") ? $(initiatingCheckbox).attr(CORE.CHECKBOX_TEXT) : '';
+					}
 				}
 				$(dataBindDoms).each((_, item) => {
 					let setValue = value;
@@ -136,7 +155,11 @@
 								}
 							}
 						}
-						CommonUtil.setValue(setValue, false, $(item));
+						if ($(item).is("input:checkbox[" + CORE.CHECKBOX_TEXT + "]")) {
+							$(item).prop("checked", $(item).attr(CORE.CHECKBOX_TEXT) === setValue);
+						} else {
+							CommonUtil.setValue(setValue, false, $(item));
+						}
 						$(item).blur();
 						// maxlength highlight minus adapt
 						if (CommonUtil.exists($(activeItemDom).attr(OUTSIDE_CONSTANTS.HIGHLIGHT_MINUS)) && CommonUtil.exists(fontColor)) {
@@ -188,16 +211,17 @@
 		return nameSet;
 	}
 
+	function uncheckedDefaultLinkAction({target: dom}) {
+		$(dom).prev("input:checkbox[name='" + $(dom).attr("name") + "']").prop("checked", !$(dom).prop("checked"));
+	}
+
+	function prepareUncheckedLinkDefault(_, item) {
+		$("<input type='checkbox' name='" + $(item).attr("name") + "' value='" + $(item).attr(CORE.UNCHECKED_VALUE)
+				+ "'" + ($(item).prop("checked") ? "" : "checked") + " style='display: none;'/>").insertBefore(item).readonlyCheckable();
+	}
+
 	function prepareDisplayControlEvent(_, item) {
-		let isHide = false;
-		let dataBindField = $(item).attr(CORE.DISPLAY);
-		if (!CommonUtil.exists(dataBindField)) {
-			dataBindField = $(item).attr(CORE.HIDE);
-			if (!CommonUtil.exists(dataBindField)) {
-				return;
-			}
-			isHide = true;
-		}
+		let bindConfig = extractDisplayControlConfig(item);
 		let itemId = $(item).attr("id");
 		if (CommonUtil.isBlank(itemId)) {
 			$(item).attr("id", CORE.DEFAULT_ID + nonIdIndex ++);
@@ -212,7 +236,7 @@
 		if (CommonUtil.exists(callbackFunctionName)) {
 			initiatorArray[CORE.CALLBACK_FUNCTION_NAME] = callbackFunctionName;
 		}
-		for (let field of dataBindField.split(';')) {
+		for (let field of bindConfig.bindField.split(';')) {
 			field = field.split(':')
 			let impactArray = displayControlInitiator[field[0]];
 			let hasBound = true;
@@ -223,7 +247,7 @@
 			}
 			impactArray.push(itemId);
 			if (!CommonUtil.exists(initiatorArray[field[0]])) {
-				initiatorArray[field[0]] = {isHide: isHide, value: []};
+				initiatorArray[field[0]] = {bindConfig: bindConfig, value: []};
 			}
 			if (field[1].startsWith('[') && field[1].endsWith(']')) {
 				for (let singleFieldValue of field[1].substring(1, field[1].length - 1).split(',')) {
@@ -240,6 +264,7 @@
 					for (let impacted of displayControlInitiator[field[0]]) {
 						let initiators = displayControlImpacted[impacted];
 						let show = true;
+						let displayOrEnabled = true;
 						for (let initiator in initiators) {
 							if (initiator === CORE.CALLBACK_FUNCTION_NAME) {
 								continue;
@@ -258,8 +283,11 @@
 								} else if ($(initiatorSelector).is("label, span")) {
 									showTest = $(initiatorSelector).text() === value;
 								}
-								if (initiators[initiator].isHide === true) {
+								if (initiators[initiator].bindConfig[CORE.IS_SHOW_OR_HIDE] === false) {
 									showTest = !showTest;
+								}
+								if (initiators[initiator].bindConfig[CORE.IS_DISPLAY_OR_ENABLED] === false) {
+									displayOrEnabled = false;
 								}
 								if (showTest === true) {
 									break;
@@ -271,12 +299,17 @@
 							}
 						}
 						let targetSelector = $("[id='" + impacted + "']");
-						let impactedElements = $(targetSelector).find("input, textarea, select").filter(":not(." + CORE.MAINTAIN_DISABLED + ")");
+						let impactedElements = $(targetSelector).find("input, textarea, select").filter(":not(." + CORE.MAINTAIN_DISABLED + ")")
+								.add($(targetSelector).filter("input, textarea, select").filter(":not(." + CORE.MAINTAIN_DISABLED + ")"));
 						if (show === true) {
-							$(targetSelector).show();
+							if (displayOrEnabled === true) {
+								$(targetSelector).show();
+							}
 							$(impactedElements).prop("disabled", false);
 						} else {
-							$(targetSelector).hide();
+							if (displayOrEnabled === true) {
+								$(targetSelector).hide();
+							}
 							$(impactedElements).prop("disabled", true);
 							if (displayControlFirstChange === false && CommonUtil.exists(initiators[CORE.CALLBACK_FUNCTION_NAME])) {
 								eval(initiators[CORE.CALLBACK_FUNCTION_NAME] + '(\"[id=\'' + impacted + '\']\")');
@@ -292,6 +325,19 @@
 			});
 			CommonUtil.initAndDeployListener($(nameSelector(field[0])), bindDisplayControlEvent);
 		}
+	}
+
+	function extractDisplayControlConfig(item) {
+		let bindConfig = {};
+		for (let configType in DISPLAY_CONTROL_CONFIG_PRESET) {
+			bindConfig['bindField'] = $(item).attr(configType);
+			bindConfig[CORE.IS_SHOW_OR_HIDE] = DISPLAY_CONTROL_CONFIG_PRESET[configType][CORE.IS_SHOW_OR_HIDE];
+			bindConfig[CORE.IS_DISPLAY_OR_ENABLED] = DISPLAY_CONTROL_CONFIG_PRESET[configType][CORE.IS_DISPLAY_OR_ENABLED];
+			if (CommonUtil.exists(bindConfig['bindField'])) {
+				break;
+			}
+		}
+		return bindConfig;
 	}
 
 	function triggerDisplayControlEventAtReady() {
