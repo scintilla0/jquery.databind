@@ -36,6 +36,9 @@
 			margin-top: -10px;
 			margin-bottom: 10px;
 		}
+		div.item.checkbox1 pre {
+			margin-left: 160px !important;
+		}
 		div.item.checkbox3 pre {
 			margin-left: 56px !important;
 		}
@@ -544,8 +547,31 @@ function test1() {
 						</pre>
 					</div>
 				</div>
+			</div>
 
-				<div class="subject">
+			<div class="subject">
+				<h3>[data-unchecked-value]</h3>
+
+				<div class="content">
+					<p class="brief">
+						Add the attribute <span class="expression">[data-unchecked-value="<span class="varName">$value"</span>]</span> to submit a default value when a checkbox element is not checked instead of submitting nothing.
+					</p>
+					<div class="item checkbox1">
+						<span>
+							<input type="checkbox" id="field29-checkbox1" name="field29" value="1" checked data-unchecked-value="0">
+							<label for="field29-checkbox1">1</label>
+						</span>
+						<pre class="code">
+							<code class="language-html">&lt;input type="checkbox" name="field29-checkbox1" value="1" checked data-unchecked-value="0"&gt;</code>
+						</pre>
+					</div>
+					<div class="item">
+						submitting value: <span id="unchecked-value-result" style="font-weight: bold">1</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
 				<h3>.display-only</h3>
 
 				<div class="content">
@@ -860,6 +886,13 @@ $("#field28").increase('-10');</code>
 		function increaseField28() {
 			$("#field28").increase('-10');
 		}
+
+		$("#field29-checkbox1").on("click", ({target: dom}) => {
+			let resultSpan = $("#unchecked-value-result");
+			setTimeout(() => $(resultSpan).text($("[name='field29']:checked").val()));
+			$(resultSpan).css("color", 'red');
+			setTimeout(() => $(resultSpan).css("color", ''), 500);
+		});
 
 	</script>
 </body>
