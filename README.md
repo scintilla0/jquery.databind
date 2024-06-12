@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.8.1 (2024-06-12)
+*	[data-unchecked-value] event preferentially generates checkbox under form element.
+
 #### 1.8.0 (2024-06-11)
 *	Add event [data-enable]/[data-disable] to do the similar as [data-display]/[data-hide].
 *	Add event [data-unchecked-value] to offer a default value when an unchecked checkbox element is submitted.

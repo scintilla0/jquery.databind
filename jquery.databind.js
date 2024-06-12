@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.8.0 - 2024-06-11
+ * jquery.databind.js - version 1.8.1 - 2024-06-12
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -17,7 +17,7 @@
  * Add the attribute [data-display="$name:$value"] or [data-hide="$name:$value"] to a DOM element to control its display status
  * 	according to the value of the specified DOM elements, e.g. [data-display="gender:1"]. Notice that display is executed in preference to hide.
  * Add the attribute [data-enable="$name:$value"] or [data-disable="$name:$value"] to do similar as display and hide event, but only affect [disabled] property
- *  instead of display status.
+ * 	instead of display status.
  * Add the attribute [data-display-hide-callback="$functionName"] to invoke the specified function as a callback when the DOM element is hidden.
  * Add the attribute [data-unchecked-value="$value"] to submit a default value when a checkbox element is not checked instead of submitting nothing.
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
@@ -33,11 +33,11 @@
 	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: 'activeItem', BIND: "data-bind",
 			CHECKBOX_TEXT: "data-bind-checkbox-text", OPTION_TEXT: "data-bind-option-text", CHECK_FIELD: "data-check-field",
 			DISPLAY: "data-display", HIDE: "data-hide", ENABLE: "data-enable", DISABLE: "data-disable",
-			DISPLAY_HIDE_CALLBACK: "data-display-hide-callback", UNCHECKED_VALUE: "data-unchecked-value",
+			DISPLAY_HIDE_CALLBACK: "data-display-hide-callback", CALLBACK_FUNCTION_NAME: '_callback_function_name',
+			UNCHECKED_VALUE: "data-unchecked-value", REVERSE_CHECKBOX_ID: "data-reverse-checkbox-id",
 			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
 			MAINTAIN_DISABLED: "maintain-disabled", TEMPLATE_ID_SELECTOR: "[id*='emplate']",
-			IS_SHOW_OR_HIDE: 'isShowOrHide', IS_DISPLAY_OR_ENABLED: 'isDisplayOrEnabled',
-			CALLBACK_FUNCTION_NAME: '_callback_function_name'};
+			IS_SHOW_OR_HIDE: 'isShowOrHide', IS_DISPLAY_OR_ENABLED: 'isDisplayOrEnabled'};
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
 	const DEFAULT_CSS = {NON_SELECTABLE_OPACITY: '0.5'};
 	const DISPLAY_CONTROL_CONFIG_PRESET = {
@@ -212,12 +212,21 @@
 	}
 
 	function uncheckedDefaultLinkAction({target: dom}) {
-		$(dom).prev("input:checkbox[name='" + $(dom).attr("name") + "']").prop("checked", !$(dom).prop("checked"));
+		$("input:checkbox[id='" + $(dom).attr(CORE.REVERSE_CHECKBOX_ID) + "']").prop("checked", !$(dom).prop("checked"));
 	}
 
 	function prepareUncheckedLinkDefault(_, item) {
-		$("<input type='checkbox' name='" + $(item).attr("name") + "' value='" + $(item).attr(CORE.UNCHECKED_VALUE)
-				+ "'" + ($(item).prop("checked") ? "" : "checked") + " style='display: none;'/>").insertBefore(item).readonlyCheckable();
+		let reverseCheckboxId = CORE.DEFAULT_ID + (nonIdIndex ++);
+		let reverseCheckbox = $("<input type='checkbox' id='" + reverseCheckboxId + "' name='" + $(item).attr("name") + "' value='"
+				+ $(item).attr(CORE.UNCHECKED_VALUE) + "'" + ($(item).prop("checked") ? "" : " checked") + " style='display: none;'/>");
+		$(reverseCheckbox).readonlyCheckable();
+		let form = $(item).closest("form");
+		if ($(form).length === 1) {
+			$(form).prepend(reverseCheckbox);
+		} else {
+			$(item).before(reverseCheckbox);
+		}
+		$(item).attr(CORE.REVERSE_CHECKBOX_ID, reverseCheckboxId).removeAttr(CORE.UNCHECKED_VALUE);
 	}
 
 	function prepareDisplayControlEvent(_, item) {
