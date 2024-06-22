@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.8.1 - 2024-06-12
+ * jquery.databind.js - version 1.8.2 - 2024-06-23
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -30,14 +30,14 @@
  * Invoke $("$selector").increase() or $("$selector").increase($increaseValue) to quickly modify the numeric value or text of the target element.
  */
 (function($) {
-	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: 'activeItem', BIND: "data-bind",
+	const CORE = {DEFAULT_ID: '_data_bind_no_', ACTIVE_ITEM: "activeItem", BIND: "data-bind",
 			CHECKBOX_TEXT: "data-bind-checkbox-text", OPTION_TEXT: "data-bind-option-text", CHECK_FIELD: "data-check-field",
 			DISPLAY: "data-display", HIDE: "data-hide", ENABLE: "data-enable", DISABLE: "data-disable",
 			DISPLAY_HIDE_CALLBACK: "data-display-hide-callback", CALLBACK_FUNCTION_NAME: '_callback_function_name',
 			UNCHECKED_VALUE: "data-unchecked-value", REVERSE_CHECKBOX_ID: "data-reverse-checkbox-id",
 			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
-			MAINTAIN_DISABLED: "maintain-disabled", TEMPLATE_ID_SELECTOR: "[id*='emplate']",
-			IS_SHOW_OR_HIDE: 'isShowOrHide', IS_DISPLAY_OR_ENABLED: 'isDisplayOrEnabled'};
+			MAINTAIN_DISABLED: 'maintain-disabled', TEMPLATE_ID_SELECTOR: "[id*=\"emplate\"]",
+			BIND_FIELD: "bindField", IS_SHOW_OR_HIDE: "isShowOrHide", IS_DISPLAY_OR_ENABLED: "isDisplayOrEnabled"};
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
 	const DEFAULT_CSS = {NON_SELECTABLE_OPACITY: '0.5'};
 	const DISPLAY_CONTROL_CONFIG_PRESET = {
@@ -66,19 +66,19 @@
 	let activeItem;
 	let displayControlFirstChange = true;
 
-	$("[" + CORE.BIND + "]").each(prepareGroup);
+	$(`[${CORE.BIND}]`).each(prepareGroup);
 	$(document)
-			.on("keyup change", "input:text[" + CORE.BIND + "], textarea[" + CORE.BIND + "]", bindAction)
-			.on("change", "select[" + CORE.BIND + "]", bindAction)
-			.on("click", "input:radio[" + CORE.BIND + "]", bindAction)
-			.on("click", "input:checkbox[" + CORE.BIND + "][" + CORE.CHECKBOX_TEXT + "]", bindAction)
-			.on("click", "input[" + CORE.CHECK_FIELD + "], button[" + CORE.CHECK_FIELD + "]", checkAction);
-	$("input:text, textarea, select, input:radio:checked").filter("[" + CORE.BIND + "]").each(bindAction);
-	$("input:checkbox").filter("[" + CORE.CHECK_FIELD + "]").each(prepareCheckReverseLinkage);
-	$("input:checkbox[" + CORE.UNCHECKED_VALUE + "]").on("click, change", uncheckedDefaultLinkAction).each(prepareUncheckedLinkDefault);
-	$("input, textarea, select").filter("[disabled]").addClass(CORE.MAINTAIN_DISABLED);
-	CommonUtil.initAndDeployListener("input." + CORE.DISPLAY_ONLY + ", select." + CORE.DISPLAY_ONLY + ", textarea." + CORE.DISPLAY_ONLY, prepareDisplayOnlyContent);
-	CommonUtil.initAndDeployListener("[" + Object.keys(DISPLAY_CONTROL_CONFIG_PRESET).join("], [") + "]", prepareDisplayControlEvent);
+			.on("keyup change", `input:text[${CORE.BIND}], textarea[${CORE.BIND}]`, bindAction)
+			.on("change", `select[${CORE.BIND}]`, bindAction)
+			.on("click", `input:radio[${CORE.BIND}]`, bindAction)
+			.on("click", `input:checkbox[${CORE.BIND}][${CORE.CHECKBOX_TEXT}]`, bindAction)
+			.on("click", `input[${CORE.CHECK_FIELD}], button[${CORE.CHECK_FIELD}]`, checkAction);
+	$(`input:text, textarea, select, input:radio:checked`).filter(`[${CORE.BIND}]`).each(bindAction);
+	$(`input:checkbox[${CORE.CHECK_FIELD}]`).each(prepareCheckReverseLinkage);
+	$(`input:checkbox[${CORE.UNCHECKED_VALUE}]`).on("click, change", uncheckedDefaultLinkAction).each(prepareUncheckedLinkDefault);
+	$(`input, textarea, select`).filter(`[disabled]`).addClass(CORE.MAINTAIN_DISABLED);
+	CommonUtil.initAndDeployListener(`input.${CORE.DISPLAY_ONLY}, select.${CORE.DISPLAY_ONLY}, textarea.${CORE.DISPLAY_ONLY}`, prepareDisplayOnlyContent);
+	CommonUtil.initAndDeployListener(`[${Object.keys(DISPLAY_CONTROL_CONFIG_PRESET).join(`], [`)}]`, prepareDisplayControlEvent);
 	triggerDisplayControlEventAtReady();
 
 	function bindAction({target: dom}, item) {
@@ -88,16 +88,16 @@
 		activeItem = dom.id;
 		let fieldName = $(dom).attr(CORE.BIND);
 		if (!CommonUtil.exists(dataBindContainer[fieldName])) {
-			$("[" + CORE.BIND + "='" + fieldName + "']").each(prepareGroup);
+			$(`[${CORE.BIND}="${fieldName}"]`).each(prepareGroup);
 		}
 		dataBindContainer[fieldName] = dom.value;
 	}
 
 	function prepareGroup(_, dom) {
-		let fieldName = $(dom).attr("" + CORE.BIND + "");
+		let fieldName = $(dom).attr(CORE.BIND);
 		if (!CommonUtil.isBlank(fieldName)) {
 			if (CommonUtil.isBlank(dom.id)) {
-				dom.id = (CORE.DEFAULT_ID + nonIdIndex ++);
+				dom.id = getNextId();
 			}
 			if (!dataBindFields.includes(fieldName)) {
 				dataBindFields.push(fieldName);
@@ -109,61 +109,61 @@
 	function prepareDataEvent(fieldName) {
 		Object.defineProperty(dataBindContainer, fieldName, {
 			set: function(value) {
-				let dataBindDoms = $("[" + CORE.BIND + "='" + fieldName + "']");
+				let dataBindDomBatch = $(`[${CORE.BIND}="${fieldName}"]`);
 				// maxlength highlight minus adapt
-				let activeItemDom = $("[id='" + CommonUtil.wrapQuotes(activeItem) + "']");
-				let fontColor = $(activeItemDom).css("color");
+				let activeItemDom = $(`[id="${CommonUtil.wrapQuotes(activeItem)}"]`);
+				let fontColor = $(activeItemDom).css(`color`);
 				// maxlength highlight minus adapt end
 				let activeOptionTextName = $(activeItemDom).attr(CORE.OPTION_TEXT);
-				let initiatingCheckbox = $(dataBindDoms).filter("input:checkbox[" + CORE.CHECKBOX_TEXT + "]");
+				let initiatingCheckbox = $(dataBindDomBatch).filter(`input:checkbox[${CORE.CHECKBOX_TEXT}]`);
 				if (CommonUtil.exists(activeOptionTextName)) {
 					let activeOptionTextGetter = getOptionTextGetter(activeOptionTextName);
-					let reverseOption = $(dataBindDoms).filter("select").find("option")
+					let reverseOption = $(dataBindDomBatch).filter(`select`).find(`option`)
 							.filter((_, item) => activeOptionTextGetter.apply(null, [$(item)]) === value);
-					value = $(reverseOption).length === 1 ? $(reverseOption).val() : '';
+					value = $(reverseOption).length === 1 ? $(reverseOption).val() : ``;
 				} else if ($(initiatingCheckbox).length === 1) {
 					if ($(initiatingCheckbox).is(activeItemDom)) {
-						value = $(initiatingCheckbox).is(":checked") ? $(initiatingCheckbox).attr(CORE.CHECKBOX_TEXT) : '';
+						value = $(initiatingCheckbox).is(`:checked`) ? $(initiatingCheckbox).attr(CORE.CHECKBOX_TEXT) : ``;
 					}
 				}
-				$(dataBindDoms).each((_, item) => {
+				$(dataBindDomBatch).each((_, item) => {
 					let setValue = value;
-					let notCurrentDom = activeItem !== $(item).attr("id");
+					let notCurrentDom = activeItem !== $(item).attr(`id`);
 					if (notCurrentDom) {
 						// select2Used adapt
-						if ($(item).hasClass("select2Used")) {
-							let option = $(item).find("option[value='" + value + "']");
+						if ($(item).hasClass(`select2Used`)) {
+							let option = $(item).find(`option[value="${value}"]`);
 							if ($(option).length === 0) {
-								value = '';
+								value = ``;
 								setValue = value;
-								option = $(item).find("option[value='" + value + "']");
+								option = $(item).find(`option[value="${value}"]`);
 							}
 							let optionText = $(option).text();
-							$(item).next().find("span.select2-selection__rendered").text(optionText).attr("title", optionText);
+							$(item).next().find(`span.select2-selection__rendered`).text(optionText).attr(`title`, optionText);
 						}
 						// select2Used adapt end
 						let optionTextName = $(item).attr(CORE.OPTION_TEXT);
 						if (CommonUtil.exists(optionTextName)) {
 							let optionTextGetter = getOptionTextGetter(optionTextName);
-							for (let index = 0; index < dataBindDoms.length; index ++) {
+							for (let index = 0; index < dataBindDomBatch.length; index ++) {
 								if (notCurrentDom) {
-									let sourceItem = $(dataBindDoms).eq(index);
-									if ($(sourceItem).is("select")) {
-										setValue = optionTextGetter.apply(null, [$(sourceItem).find("option[value='" + value + "']")]);
+									let sourceItem = $(dataBindDomBatch).eq(index);
+									if ($(sourceItem).is(`select`)) {
+										setValue = optionTextGetter.apply(null, [$(sourceItem).find(`option[value="${value}"]`)]);
 										break;
 									}
 								}
 							}
 						}
-						if ($(item).is("input:checkbox[" + CORE.CHECKBOX_TEXT + "]")) {
-							$(item).prop("checked", $(item).attr(CORE.CHECKBOX_TEXT) === setValue);
+						if ($(item).is(`input:checkbox[${CORE.CHECKBOX_TEXT}]`)) {
+							$(item).prop(`checked`, $(item).attr(CORE.CHECKBOX_TEXT) === setValue);
 						} else {
 							CommonUtil.setValue(setValue, false, $(item));
 						}
 						$(item).blur();
 						// maxlength highlight minus adapt
 						if (CommonUtil.exists($(activeItemDom).attr(OUTSIDE_CONSTANTS.HIGHLIGHT_MINUS)) && CommonUtil.exists(fontColor)) {
-							$(item).css("color", fontColor);
+							$(item).css(`color`, fontColor);
 						}
 						// maxlength highlight minus adapt end
 					}
@@ -180,9 +180,9 @@
 		let name = $(dom).attr(CORE.CHECK_FIELD);
 		if (!CommonUtil.isBlank(name)) {
 			let nameSet = extractName(name);
-			let targetDom = $("input:checkbox[name" + nameSet[0] + "='" + nameSet[1] + "']");
-			$(targetDom).prop("checked", CommonUtil.exists(dom.checked) ? dom.checked : false);
-			$(targetDom).filter("[" + CORE.CHECK_FIELD + "]").each((_, item) => checkAction({target: $(item)[0]}));
+			let targetDom = $(`input:checkbox[name${nameSet[0]}="${nameSet[1]}"]`);
+			$(targetDom).prop(`checked`, CommonUtil.exists(dom.checked) ? dom.checked : false);
+			$(targetDom).filter(`[${CORE.CHECK_FIELD}]`).each((_, item) => checkAction({target: $(item)[0]}));
 		}
 	}
 
@@ -190,10 +190,10 @@
 		let name = $(item).attr(CORE.CHECK_FIELD);
 		if (!CommonUtil.isBlank(name)) {
 			let nameSet = extractName(name);
-			let selectorString = "input:checkbox[name" + nameSet[0] + "='" + nameSet[1] + "']";
+			let selectorString = `input:checkbox[name${nameSet[0]}="${nameSet[1]}"]`;
 			$(document).on("change", selectorString, () => {
 				let selector = $(selectorString);
-				$("[" + CORE.CHECK_FIELD + "='" + name +"']").prop("checked", $(selector).filter(":checked").length === $(selector).length).change();
+				$(`[${CORE.CHECK_FIELD}="${name}"]`).prop(`checked`, $(selector).filter(`:checked`).length === $(selector).length).change();
 			});
 		}
 	}
@@ -212,15 +212,15 @@
 	}
 
 	function uncheckedDefaultLinkAction({target: dom}) {
-		$("input:checkbox[id='" + $(dom).attr(CORE.REVERSE_CHECKBOX_ID) + "']").prop("checked", !$(dom).prop("checked"));
+		$(`input:checkbox[id="${$(dom).attr(CORE.REVERSE_CHECKBOX_ID)}"]`).prop(`checked`, !$(dom).prop(`checked`));
 	}
 
 	function prepareUncheckedLinkDefault(_, item) {
-		let reverseCheckboxId = CORE.DEFAULT_ID + (nonIdIndex ++);
-		let reverseCheckbox = $("<input type='checkbox' id='" + reverseCheckboxId + "' name='" + $(item).attr("name") + "' value='"
-				+ $(item).attr(CORE.UNCHECKED_VALUE) + "'" + ($(item).prop("checked") ? "" : " checked") + " style='display: none;'/>");
+		let reverseCheckboxId = getNextId();
+		let reverseCheckbox = $(`<input type="checkbox" id="${reverseCheckboxId}" name="${$(item).attr(`name`)}" value="` +
+				$(item).attr(CORE.UNCHECKED_VALUE) + `"${$(item).prop(`checked`) ? `` : ` checked`} style="display: none;"/>`);
 		$(reverseCheckbox).readonlyCheckable();
-		let form = $(item).closest("form");
+		let form = $(item).closest(`form`);
 		if ($(form).length === 1) {
 			$(form).prepend(reverseCheckbox);
 		} else {
@@ -231,10 +231,10 @@
 
 	function prepareDisplayControlEvent(_, item) {
 		let bindConfig = extractDisplayControlConfig(item);
-		let itemId = $(item).attr("id");
+		let itemId = $(item).attr(`id`);
 		if (CommonUtil.isBlank(itemId)) {
-			$(item).attr("id", CORE.DEFAULT_ID + nonIdIndex ++);
-			itemId = $(item).attr("id");
+			$(item).attr(`id`, getNextId());
+			itemId = $(item).attr(`id`);
 		}
 		let initiatorArray = displayControlImpacted[itemId];
 		if (!CommonUtil.exists(initiatorArray)) {
@@ -245,7 +245,7 @@
 		if (CommonUtil.exists(callbackFunctionName)) {
 			initiatorArray[CORE.CALLBACK_FUNCTION_NAME] = callbackFunctionName;
 		}
-		for (let field of bindConfig.bindField.split(';')) {
+		for (let field of bindConfig[CORE.BIND_FIELD].split(';')) {
 			field = field.split(':')
 			let impactArray = displayControlInitiator[field[0]];
 			let hasBound = true;
@@ -269,7 +269,7 @@
 				continue;
 			}
 			let bindDisplayControlEvent = (_, eventItem) => {
-				$(document).on("change", "[id='" + $(eventItem).attr("id") + "']", () => {
+				$(document).on("change", `[id="${$(eventItem).attr(`id`)}"]`, () => {
 					for (let impacted of displayControlInitiator[field[0]]) {
 						let initiators = displayControlImpacted[impacted];
 						let show = true;
@@ -281,15 +281,15 @@
 							let initiatorSelector = $(nameSelector(initiator));
 							let showTest = false;
 							for (let value of initiators[initiator].value) {
-								if (CommonUtil.isBlank(value) && $(initiatorSelector).is("input:checkbox, input:radio")) {
-									showTest = $(initiatorSelector).filter(":checked").length === 0;
-								} else if ($(initiatorSelector).is("input:checkbox, input:radio")) {
-									showTest = $(initiatorSelector).filter("[value='" + value+ "']:checked").length === 1;
-								} else if ($(initiatorSelector).is("select")) {
-									showTest = $(initiatorSelector).find("option[value='" + value + "']:selected").length === 1;
-								} else if ($(initiatorSelector).is("input:text, input:hidden, textarea")) {
+								if (CommonUtil.isBlank(value) && $(initiatorSelector).is(`input:checkbox, input:radio`)) {
+									showTest = $(initiatorSelector).filter(`:checked`).length === 0;
+								} else if ($(initiatorSelector).is(`input:checkbox, input:radio`)) {
+									showTest = $(initiatorSelector).filter(`[value="${value}"]:checked`).length === 1;
+								} else if ($(initiatorSelector).is(`select`)) {
+									showTest = $(initiatorSelector).find(`option[value="${value}"]:selected`).length === 1;
+								} else if ($(initiatorSelector).is(`input:text, input:hidden, textarea`)) {
 									showTest = $(initiatorSelector).val() === value;
-								} else if ($(initiatorSelector).is("label, span")) {
+								} else if ($(initiatorSelector).is(`label, span`)) {
 									showTest = $(initiatorSelector).text() === value;
 								}
 								if (initiators[initiator].bindConfig[CORE.IS_SHOW_OR_HIDE] === false) {
@@ -307,29 +307,29 @@
 								break;
 							}
 						}
-						let targetSelector = $("[id='" + impacted + "']");
-						let impactedElements = $(targetSelector).find("input, textarea, select").filter(":not(." + CORE.MAINTAIN_DISABLED + ")")
-								.add($(targetSelector).filter("input, textarea, select").filter(":not(." + CORE.MAINTAIN_DISABLED + ")"));
+						let targetSelector = $(`[id="${impacted}"]`);
+						let impactedElements = $(targetSelector).find(`input, textarea, select`).filter(`:not(.${CORE.MAINTAIN_DISABLED})`)
+								.add($(targetSelector).filter(`input, textarea, select`).filter(`:not(.${CORE.MAINTAIN_DISABLED})`));
 						if (show === true) {
 							if (displayOrEnabled === true) {
 								$(targetSelector).show();
 							}
-							$(impactedElements).prop("disabled", false);
+							$(impactedElements).prop(`disabled`, false);
 						} else {
 							if (displayOrEnabled === true) {
 								$(targetSelector).hide();
 							}
-							$(impactedElements).prop("disabled", true);
+							$(impactedElements).prop(`disabled`, true);
 							if (displayControlFirstChange === false && CommonUtil.exists(initiators[CORE.CALLBACK_FUNCTION_NAME])) {
-								eval(initiators[CORE.CALLBACK_FUNCTION_NAME] + '(\"[id=\'' + impacted + '\']\")');
+								eval(`${initiators[CORE.CALLBACK_FUNCTION_NAME]}(\`[id="${impacted}"]\`)`);
 							}
 						}
 					}
 				});
 			};
 			$(nameSelector(field[0])).each((_, initiatorItem) => {
-				if (CommonUtil.isBlank($(initiatorItem).attr("id"))) {
-					$(initiatorItem).attr("id", CORE.DEFAULT_ID + nonIdIndex ++);
+				if (CommonUtil.isBlank($(initiatorItem).attr(`id`))) {
+					$(initiatorItem).attr(`id`, getNextId());
 				}
 			});
 			CommonUtil.initAndDeployListener($(nameSelector(field[0])), bindDisplayControlEvent);
@@ -339,10 +339,10 @@
 	function extractDisplayControlConfig(item) {
 		let bindConfig = {};
 		for (let configType in DISPLAY_CONTROL_CONFIG_PRESET) {
-			bindConfig['bindField'] = $(item).attr(configType);
+			bindConfig[CORE.BIND_FIELD] = $(item).attr(configType);
 			bindConfig[CORE.IS_SHOW_OR_HIDE] = DISPLAY_CONTROL_CONFIG_PRESET[configType][CORE.IS_SHOW_OR_HIDE];
 			bindConfig[CORE.IS_DISPLAY_OR_ENABLED] = DISPLAY_CONTROL_CONFIG_PRESET[configType][CORE.IS_DISPLAY_OR_ENABLED];
-			if (CommonUtil.exists(bindConfig['bindField'])) {
+			if (CommonUtil.exists(bindConfig[CORE.BIND_FIELD])) {
 				break;
 			}
 		}
@@ -352,10 +352,10 @@
 	function triggerDisplayControlEventAtReady() {
 		for (let initiator in displayControlInitiator) {
 			let selectorString = nameSelector(initiator);
-			$(selectorString).filter(":not(:checkbox):not(:radio)").change();
+			$(selectorString).filter(`:not(:checkbox):not(:radio)`).change();
 			let processedName = [];
-			$(selectorString).filter("input:checkbox, input:radio").each((_, item) => {
-				let name = $(item).attr("name");
+			$(selectorString).filter(`input:checkbox, input:radio`).each((_, item) => {
+				let name = $(item).attr(`name`);
 				if (!processedName.includes(name)) {
 					$(item).change();
 					processedName.push(name);
@@ -366,40 +366,44 @@
 	}
 
 	function nameSelector(name) {
-		return "[name='" + name + "']";
+		return `[name="${name}"]`;
+	}
+
+	function getNextId() {
+		return CORE.DEFAULT_ID + (nonIdIndex ++);
 	}
 
 	function prepareDisplayOnlyContent(_, item) {
-		let hidden = ":hidden"; // evasion of IDEA warning
+		let hidden = `:hidden`; // evasion of IDEA warning
 		if ($(item).hasClass(CORE.DISPLAY_ONLY_DEPLOYED) ||
 				$(item).closest(CORE.TEMPLATE_ID_SELECTOR + hidden).length > 0 || $(item).closest(CORE.TEMPLATE_ID_SELECTOR).closest(hidden).length > 0) {
 			return;
 		}
-		if ($(item).is("input:checkbox, input:radio")) {
+		if ($(item).is(`input:checkbox, input:radio`)) {
 			$(item).readonlyCheckable();
 		} else {
 			let value = $(item).val();
 			let dataBindField = $(item).attr(CORE.BIND);
-			let dataBindProperty = (CommonUtil.exists(dataBindField) ? ' ' + CORE.BIND + '="' + dataBindField + '"' : '');
-			if ($(item).is("select")) {
-				value = $(item).find("option[value='" + value + "']").text();
+			let dataBindProperty = (CommonUtil.exists(dataBindField) ? ` ${CORE.BIND}="${dataBindField}"` : ``);
+			if ($(item).is(`select`)) {
+				value = $(item).find(`option[value="${value}"]`).text();
 			}
-			let span = $('<span' + dataBindProperty + ' style="white-space: pre-wrap"></span>');
+			let span = $(`<span${dataBindProperty} style="white-space: pre-wrap"></span>`);
 			$(span).text(value);
 			$(item).after(span);
-			$(item).css("display", 'none');
+			$(item).css(`display`, `none`);
 		}
 		$(item).addClass(CORE.DISPLAY_ONLY_DEPLOYED);
 	}
 
 	function readonlyCheckable() {
 		$(this).on("click", () => false);
-		$(this).parent("label, span, div").css("cursor", 'default').css("opacity", DEFAULT_CSS.NON_SELECTABLE_OPACITY);
+		$(this).parent(`label, span, div`).css(`cursor`, `default`).css(`opacity`, DEFAULT_CSS.NON_SELECTABLE_OPACITY);
 	}
 
 	function boolean(testValue) {
 		if ($(this).length > 1) {
-			throw 'Multiple elements selected is not permitted.';
+			throw `Multiple elements selected is not permitted.`;
 		}
 		let value = null;
 		let valueString = $(this).val();
@@ -413,7 +417,7 @@
 		}
 		if (CommonUtil.exists(testValue)) {
 			if (typeof testValue !== "boolean") {
-				throw 'Invalid type of argument. Expected: boolean. Received: ' + typeof testValue + '.';
+				throw `Invalid type of argument. Expected: boolean. Received: ${typeof testValue}.`;
 			}
 			return testValue === value;
 		} else {
@@ -424,8 +428,8 @@
 	function isBlank() {
 		let isBlank = true;
 		$(this).each((_, item) => {
-			if (($(item).is("input:radio, input:checkbox") && $(item).is(":checked")) ||
-				(!$(item).is("input:radio, input:checkbox") && !CommonUtil.isBlank($(item).val()))) {
+			if (($(item).is(`input:radio, input:checkbox`) && $(item).is(`:checked`)) ||
+				(!$(item).is(`input:radio, input:checkbox`) && !CommonUtil.isBlank($(item).val()))) {
 				return isBlank = false;
 			}
 		});
@@ -440,8 +444,8 @@
 				&& (typeof appendString === "string" || typeof appendString === "number")) {
 			modifyCore([operation, appendString], this, false);
 		} else {
-			throw 'Invalid type of argument. Expected: function; string/number, string/number. Received: ' +
-					typeof operation + (CommonUtil.exists(appendString) ? (', ' + typeof appendString) : '') +'.';
+			throw `Invalid type of argument. Expected: function; string/number, string/number. Received: ` +
+					typeof operation + `${CommonUtil.exists(appendString) ? `, ${typeof appendString}` : ``}.`;
 		}
 	}
 
@@ -449,8 +453,8 @@
 		if (!isNaN(increaseValue) && typeof increaseValue !== "boolean") {
 			modifyCore(value => Number(value) + Number(increaseValue), this, true);
 		} else {
-			throw 'Invalid numeric increase value. Expected: number/string. Received: ' +
-					typeof increaseValue + (typeof increaseValue === "string" ? '(NaN)' : '') + '.';
+			throw `Invalid numeric increase value. Expected: number/string. Received: ` +
+					typeof increaseValue + `${typeof increaseValue === "string" ? `(NaN)` : ``}.`;
 		}
 	}
 
@@ -461,13 +465,13 @@
 		}
 		$(target).each((_, item) => {
 			let domChanger;
-			if ($(item).is("input:text, input:hidden, textarea")) {
+			if ($(item).is(`input:text, input:hidden, textarea`)) {
 				domChanger = $.fn.val;
-			} else if ($(item).is("span, label")) {
+			} else if ($(item).is(`span, label`)) {
 				domChanger = $.fn.text;
 			} else {
-				throw 'Unmodifiable element type. Target: ' + $(item).attr("id") + '. Type: ' +
-						$(item).prop("tagName").toLocaleLowerCase() + ($(item).prop("tagName") === "INPUT" ? ':' + $(item).prop("type") : '') + '.';
+				throw `Unmodifiable element type. Target: ${$(item).attr(`id`)}. Type: ` +
+						$(item).prop(`tagName`).toLocaleLowerCase() + `${$(item).prop(`tagName`) === `INPUT` ? `:${$(item).prop(`type`)}` : ``}.`;
 			}
 			let originalValue = domChanger.apply($(item));
 			if (isIncreasing === false || !isNaN(originalValue)) {
@@ -489,7 +493,7 @@
 			if (isBlank(string)) {
 				return string;
 			}
-			return string.replaceAll('\'', '\\\'').replaceAll('\"', '\\\"');
+			return string.replaceAll('\'', '\\\'').replaceAll('\"', '\\\"').replaceAll('\`', '\\\`');
 		}
 
 		let throttleTimer = {};
@@ -524,18 +528,18 @@
 			value = exists(value) ? value : '';
 			for (let selector of selectors) {
 				$(selector).each((_, item) => {
-					if ($(item).is("input:radio, input:checkbox")) {
-						$(item).prop("checked", false);
-						$(item).filter("[value='" + value.toString() + "']").prop("checked", true);
-					} else if ($(item).is("input:text, input:hidden, textarea, select")) {
+					if ($(item).is(`input:radio, input:checkbox`)) {
+						$(item).prop(`checked`, false);
+						$(item).filter(`[value="${value.toString()}"]`).prop(`checked`, true);
+					} else if ($(item).is(`input:text, input:hidden, textarea, select`)) {
 						$(item).val(value);
-					} else if ($(item).is("label, span, p")) {
+					} else if ($(item).is(`label, span, p`)) {
 						$(item).text(value);
-					} else if ($(item).is("a")) {
-						$(item).attr("href", value);
+					} else if ($(item).is(`a`)) {
+						$(item).attr(`href`, value);
 					}
 					if (doChange === true) {
-						throttle(() => $(item).blur().change(), $(item).attr("id"));
+						throttle(() => $(item).blur().change(), $(item).attr(`id`));
 					}
 				});
 			}

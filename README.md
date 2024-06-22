@@ -11,6 +11,10 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.8.2 (2024-06-23)
+*	Use ES6 template strings.
+*	Minor Optimization.
+
 #### 1.8.1 (2024-06-12)
 *	[data-unchecked-value] event preferentially generates checkbox under form element.
 
