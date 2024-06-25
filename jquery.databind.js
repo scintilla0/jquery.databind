@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.8.2 - 2024-06-23
+ * jquery.databind.js - version 1.8.3 - 2024-06-25
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -22,7 +22,7 @@
  * Add the attribute [data-unchecked-value="$value"] to submit a default value when a checkbox element is not checked instead of submitting nothing.
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
  * For a better visual effect, please add the CSS rule [.display-only, [data-display], [data-hide], [data-enable], [data-disable] { display: none; }] to your main stylesheet.
- * Invoke $("$selector").readonlyCheckable() to make checkbox or radio elements readonly via js code if they are unmodifiable.
+ * Invoke $("$selector").readonlyCheckable() to make checkbox, radio or select elements readonly via js code if they are unmodifiable.
  * Invoke $("$selector").boolean() to evaluate the boolean value of an element. Returns null if it is unparseable.
  * A boolean test value can be passed in when evaluate whether the element reserves the target boolean value, e.g. $("$selector").boolean(false).
  * Invoke $.isBlank() or $("$selector").isBlank() to evaluate whether parameter or the value of the target dom is undefined, null or blank.
@@ -37,9 +37,9 @@
 			UNCHECKED_VALUE: "data-unchecked-value", REVERSE_CHECKBOX_ID: "data-reverse-checkbox-id",
 			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
 			MAINTAIN_DISABLED: 'maintain-disabled', TEMPLATE_ID_SELECTOR: "[id*=\"emplate\"]",
+			READONLY_CHECKABLE_ITEM: 'readonly-checkable-item',
 			BIND_FIELD: "bindField", IS_SHOW_OR_HIDE: "isShowOrHide", IS_DISPLAY_OR_ENABLED: "isDisplayOrEnabled"};
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
-	const DEFAULT_CSS = {NON_SELECTABLE_OPACITY: '0.5'};
 	const DISPLAY_CONTROL_CONFIG_PRESET = {
 		[CORE.DISPLAY]: {[CORE.IS_SHOW_OR_HIDE]: true, [CORE.IS_DISPLAY_OR_ENABLED]: true},
 		[CORE.HIDE]: {[CORE.IS_SHOW_OR_HIDE]: false, [CORE.IS_DISPLAY_OR_ENABLED]: true},
@@ -397,8 +397,27 @@
 	}
 
 	function readonlyCheckable() {
-		$(this).on("click", () => false);
-		$(this).parent(`label, span, div`).css(`cursor`, `default`).css(`opacity`, DEFAULT_CSS.NON_SELECTABLE_OPACITY);
+		$(this).addClass(CORE.READONLY_CHECKABLE_ITEM);
+		let checkable = $(this).filter("input:radio, input:checkbox").on("click", () => false);
+		let select = $(this).filter("select:not(.select2Used)").css(`pointer-events`, `none`);
+		if (isBootstrapCSSLoaded()) {
+			$(checkable).parent(`label, span, div`).css(`cursor`, `default`).css(`opacity`, `0.5`);
+			$(select).css(`cursor`, `default`).css(`background-color`, `#e9ecef`);
+		} else {
+			$(checkable).parent(`label, span, div`).css(`cursor`, `default`).css(`opacity`, `0.5`);
+			$(select).css(`cursor`, `default`).css(`color`, `#6d6d6d`).css(`opacity`, `0.7`)
+					.css(`background-color`, `#f8f8f8`).css(`border-color`, `#d0d0d0`)
+					.css(`border-radius`, `2.5px`);
+		}
+	}
+
+	function isBootstrapCSSLoaded() {
+		for (let link of document.getElementsByTagName('link')) {
+			if (link.href && (link.href.includes('bootstrap.min.css') || link.href.includes('bootstrap.css'))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	function boolean(testValue) {

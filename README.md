@@ -11,6 +11,11 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.8.3 (2024-06-25)
+*	$(selector).readonlyCheckable() now supports select elements.
+*	$(selector).readonlyCheckable() supports bootstrap css style for select elements, other elements will be fulfilled in later version.
+*	$(selector).readonlyCheckable() now adds a class "readonly_checkable_item" for customized styles.
+
 #### 1.8.2 (2024-06-23)
 *	Use ES6 template strings.
 *	Minor Optimization.

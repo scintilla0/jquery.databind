@@ -646,8 +646,9 @@ function test1() {
 
 				<div class="content">
 					<p class="brief">
-						If checkbox or radio elements are unmodifiable in HTML for some reason, invoke <span class="expression">$(<span class="varName">[$selector]</span>).readonlyCheckable()</span> to make them unselectable via js code.<br>
-						　Notice that they are just unable to be selected instead of having a <span class="expression">[readonly]</span> or <span class="expression">[disabled]</span> attribute.
+						If checkbox, radio or select elements are unmodifiable in HTML for some reason, invoke <span class="expression">$(<span class="varName">[$selector]</span>).readonlyCheckable()</span> to make them unselectable via js code.<br>
+						　Notice that they are just unable to be selected instead of having a <span class="expression">[readonly]</span> or <span class="expression">[disabled]</span> attribute.<br>
+						　These elements will have class <span class="expression">"readonly-checkable-item"</span> for your customized styles.
 					</p>
 					<div class="item radio3">
 						<span>
@@ -687,10 +688,26 @@ function test1() {
 &lt;input type="checkbox" name="field16" value="3" checked&gt;</code>
 						</pre>
 					</div>
+					<div class="item select">
+						<select name="field30">
+							<option value=""></option>
+							<option value="1" selected>label 1</option>
+							<option value="2">label 2</option>
+							<option value="3">label 3</option>
+						</select>
+						<pre class="code" style="margin-left: 159px;">
+							<code class="language-html">&lt;select name="field30"&gt;
+	&lt;option value=""&gt;&lt;/option&gt;
+	&lt;option value="1" selected&gt;label 1&lt;/option&gt;
+	&lt;option value="2"&gt;label 2&lt;/option&gt;
+	&lt;option value="3"&gt;label 3&lt;/option&gt;
+&lt;/select&gt;</code>
+						</pre>
+					</div>
 					<div class="item">
 						<pre class="code" style="margin-left: 210px;">
 							<code class="language-js">$(document).ready(() => {
-	$("[name='field15'], [name='field16']").readonlyCheckable();
+	$("[name='field15'], [name='field16'], [name='field30']").readonlyCheckable();
 });</code>
 						</pre>
 					</div>
@@ -861,7 +878,7 @@ $("#field28").increase('-10');</code>
 		hljs.highlightAll();
 
 		$(document).ready(() => {
-			$("[name='field15'], [name='field16']").readonlyCheckable();
+			$("[name='field15'], [name='field16'], [name='field30']").readonlyCheckable();
 		});
 
 		function test1() {
