@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.8.3 - 2024-06-25
+ * jquery.databind.js - version 1.9.0 - 2024-06-28
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -22,7 +22,7 @@
  * Add the attribute [data-unchecked-value="$value"] to submit a default value when a checkbox element is not checked instead of submitting nothing.
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
  * For a better visual effect, please add the CSS rule [.display-only, [data-display], [data-hide], [data-enable], [data-disable] { display: none; }] to your main stylesheet.
- * Invoke $("$selector").readonlyCheckable() to make checkbox, radio or select elements readonly via js code if they are unmodifiable.
+ * Invoke $("$selector").readonly() to make checkbox, radio or select elements readonly via js code if they are unmodifiable, and $("$selector").removeReadonly() to remove it.
  * Invoke $("$selector").boolean() to evaluate the boolean value of an element. Returns null if it is unparseable.
  * A boolean test value can be passed in when evaluate whether the element reserves the target boolean value, e.g. $("$selector").boolean(false).
  * Invoke $.isBlank() or $("$selector").isBlank() to evaluate whether parameter or the value of the target dom is undefined, null or blank.
@@ -37,8 +37,8 @@
 			UNCHECKED_VALUE: "data-unchecked-value", REVERSE_CHECKBOX_ID: "data-reverse-checkbox-id",
 			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
 			MAINTAIN_DISABLED: 'maintain-disabled', TEMPLATE_ID_SELECTOR: "[id*=\"emplate\"]",
-			READONLY_CHECKABLE_ITEM: 'readonly-checkable-item',
-			BIND_FIELD: "bindField", IS_SHOW_OR_HIDE: "isShowOrHide", IS_DISPLAY_OR_ENABLED: "isDisplayOrEnabled"};
+			READONLY_ITEM: 'readonly-item', BIND_FIELD: "bindField",
+			IS_SHOW_OR_HIDE: "isShowOrHide", IS_DISPLAY_OR_ENABLED: "isDisplayOrEnabled"};
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
 	const DISPLAY_CONTROL_CONFIG_PRESET = {
 		[CORE.DISPLAY]: {[CORE.IS_SHOW_OR_HIDE]: true, [CORE.IS_DISPLAY_OR_ENABLED]: true},
@@ -48,7 +48,8 @@
 	};
 	const CommonUtil = _CommonUtil();
 	$.fn.extend({
-		readonlyCheckable: readonlyCheckable,
+		readonly: readonly,
+		removeReadonly: removeReadonly,
 		boolean: boolean,
 		isBlank: isBlank,
 		increase: increase,
@@ -72,12 +73,12 @@
 			.on("change", `select[${CORE.BIND}]`, bindAction)
 			.on("click", `input:radio[${CORE.BIND}]`, bindAction)
 			.on("click", `input:checkbox[${CORE.BIND}][${CORE.CHECKBOX_TEXT}]`, bindAction)
-			.on("click", `input[${CORE.CHECK_FIELD}], button[${CORE.CHECK_FIELD}]`, checkAction);
+			.on("click", `input:checkbox[${CORE.CHECK_FIELD}], input:button[${CORE.CHECK_FIELD}], button[${CORE.CHECK_FIELD}]`, checkAction);
 	$(`input:text, textarea, select, input:radio:checked`).filter(`[${CORE.BIND}]`).each(bindAction);
 	$(`input:checkbox[${CORE.CHECK_FIELD}]`).each(prepareCheckReverseLinkage);
 	$(`input:checkbox[${CORE.UNCHECKED_VALUE}]`).on("click, change", uncheckedDefaultLinkAction).each(prepareUncheckedLinkDefault);
 	$(`input, textarea, select`).filter(`[disabled]`).addClass(CORE.MAINTAIN_DISABLED);
-	CommonUtil.initAndDeployListener(`input.${CORE.DISPLAY_ONLY}, select.${CORE.DISPLAY_ONLY}, textarea.${CORE.DISPLAY_ONLY}`, prepareDisplayOnlyContent);
+	CommonUtil.initAndDeployListener([`input`, `select`, `textarea`].map(item => `${item}.${CORE.DISPLAY_ONLY}`).join(`, `), prepareDisplayOnlyContent);
 	CommonUtil.initAndDeployListener(`[${Object.keys(DISPLAY_CONTROL_CONFIG_PRESET).join(`], [`)}]`, prepareDisplayControlEvent);
 	triggerDisplayControlEventAtReady();
 
@@ -219,7 +220,7 @@
 		let reverseCheckboxId = getNextId();
 		let reverseCheckbox = $(`<input type="checkbox" id="${reverseCheckboxId}" name="${$(item).attr(`name`)}" value="` +
 				$(item).attr(CORE.UNCHECKED_VALUE) + `"${$(item).prop(`checked`) ? `` : ` checked`} style="display: none;"/>`);
-		$(reverseCheckbox).readonlyCheckable();
+		$(reverseCheckbox).readonly();
 		let form = $(item).closest(`form`);
 		if ($(form).length === 1) {
 			$(form).prepend(reverseCheckbox);
@@ -380,7 +381,7 @@
 			return;
 		}
 		if ($(item).is(`input:checkbox, input:radio`)) {
-			$(item).readonlyCheckable();
+			$(item).readonly();
 		} else {
 			let value = $(item).val();
 			let dataBindField = $(item).attr(CORE.BIND);
@@ -396,28 +397,61 @@
 		$(item).addClass(CORE.DISPLAY_ONLY_DEPLOYED);
 	}
 
-	function readonlyCheckable() {
-		$(this).addClass(CORE.READONLY_CHECKABLE_ITEM);
-		let checkable = $(this).filter("input:radio, input:checkbox").on("click", () => false);
-		let select = $(this).filter("select:not(.select2Used)").css(`pointer-events`, `none`);
+	function readonly() {
+		$(this).addClass(CORE.READONLY_ITEM);
+		$(this).filter(`input:text, input:hidden, textarea`).prop(`readonly`, true);
+		let checkable = $(this).filter(`input:radio, input:checkbox`).css(`pointer-events`, `none`);
+		let select = $(this).filter(`select:not(.select2Used)`).css(`pointer-events`, `none`);
+		$(checkable).each((_, item) => $(`[for="${$(item).attr(`id`)}"]`).css(`pointer-events`, `none`));
 		if (isBootstrapCSSLoaded()) {
 			$(checkable).parent(`label, span, div`).css(`cursor`, `default`).css(`opacity`, `0.5`);
 			$(select).css(`cursor`, `default`).css(`background-color`, `#e9ecef`);
-		} else {
-			$(checkable).parent(`label, span, div`).css(`cursor`, `default`).css(`opacity`, `0.5`);
+		} else if (isBrowser(`Chrome`)) {
+			$(checkable).css(`cursor`, `default`).css(`filter`, `grayscale(1)`).css(`opacity`, `0.3`);
 			$(select).css(`cursor`, `default`).css(`color`, `#6d6d6d`).css(`opacity`, `0.7`)
-					.css(`background-color`, `#f8f8f8`).css(`border-color`, `#d0d0d0`)
-					.css(`border-radius`, `2.5px`);
+					.css(`background-color`, `#f8f8f8`).css(`border-color`, `#d0d0d0`).css(`border-radius`, `2.5px`);
+		} else if (isBrowser(`Firefox`)) {
+			$(checkable).css(`cursor`, `default`).css(`filter`, `grayscale(1)`).css(`opacity`, `0.55`);
+			$(select).css(`cursor`, `default`).css(`opacity`, `0.6`);
+		} else {
+			$(checkable).css(`cursor`, `default`).css(`opacity`, `0.5`);
+			$(select).css(`cursor`, `default`).css(`opacity`, `0.5`);
+		}
+	}
+
+	function removeReadonly() {
+		$(this).removeClass(CORE.READONLY_ITEM);
+		$(this).filter(`input:text, input:hidden, textarea`).prop(`readonly`, false);
+		let checkable = $(this).filter(`input:radio, input:checkbox`).css(`pointer-events`, ``);
+		let select = $(this).filter(`select:not(.select2Used)`).css(`pointer-events`, ``);
+		$(checkable).each((_, item) => $(`[for="${$(item).attr(`id`)}"]`).css(`pointer-events`, ``));
+		if (isBootstrapCSSLoaded()) {
+			$(checkable).parent(`label, span, div`).css(`cursor`, ``).css(`opacity`, ``);
+			$(select).css(`cursor`, ``).css(`background-color`, ``);
+		} else if (isBrowser(`Chrome`)) {
+			$(checkable).css(`cursor`, ``).css(`filter`, ``).css(`opacity`, ``);
+			$(select).css(`cursor`, ``).css(`color`, ``).css(`opacity`, ``)
+					.css(`background-color`, ``).css(`border-color`, ``).css(`border-radius`, ``);
+		} else if (isBrowser(`Firefox`)) {
+			$(checkable).css(`cursor`, ``).css(`filter`, ``).css(`opacity`, ``);
+			$(select).css(`cursor`, `default`).css(`opacity`, ``);
+		} else {
+			$(checkable).css(`cursor`, ``).css(`opacity`, ``);
+			$(select).css(`cursor`, ``).css(`opacity`, ``);
 		}
 	}
 
 	function isBootstrapCSSLoaded() {
-		for (let link of document.getElementsByTagName('link')) {
-			if (link.href && (link.href.includes('bootstrap.min.css') || link.href.includes('bootstrap.css'))) {
+		for (let link of $(`link`)) {
+			if (link.href && (link.href.includes(`bootstrap.min.css`) || link.href.includes(`bootstrap.css`))) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	function isBrowser(type) {
+		return navigator.userAgent.includes(type);
 	}
 
 	function boolean(testValue) {

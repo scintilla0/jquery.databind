@@ -11,10 +11,18 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.9.0 (2024-06-28)
+*	`IMPORTANT` Change method name from ~~$(selector).readonlyCheckable()~~ to $(selector).readonly().
+*	`IMPORTANT` Change the class name added by $(selector).readonly() from ~~"readonly-checkable-item"~~ to "readonly-item".
+*	Logic of $(selector).readonly()'s preventing checkbox/radio click action changed.
+*	$(selector).readonly() now can simply add property [readonly] to plain input and textarea elements.
+*	$(selector).readonly() now supports default Chrome/Firefox disabled style for checkbox, radio and select elements.
+*	Add method $(selector).removeReadonly() to remove $(selector).readonly()'s effects.
+
 #### 1.8.3 (2024-06-25)
 *	$(selector).readonlyCheckable() now supports select elements.
 *	$(selector).readonlyCheckable() supports bootstrap css style for select elements, other elements will be fulfilled in later version.
-*	$(selector).readonlyCheckable() now adds a class "readonly_checkable_item" for customized styles.
+*	$(selector).readonlyCheckable() now adds a class "readonly-checkable-item" for customized styles.
 
 #### 1.8.2 (2024-06-23)
 *	Use ES6 template strings.

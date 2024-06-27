@@ -195,7 +195,6 @@
 &lt;input type="checkbox" name="field1-checkbox" value="3" data-bind="field1"&gt;</code>
 						</pre>
 					</div>
-
 					<div class="item checkbox3">
 						<span>
 							<input type="checkbox" id="field2-checkbox1" name="field2-checkbox" value="1" data-bind="field2" data-bind-checkbox-text="checked">
@@ -642,14 +641,20 @@ function test1() {
 			</div>
 
 			<div class="subject">
-				<h3>$().readonlyCheckable()</h3>
+				<h3>$().readonly() / $().removeReadonly()</h3>
 
 				<div class="content">
 					<p class="brief">
-						If checkbox, radio or select elements are unmodifiable in HTML for some reason, invoke <span class="expression">$(<span class="varName">[$selector]</span>).readonlyCheckable()</span> to make them unselectable via js code.<br>
+						If checkbox, radio or select elements are unmodifiable in HTML for some reason, invoke <span class="expression">$(<span class="varName">[$selector]</span>).readonly()</span> to make them unselectable via js code.<br>
 						　Notice that they are just unable to be selected instead of having a <span class="expression">[readonly]</span> or <span class="expression">[disabled]</span> attribute.<br>
 						　These elements will have class <span class="expression">"readonly-checkable-item"</span> for your customized styles.
 					</p>
+					<div class="item">
+						<input type="text" name="field31" value="testValue">
+						<pre class="code">
+							<code class="language-html">&lt;input type="text" name="field31" value="testValue"&gt;</code>
+						</pre>
+					</div>
 					<div class="item radio3">
 						<span>
 							<input type="radio" id="field15-radio1" name="field15" value="1">
@@ -705,10 +710,25 @@ function test1() {
 						</pre>
 					</div>
 					<div class="item">
-						<pre class="code" style="margin-left: 210px;">
-							<code class="language-js">$(document).ready(() => {
-	$("[name='field15'], [name='field16'], [name='field30']").readonlyCheckable();
-});</code>
+						<button type="button" style="margin: 10px;" onclick="readonly()">readonly</button>
+						<pre class="code" style="margin-left: 123px;">
+							<code class="language-js">function readonly() {
+	$("[name='field31'], [name='field15'], [name='field16'], [name='field30']").readonly();
+}</code>
+						</pre>
+					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief">
+						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).removeReadonly()</span> to remove these effects.
+					</p>
+					<div class="item">
+						<button type="button" style="margin: 10px;" onclick="removeReadonly()">removeReadonly</button>
+						<pre class="code" style="margin-left: 73px;">
+							<code class="language-js">function removeReadonly() {
+	$("[name='field31'], [name='field15'], [name='field16'], [name='field30']").removeReadonly();
+}</code>
 						</pre>
 					</div>
 				</div>
@@ -877,9 +897,13 @@ $("#field28").increase('-10');</code>
 	<script>
 		hljs.highlightAll();
 
-		$(document).ready(() => {
-			$("[name='field15'], [name='field16'], [name='field30']").readonlyCheckable();
-		});
+		function readonly() {
+			$("[name='field31'], [name='field15'], [name='field16'], [name='field30']").readonly();
+		}
+
+		function removeReadonly() {
+			$("[name='field31'], [name='field15'], [name='field16'], [name='field30']").removeReadonly();
+		}
 
 		function test1() {
 			let testSpan = $("#test1Result");
