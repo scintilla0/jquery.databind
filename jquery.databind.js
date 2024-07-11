@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.9.0 - 2024-06-28
+ * jquery.databind.js - version 1.9.1 - 2024-07-11
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -26,6 +26,7 @@
  * Invoke $("$selector").boolean() to evaluate the boolean value of an element. Returns null if it is unparseable.
  * A boolean test value can be passed in when evaluate whether the element reserves the target boolean value, e.g. $("$selector").boolean(false).
  * Invoke $.isBlank() or $("$selector").isBlank() to evaluate whether parameter or the value of the target dom is undefined, null or blank.
+ * Invoke $("$selector").isChecked() to evaluate whether the target checkbox or radio element is checked.
  * Invoke $("$selector").modify($function) or $("$selector").modify($prependString, $appendString) to quickly modify the value or text of the target element.
  * Invoke $("$selector").increase() or $("$selector").increase($increaseValue) to quickly modify the numeric value or text of the target element.
  */
@@ -52,6 +53,7 @@
 		removeReadonly: removeReadonly,
 		boolean: boolean,
 		isBlank: isBlank,
+		isChecked: isChecked,
 		increase: increase,
 		modify: modify
 	});
@@ -487,6 +489,10 @@
 			}
 		});
 		return isBlank;
+	}
+
+	function isChecked() {
+		return $(this).is(`input:radio:checked, input:checkbox:checked`);
 	}
 
 	function modify(operation, appendString) {

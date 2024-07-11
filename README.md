@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.9.1 (2024-07-11)
+*	Add method $(selector).isChecked().
+
 #### 1.9.0 (2024-06-28)
 *	`IMPORTANT` Change method name from ~~$(selector).readonlyCheckable()~~ to $(selector).readonly().
 *	`IMPORTANT` Change the class name added by $(selector).readonly() from ~~"readonly-checkable-item"~~ to "readonly-item".

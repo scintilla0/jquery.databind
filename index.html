@@ -1039,6 +1039,62 @@ let field24Blank = $.isBlank('1234'); // field24Blank = false</code></pre>
 			</div>
 
 			<div class="subject">
+				<h3 class="mb-3">$().isChecked()</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).isChecked()</span> to evaluate whether the target checkbox or radio element is checked.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						通过调用<span class="expression">$(<span class="varName">[$selector]</span>).isChecked()</span>来判断一个checkbox或radio标签是否被选中．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="form-check-inline">
+								<input type="checkbox" class="form-check-input" id="field32-checkbox1" name="field32" value="1" checked>
+								<label class="form-check-label" for="field32-checkbox1">item: 1</label>
+							</div>
+							<div class="form-check-inline">
+								<input type="checkbox" class="form-check-input" id="field32-checkbox2" name="field32" value="2">
+								<label class="form-check-label" for="field32-checkbox2">item: 2</label>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+								<pre><code class="language-html">&lt;input type="checkbox" name="field32" value="1" checked&gt;
+&lt;input type="checkbox" name="field32" value="2"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="form-check-inline">
+								<input type="radio" class="form-check-input" id="field33-radio1" name="field33" value="1" checked>
+								<label class="form-check-label" for="field33-radio1">item: 1</label>
+							</div>
+							<div class="form-check-inline">
+								<input type="radio" class="form-check-input" id="field33-radio2" name="field33" value="2">
+								<label class="form-check-label" for="field33-radio2">item: 2</label>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field33" value="1" checked&gt;
+&lt;input type="radio" name="field33" value="2"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-8 offset-md-4 code-container">
+							<pre><code class="language-js">let idField32Checkbox1Checked = $("#field32-checkbox1").isChecked(); // idField32Checkbox1Checked = true
+let idField32Checkbox2Checked = $("#field32-checkbox2").isChecked(); // idField32Checkbox2Checked = false
+let idField33Checkbox1Checked = $("#field33-checkbox1").isChecked(); // idField33Checkbox1Checked = true
+let idField33Checkbox2Checked = $("#field33-checkbox2").isChecked(); // idField33Checkbox2Checked = false</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
 				<h3 class="mb-3">$().modify() / $().increase()</h3>
 
 				<div class="content">
