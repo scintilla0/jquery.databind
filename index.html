@@ -31,6 +31,10 @@
 			margin-bottom: 60px;
 		}
 
+		.align-items-center {
+			padding-top: 1px;
+			padding-bottom: 1px;
+		}
 		.code-container {
 			position: relative;
 			background-color: #f8f9fa;
@@ -106,7 +110,7 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="text" class="form-control" data-bind="field1">
+							<input type="text" data-bind="field1">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="text" data-bind="field1"&gt;</code></pre>
@@ -115,7 +119,7 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<textarea class="form-control" data-bind="field1"></textarea>
+							<textarea data-bind="field1"></textarea>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;textarea data-bind="field1"&gt;&lt;/textarea&gt;</code></pre>
@@ -133,7 +137,7 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<select class="form-select" data-bind="field1">
+							<select data-bind="field1">
 								<option value=""></option>
 								<option value="1">1</option>
 								<option value="2">2</option>
@@ -152,18 +156,9 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field1-radio1" name="field1-radio" value="1" data-bind="field1">
-								<label class="form-check-label" for="field1-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field1-radio2" name="field1-radio" value="2" data-bind="field1">
-								<label class="form-check-label" for="field1-radio2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field1-radio3" name="field1-radio" value="3" data-bind="field1">
-								<label class="form-check-label" for="field1-radio3">item: 3</label>
-							</div>
+							<input type="radio" id="field1-radio1" name="field1-radio" value="1" data-bind="field1">
+							<input type="radio" id="field1-radio2" name="field1-radio" value="2" data-bind="field1">
+							<input type="radio" id="field1-radio3" name="field1-radio" value="3" data-bind="field1">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" name="field1-radio" value="1" data-bind="field1"&gt;
@@ -187,18 +182,9 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field1-checkbox1" name="field1-checkbox" value="1" data-bind="field1">
-								<label class="form-check-label" for="field1-checkbox1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field1-checkbox2" name="field1-checkbox" value="2" data-bind="field1">
-								<label class="form-check-label" for="field1-checkbox2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field1-checkbox3" name="field1-checkbox" value="3" data-bind="field1">
-								<label class="form-check-label" for="field1-checkbox3">item: 3</label>
-							</div>
+							<input type="checkbox" id="field1-checkbox1" name="field1-checkbox" value="1" data-bind="field1">
+							<input type="checkbox" id="field1-checkbox2" name="field1-checkbox" value="2" data-bind="field1">
+							<input type="checkbox" id="field1-checkbox3" name="field1-checkbox" value="3" data-bind="field1">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="checkbox" name="field1-checkbox" value="1" data-bind="field1"&gt;
@@ -209,11 +195,8 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container" style="display: flex; align-items: center;">
-							<div class="form-check" style="width: 150px;">
-								<input type="checkbox" class="form-check-input" id="field2-checkbox1" name="field2-checkbox" value="1" data-bind="field2" data-bind-checkbox-text="checked">
-								<label class="form-check-label" for="field2-checkbox1">item: 1</label>
-							</div>
-							<input type="text" class="form-control" data-bind="field2"><br>
+							<input type="checkbox" id="field2-checkbox1" name="field2-checkbox" value="1" data-bind="field2" data-bind-checkbox-text="checked">
+							<input type="text" data-bind="field2" style="width: fit-content;">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="checkbox" name="field2-checkbox" value="1" data-bind="field2" data-bind-checkbox-text="checked"&gt;
@@ -239,7 +222,7 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<select class="form-select" data-bind="field3">
+							<select data-bind="field3">
 								<option value=""></option>
 								<option value="1" data-display-content="display content 1">label 1</option>
 								<option value="2" data-display-content="display content 2">label 2</option>
@@ -258,7 +241,7 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="text" class="form-control" data-bind="field3">
+							<input type="text" data-bind="field3">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="text" data-bind="field3"&gt;</code></pre>
@@ -267,7 +250,7 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="text" class="form-control" data-bind="field3" data-bind-option-text>
+							<input type="text" data-bind="field3" data-bind-option-text>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="text" data-bind="field3" data-bind-option-text&gt;</code></pre>
@@ -276,7 +259,7 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="text" class="form-control" data-bind="field3" data-bind-option-text="data-display-content">
+							<input type="text" data-bind="field3" data-bind-option-text="data-display-content">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="text" data-bind="field3" data-bind-option-text="data-display-content"&gt;</code></pre>
@@ -300,7 +283,7 @@
 						<div class="col-md-3 item-container">
 							<div class="form-check">
 								<input type="checkbox" class="form-check-input" id="field4-checkbox-control" data-check-field="field4">
-								<label for="field4-checkbox-control">control</label>
+								<label class="form-check-label" for="field4-checkbox-control">control</label>
 							</div>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
@@ -310,18 +293,9 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field4-checkbox1" name="field4" value="1">
-								<label class="form-check-label" for="field4-checkbox1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field4-checkbox2" name="field4" value="2">
-								<label class="form-check-label" for="field4-checkbox2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field4-checkbox3" name="field4" value="3">
-								<label class="form-check-label" for="field4-checkbox3">item: 3</label>
-							</div>
+							<input type="checkbox" id="field4-checkbox1" name="field4" value="1">
+							<input type="checkbox" id="field4-checkbox2" name="field4" value="2">
+							<input type="checkbox" id="field4-checkbox3" name="field4" value="3">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="checkbox" name="field4" value="1"&gt;
@@ -341,8 +315,8 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="button" class="btn btn-primary" data-check-field="field5" checked value="check">
-							<button type="button" class="btn btn-primary" data-check-field="field5">uncheck</button>
+							<input type="button" data-check-field="field5" checked value="check" style="width: 100px;">
+							<button type="button" data-check-field="field5" style="width: 100px;">uncheck</button>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="button" data-check-field="field5" checked value="check"&gt;
@@ -352,18 +326,9 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field5-checkbox1" name="field5" value="1">
-								<label class="form-check-label" for="field5-checkbox1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field5-checkbox2" name="field5" value="2">
-								<label class="form-check-label" for="field5-checkbox2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field5-checkbox3" name="field5" value="3">
-								<label class="form-check-label" for="field5-checkbox3">item: 3</label>
-							</div>
+							<input type="checkbox" id="field5-checkbox1" name="field5" value="1">
+							<input type="checkbox" id="field5-checkbox2" name="field5" value="2">
+							<input type="checkbox" id="field5-checkbox3" name="field5" value="3">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="checkbox" name="field5" value="1"&gt;
@@ -386,8 +351,7 @@
 							<div class="form-check-inline">
 								<input type="checkbox" class="form-check-input" id="field6-checkbox-control" data-check-field="eld6$">
 								<label class="form-check-label" for="field6-checkbox-control">control</label>
-							</div>
-						</div>
+							</div>						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="checkbox" data-check-field="eld6$"&gt;</code></pre>
 						</div>
@@ -395,18 +359,9 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field6-checkbox1" name="field6" value="1">
-								<label class="form-check-label" for="field6-checkbox1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field6-checkbox2" name="field6" value="2">
-								<label class="form-check-label" for="field6-checkbox2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field6-checkbox3" name="field6" value="3">
-								<label class="form-check-label" for="field6-checkbox3">item: 3</label>
-							</div>
+							<input type="checkbox" id="field6-checkbox1" name="field6" value="1">
+							<input type="checkbox" id="field6-checkbox2" name="field6" value="2">
+							<input type="checkbox" id="field6-checkbox3" name="field6" value="3">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="checkbox" name="field6" value="1"&gt;
@@ -443,14 +398,8 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field7-radio1" name="field7" value="1" checked>
-								<label class="form-check-label" for="field7-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field7-radio2" name="field7" value="2">
-								<label class="form-check-label" for="field7-radio2">item: 2</label>
-							</div>
+							<input type="radio" id="field7-radio1" name="field7" value="1" checked>
+							<input type="radio" id="field7-radio2" name="field7" value="2">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" name="field7" value="1" checked&gt;
@@ -482,14 +431,8 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field8-radio1" name="field8" value="1" checked>
-								<label class="form-check-label" for="field8-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field8-radio2" name="field8" value="2">
-								<label class="form-check-label" for="field8-radio2">item: 2</label>
-							</div>
+							<input type="radio" id="field8-radio1" name="field8" value="1" checked>
+							<input type="radio" id="field8-radio2" name="field8" value="2">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" name="field8" value="1" checked&gt;
@@ -519,18 +462,9 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field9-radio1" name="field9" value="1" checked>
-								<label class="form-check-label" for="field9-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field9-radio2" name="field9" value="2">
-								<label class="form-check-label" for="field9-radio2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field9-radio3" name="field9" value="3">
-								<label class="form-check-label" for="field9-radio3">item: 3</label>
-							</div>
+							<input type="radio" id="field9-radio1" name="field9" value="1" checked>
+							<input type="radio" id="field9-radio2" name="field9" value="2">
+							<input type="radio" id="field9-radio3" name="field9" value="3">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" name="field9" value="1" checked&gt;
@@ -554,7 +488,7 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="text" class="form-control" data-enable="field11:1" value="test string">
+							<input type="text" data-enable="field11:1" value="test string">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="text" data-enable="field11:1" value="test string"&gt;</code></pre>
@@ -563,14 +497,8 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field11-radio1" name="field11" value="1" checked>
-								<label class="form-check-label" for="field11-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field11-radio2" name="field11" value="2">
-								<label class="form-check-label" for="field11-radio2">item: 2</label>
-							</div>
+							<input type="radio" id="field11-radio1" name="field11" value="1" checked>
+							<input type="radio" id="field11-radio2" name="field11" value="2">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" name="field11" value="1" checked&gt;
@@ -580,7 +508,7 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="text" class="form-control" data-disable="field12:1" value="test string">
+							<input type="text" data-disable="field12:1" value="test string">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="text" data-disable="field12:1" value="test string"&gt;</code></pre>
@@ -589,14 +517,8 @@
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field12-radio1" name="field12" value="1" checked>
-								<label class="form-check-label" for="field12-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field12-radio2" name="field12" value="2">
-								<label class="form-check-label" for="field12-radio2">item: 2</label>
-							</div>
+							<input type="radio" id="field12-radio1" name="field12" value="1" checked>
+							<input type="radio" id="field12-radio2" name="field12" value="2">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" name="field12" value="1" checked&gt;
@@ -643,14 +565,8 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field10-radio1" name="field10" value="1" checked>
-								<label class="form-check-label" for="field10-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field10-radio2" name="field10" value="2">
-								<label class="form-check-label" for="field10-radio2">item: 2</label>
-							</div>
+							<input type="radio" id="field10-radio1" name="field10" value="1" checked>
+							<input type="radio" id="field10-radio2" name="field10" value="2">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" name="field10" value="1" checked&gt;
@@ -675,10 +591,7 @@ function test1() {
 						<div class="col-md-3 item-container">
 							<div class="row">
 								<div class="col-md">
-									<div class="form-check" style="margin-right: 30px;">
-										<input type="checkbox" class="form-check-input" id="field29-checkbox1" name="field29" value="1" checked data-unchecked-value="0">
-										<label class="form-check-label" for="field29-checkbox1">item: 1</label>
-									</div>
+									<input type="checkbox" id="field29-checkbox1" name="field29" value="1" checked data-unchecked-value="0">
 								</div>
 							</div>
 							<div class="row">
@@ -707,7 +620,7 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="text" class="form-control display-only" value="display-only input">
+							<input type="text" class="display-only" value="display-only input">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="text" class="display-only" value="display-only input"&gt;</code></pre>
@@ -716,7 +629,7 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<select class="form-select display-only">
+							<select class="display-only">
 								<option value=""></option>
 								<option value="1" selected>label 1</option>
 								<option value="2">label 2</option>
@@ -735,18 +648,9 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" id="field13-radio1" name="field13" class="form-check-input display-only" value="1">
-								<label class="form-check-label" for="field13-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" id="field13-radio2" name="field13" class="form-check-input display-only" value="2" checked>
-								<label class="form-check-label" for="field13-radio2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" id="field13-radio3" name="field13" class="form-check-input display-only" value="3">
-								<label class="form-check-label" for="field13-radio3">item: 3</label>
-							</div>
+							<input type="radio" id="field13-radio1" name="field13" class="display-only" value="1">
+							<input type="radio" id="field13-radio2" name="field13" class="display-only" value="2" checked>
+							<input type="radio" id="field13-radio3" name="field13" class="display-only" value="3">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" name="field13" class="display-only" value="1"&gt;
@@ -757,18 +661,9 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="checkbox" id="field14-checkbox1" name="field14" class="form-check-input display-only" value="1">
-								<label class="form-check-label" for="field14-checkbox1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" id="field14-checkbox2" name="field14" class="form-check-input display-only" value="2" checked>
-								<label class="form-check-label" for="field14-checkbox2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" id="field14-checkbox3" name="field14" class="form-check-input display-only" value="3" checked>
-								<label class="form-check-label" for="field14-checkbox3">item: 3</label>
-							</div>
+							<input type="checkbox" id="field14-checkbox1" name="field14" class="display-only" value="1">
+							<input type="checkbox" id="field14-checkbox2" name="field14" class="display-only" value="2" checked>
+							<input type="checkbox" id="field14-checkbox3" name="field14" class="display-only" value="3" checked>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="checkbox" name="field14" class="display-only" value="1"&gt;
@@ -796,7 +691,7 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="text" class="form-control readonly-group" name="field31" value="test string">
+							<input type="text" class="readonly-group" name="field31" value="test string">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="text" class="readonly-group" name="field31" value="test string"&gt;</code></pre>
@@ -805,19 +700,9 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input readonly-group" id="field15-radio1" name="field15" value="1">
-								<label class="form-check-label" for="field15-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input readonly-group" id="field15-radio2" name="field15" value="2" checked>
-								<label class="form-check-label" for="field15-radio2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input readonly-group" id="field15-radio3" name="field15" value="3">
-								<label class="form-check-label" for="field15-radio3">item: 3</label>
-							</div>
-
+							<input type="radio" class="readonly-group" id="field15-radio1" name="field15" value="1">
+							<input type="radio" class="readonly-group" id="field15-radio2" name="field15" value="2" checked>
+							<input type="radio" class="readonly-group" id="field15-radio3" name="field15" value="3">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" class="readonly-group" name="field15" value="1"&gt;
@@ -828,18 +713,9 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input readonly-group" id="field16-checkbox1" name="field16" value="1">
-								<label class="form-check-label" for="field16-checkbox1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input readonly-group" id="field16-checkbox2" name="field16" value="2" checked>
-								<label class="form-check-label" for="field16-checkbox2">item: 2</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input readonly-group" id="field16-checkbox3" name="field16" value="3" checked>
-								<label class="form-check-label" for="field16-checkbox3">item: 3</label>
-							</div>
+							<input type="checkbox" class="readonly-group" id="field16-checkbox1" name="field16" value="1">
+							<input type="checkbox" class="readonly-group" id="field16-checkbox2" name="field16" value="2" checked>
+							<input type="checkbox" class="readonly-group" id="field16-checkbox3" name="field16" value="3" checked>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="checkbox" class="readonly-group" name="field16" value="1"&gt;
@@ -850,7 +726,7 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<select class="form-select readonly-group" name="field30">
+							<select class="readonly-group" name="field30">
 								<option value=""></option>
 								<option value="1" selected>label 1</option>
 								<option value="2">label 2</option>
@@ -869,7 +745,7 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<button type="button" class="btn btn-primary" onclick="readonly()">readonly</button>
+							<button type="button" onclick="readonly()" style="width: 160px;">readonly</button>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-js">function readonly() {
@@ -889,7 +765,7 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3">
-							<button type="button" class="btn btn-primary" onclick="removeReadonly()">removeReadonly</button>
+							<button type="button" onclick="removeReadonly()" style="width: 160px;">removeReadonly</button>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-js">function removeReadonly() {
@@ -913,14 +789,14 @@ function test1() {
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field17" value="true">
+									<input type="text" id="field17" value="true">
 								</div>
 							</div>
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field18" value="123">
+									<input type="text" id="field18" value="123">
 								</div>
 							</div>
 						</div>
@@ -948,14 +824,14 @@ let field18Boolean = $("#field18").boolean(); // field18Boolean = null</code></p
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field19" value="false">
+									<input type="text" id="field19" value="false">
 								</div>
 							</div>
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field20" value="123">
+									<input type="text" id="field20" value="123">
 								</div>
 							</div>
 						</div>
@@ -987,14 +863,14 @@ let field20Boolean = $("#field20").boolean(true); // field20Boolean = false</cod
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field21">
+									<input type="text" id="field21">
 								</div>
 							</div>
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field22" value="123">
+									<input type="text" id="field22" value="123">
 								</div>
 							</div>
 						</div>
@@ -1022,7 +898,7 @@ let field22Blank = $("#field22").isBlank(); // field22Blank = false</code></pre>
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<input type="text" class="form-control" id="field23">
+							<input type="text" id="field23">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="text" id="field23"&gt;</code></pre>
@@ -1051,14 +927,8 @@ let field24Blank = $.isBlank('1234'); // field24Blank = false</code></pre>
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field32-checkbox1" name="field32" value="1" checked>
-								<label class="form-check-label" for="field32-checkbox1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="checkbox" class="form-check-input" id="field32-checkbox2" name="field32" value="2">
-								<label class="form-check-label" for="field32-checkbox2">item: 2</label>
-							</div>
+							<input type="checkbox" id="field32-checkbox1" name="field32" value="1" checked>
+							<input type="checkbox" id="field32-checkbox2" name="field32" value="2">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 								<pre><code class="language-html">&lt;input type="checkbox" name="field32" value="1" checked&gt;
@@ -1068,14 +938,8 @@ let field24Blank = $.isBlank('1234'); // field24Blank = false</code></pre>
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field33-radio1" name="field33" value="1" checked>
-								<label class="form-check-label" for="field33-radio1">item: 1</label>
-							</div>
-							<div class="form-check-inline">
-								<input type="radio" class="form-check-input" id="field33-radio2" name="field33" value="2">
-								<label class="form-check-label" for="field33-radio2">item: 2</label>
-							</div>
+							<input type="radio" id="field33-radio1" name="field33" value="1" checked>
+							<input type="radio" id="field33-radio2" name="field33" value="2">
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-html">&lt;input type="radio" name="field33" value="1" checked&gt;
@@ -1107,14 +971,14 @@ let isField33Checkbox2Checked = $("#field33-checkbox2").isChecked(); // isField3
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field25" value="test">
+									<input type="text" id="field25" value="test">
 								</div>
 							</div>
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field26" value="test">
+									<input type="text" id="field26" value="test">
 								</div>
 							</div>
 						</div>
@@ -1126,8 +990,8 @@ let isField33Checkbox2Checked = $("#field33-checkbox2").isChecked(); // isField3
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<button type="button" class="btn btn-primary" onclick="modifyField25()">modify25</button>
-							<button type="button" class="btn btn-primary" onclick="modifyField26()">modify26</button>
+							<button type="button" onclick="modifyField25()" style="width: 120px;">modify25</button>
+							<button type="button" onclick="modifyField26()" style="width: 120px;">modify26</button>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-js">$("#field25").modify(value => 'prefix ' + value + ' suffix');
@@ -1146,14 +1010,14 @@ $("#field26").modify('prefix ', ' suffix');</code></pre>
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field27" value="1">
+									<input type="text" id="field27" value="1">
 								</div>
 							</div>
-							<div class="row">
+							<div class="row align-items-center">
 								<div class="col-md">
-									<input type="text" class="form-control" id="field28" value="1">
+									<input type="text" id="field28" value="1">
 								</div>
 							</div>
 						</div>
@@ -1165,8 +1029,8 @@ $("#field26").modify('prefix ', ' suffix');</code></pre>
 
 					<div class="item row mb-4 align-items-center">
 						<div class="col-md-3 item-container">
-							<button type="button" class="btn btn-primary" onclick="increaseField27()">increase27</button>
-							<button type="button" class="btn btn-primary" onclick="increaseField28()">increase28</button>
+							<button type="button" onclick="increaseField27()" style="width: 120px;">increase27</button>
+							<button type="button" onclick="increaseField28()" style="width: 120px;">increase28</button>
 						</div>
 						<div class="col-md-8 offset-md-1 code-container">
 							<pre><code class="language-js">$("#field27").increase();
@@ -1199,7 +1063,17 @@ $("#field28").increase('-10');</code></pre>
 				$(`.lang-` + lang).remove();
 			}
 		});
-		$(`.code-container`).prepend(`<button type="button" class="btn btn-outline-primary btn-sm copy-button">copy</button>`);
+		$(`select`).addClass(`form-select`);
+		$(`button, input:button`).addClass(`btn`).addClass(`btn-primary`);
+		$(`input:text, textarea`).addClass(`form-control`);
+		$(`input:radio, input:checkbox`).filter(`:not(.form-check-input):not(:hidden)`).each((_, item) => {
+			$(item).addClass(`form-check-input`);
+			let div = $(`<div class="form-check-inline"></div>`);
+			$(div).insertAfter(item).append(item).append(`\n`);
+			$(div).append($(`<label class="form-check-label" for="${$(item).attr(`id`)}">item: ${$(item).val()}</label>`));
+			$(item).filter(`input:radio.display-only, input:checkbox.display-only`).readonly();
+		});
+		$(`.code-container`).prepend(`<button type="button" class="btn btn-outline-secondary btn-sm copy-button">copy</button>`);
 		$(document).on("click", `.copy-button`, ({target: button}) => {
 			let content = ``;
 			$(button).closest(`.code-container`).find(`code`).each((index, item) => {

@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.9.1 - 2024-07-11
+ * jquery.databind.js - version 1.9.2 - 2024-07-31
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -47,6 +47,93 @@
 		[CORE.ENABLE]: {[CORE.IS_SHOW_OR_HIDE]: true, [CORE.IS_DISPLAY_OR_ENABLED]: false},
 		[CORE.DISABLE]: {[CORE.IS_SHOW_OR_HIDE]: false, [CORE.IS_DISPLAY_OR_ENABLED]: false}
 	};
+	const READONLY_CSS_PRESET = [{
+		name: `bootstrap`,
+		pickTest: () => $(`link`).filter((_, link) => link.href && (link.href.includes(`bootstrap.min.css`) || link.href.includes(`bootstrap.css`))).length >= 1,
+		elementTypes: [
+			{
+				name: `checkable`,
+				pickRange: checkable => $(checkable).parent(`label, span, div`).filter(`.form-check, .form-check-inline`),
+				css: {
+					'cursor': `default`,
+					'opacity': `0.5`,
+				}
+			}, {
+				name: `select`,
+				pickRange: select => $(select),
+				css: {
+					'background-color': `#e9ecef`,
+				}
+			}
+		]
+	}, {
+		name: `chrome`,
+		pickTest: () => isBrowser(`Chrome`),
+		elementTypes: [
+			{
+				name: `checkable`,
+				pickRange: checkable => $(checkable),
+				css: {
+					'cursor': `default`,
+					'filter': `grayscale(1)`,
+					'opacity': `0.3`
+				}
+			}, {
+				name: `select`,
+				pickRange: select => $(select),
+				css: {
+					'cursor': `default`,
+					'color': `#6d6d6d`,
+					'opacity': `0.7`,
+					'background-color': `#f8f8f8`,
+					'border-color': `#d0d0d0`,
+					'border-radius': `2.5px`
+				}
+			}
+		]
+	}, {
+		name: `firefox`,
+		pickTest: () => isBrowser(`Firefox`),
+		elementTypes: [
+			{
+				name: `checkable`,
+				pickRange: checkable => $(checkable),
+				css: {
+					'cursor': `default`,
+					'filter': `grayscale(1)`,
+					'opacity': `0.55`
+				}
+			}, {
+				name: `select`,
+				pickRange: select => $(select),
+				css: {
+					'cursor': `default`,
+					'opacity': `0.6`
+				}
+			}
+		]
+	}, {
+		name: `default`,
+		pickTest: () => true,
+		elementTypes: [
+			{
+				name: `checkable`,
+				pickRange: checkable => $(checkable),
+				css: {
+					'cursor': `default`,
+					'opacity': `0.5`
+				}
+			}, {
+				name: `select`,
+				pickRange: select => $(select),
+				css: {
+					'cursor': `default`,
+					'opacity': `0.5`
+				}
+			}
+		]
+	}];
+
 	const CommonUtil = _CommonUtil();
 	$.fn.extend({
 		readonly: readonly,
@@ -405,20 +492,7 @@
 		let checkable = $(this).filter(`input:radio, input:checkbox`).css(`pointer-events`, `none`);
 		let select = $(this).filter(`select:not(.select2Used)`).css(`pointer-events`, `none`);
 		$(checkable).each((_, item) => $(`[for="${$(item).attr(`id`)}"]`).css(`pointer-events`, `none`));
-		if (isBootstrapCSSLoaded()) {
-			$(checkable).parent(`label, span, div`).css(`cursor`, `default`).css(`opacity`, `0.5`);
-			$(select).css(`cursor`, `default`).css(`background-color`, `#e9ecef`);
-		} else if (isBrowser(`Chrome`)) {
-			$(checkable).css(`cursor`, `default`).css(`filter`, `grayscale(1)`).css(`opacity`, `0.3`);
-			$(select).css(`cursor`, `default`).css(`color`, `#6d6d6d`).css(`opacity`, `0.7`)
-					.css(`background-color`, `#f8f8f8`).css(`border-color`, `#d0d0d0`).css(`border-radius`, `2.5px`);
-		} else if (isBrowser(`Firefox`)) {
-			$(checkable).css(`cursor`, `default`).css(`filter`, `grayscale(1)`).css(`opacity`, `0.55`);
-			$(select).css(`cursor`, `default`).css(`opacity`, `0.6`);
-		} else {
-			$(checkable).css(`cursor`, `default`).css(`opacity`, `0.5`);
-			$(select).css(`cursor`, `default`).css(`opacity`, `0.5`);
-		}
+		readonlyCssPreset(checkable, select, false);
 	}
 
 	function removeReadonly() {
@@ -427,29 +501,22 @@
 		let checkable = $(this).filter(`input:radio, input:checkbox`).css(`pointer-events`, ``);
 		let select = $(this).filter(`select:not(.select2Used)`).css(`pointer-events`, ``);
 		$(checkable).each((_, item) => $(`[for="${$(item).attr(`id`)}"]`).css(`pointer-events`, ``));
-		if (isBootstrapCSSLoaded()) {
-			$(checkable).parent(`label, span, div`).css(`cursor`, ``).css(`opacity`, ``);
-			$(select).css(`cursor`, ``).css(`background-color`, ``);
-		} else if (isBrowser(`Chrome`)) {
-			$(checkable).css(`cursor`, ``).css(`filter`, ``).css(`opacity`, ``);
-			$(select).css(`cursor`, ``).css(`color`, ``).css(`opacity`, ``)
-					.css(`background-color`, ``).css(`border-color`, ``).css(`border-radius`, ``);
-		} else if (isBrowser(`Firefox`)) {
-			$(checkable).css(`cursor`, ``).css(`filter`, ``).css(`opacity`, ``);
-			$(select).css(`cursor`, `default`).css(`opacity`, ``);
-		} else {
-			$(checkable).css(`cursor`, ``).css(`opacity`, ``);
-			$(select).css(`cursor`, ``).css(`opacity`, ``);
-		}
+		readonlyCssPreset(checkable, select, true);
 	}
 
-	function isBootstrapCSSLoaded() {
-		for (let link of $(`link`)) {
-			if (link.href && (link.href.includes(`bootstrap.min.css`) || link.href.includes(`bootstrap.css`))) {
-				return true;
+	function readonlyCssPreset(checkable, select, isRemoving) {
+		for (let preset of READONLY_CSS_PRESET) {
+			if (preset.pickTest.apply() === true) {
+				for (let elementType of preset.elementTypes) {
+					let target = elementType.name === `checkable` ? checkable : elementType.name === `select` ? select : null;
+					let targetSelector = elementType.pickRange.apply(null, [target]);
+					for (let style in elementType.css) {
+						$(targetSelector).css(style, isRemoving ? `` : elementType.css[style]);
+					}
+				}
+				break;
 			}
 		}
-		return false;
 	}
 
 	function isBrowser(type) {

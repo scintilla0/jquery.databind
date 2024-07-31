@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.9.2 (2024-07-31)
+*	$(selector).readonly()'s css loading method changed.
+
 #### 1.9.1 (2024-07-11)
 *	Add method $(selector).isChecked().
 
