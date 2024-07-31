@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.9.2 - 2024-07-31
+ * jquery.databind.js - version 1.9.3 - 2024-07-31
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -152,6 +152,7 @@
 	let dataBindFields = [];
 	let displayControlInitiator = {};
 	let displayControlImpacted = {};
+	let displayControlEvents = [];
 	let nonIdIndex = 0;
 	let activeItem;
 	let displayControlFirstChange = true;
@@ -359,63 +360,67 @@
 				continue;
 			}
 			let bindDisplayControlEvent = (_, eventItem) => {
-				$(document).on("change", `[id="${$(eventItem).attr(`id`)}"]`, () => {
-					for (let impacted of displayControlInitiator[field[0]]) {
-						let initiators = displayControlImpacted[impacted];
-						let show = true;
-						let displayOrEnabled = true;
-						for (let initiator in initiators) {
-							if (initiator === CORE.CALLBACK_FUNCTION_NAME) {
-								continue;
-							}
-							let initiatorSelector = $(nameSelector(initiator));
-							let showTest = false;
-							for (let value of initiators[initiator].value) {
-								if (CommonUtil.isBlank(value) && $(initiatorSelector).is(`input:checkbox, input:radio`)) {
-									showTest = $(initiatorSelector).filter(`:checked`).length === 0;
-								} else if ($(initiatorSelector).is(`input:checkbox, input:radio`)) {
-									showTest = $(initiatorSelector).filter(`[value="${value}"]:checked`).length === 1;
-								} else if ($(initiatorSelector).is(`select`)) {
-									showTest = $(initiatorSelector).find(`option[value="${value}"]:selected`).length === 1;
-								} else if ($(initiatorSelector).is(`input:text, input:hidden, textarea`)) {
-									showTest = $(initiatorSelector).val() === value;
-								} else if ($(initiatorSelector).is(`label, span`)) {
-									showTest = $(initiatorSelector).text() === value;
+				let eventItemId = $(eventItem).attr(`id`);
+				if (!displayControlEvents.includes(eventItemId)) {
+					$(document).on("change", `[id="${eventItemId}"]`, () => {
+						for (let impacted of displayControlInitiator[field[0]]) {
+							let initiators = displayControlImpacted[impacted];
+							let show = true;
+							let displayOrEnabled = true;
+							for (let initiator in initiators) {
+								if (initiator === CORE.CALLBACK_FUNCTION_NAME) {
+									continue;
 								}
-								if (initiators[initiator].bindConfig[CORE.IS_SHOW_OR_HIDE] === false) {
-									showTest = !showTest;
+								let initiatorSelector = $(nameSelector(initiator));
+								let showTest = false;
+								for (let value of initiators[initiator].value) {
+									if (CommonUtil.isBlank(value) && $(initiatorSelector).is(`input:checkbox, input:radio`)) {
+										showTest = $(initiatorSelector).filter(`:checked`).length === 0;
+									} else if ($(initiatorSelector).is(`input:checkbox, input:radio`)) {
+										showTest = $(initiatorSelector).filter(`[value="${value}"]:checked`).length === 1;
+									} else if ($(initiatorSelector).is(`select`)) {
+										showTest = $(initiatorSelector).find(`option[value="${value}"]:selected`).length === 1;
+									} else if ($(initiatorSelector).is(`input:text, input:hidden, textarea`)) {
+										showTest = $(initiatorSelector).val() === value;
+									} else if ($(initiatorSelector).is(`label, span`)) {
+										showTest = $(initiatorSelector).text() === value;
+									}
+									if (initiators[initiator].bindConfig[CORE.IS_SHOW_OR_HIDE] === false) {
+										showTest = !showTest;
+									}
+									if (initiators[initiator].bindConfig[CORE.IS_DISPLAY_OR_ENABLED] === false) {
+										displayOrEnabled = false;
+									}
+									if (showTest === true) {
+										break;
+									}
 								}
-								if (initiators[initiator].bindConfig[CORE.IS_DISPLAY_OR_ENABLED] === false) {
-									displayOrEnabled = false;
-								}
-								if (showTest === true) {
+								show = showTest;
+								if (show === false) {
 									break;
 								}
 							}
-							show = showTest;
-							if (show === false) {
-								break;
-							}
-						}
-						let targetSelector = $(`[id="${impacted}"]`);
-						let impactedElements = $(targetSelector).find(`input, textarea, select`).filter(`:not(.${CORE.MAINTAIN_DISABLED})`)
+							let targetSelector = $(`[id="${impacted}"]`);
+							let impactedElements = $(targetSelector).find(`input, textarea, select`).filter(`:not(.${CORE.MAINTAIN_DISABLED})`)
 								.add($(targetSelector).filter(`input, textarea, select`).filter(`:not(.${CORE.MAINTAIN_DISABLED})`));
-						if (show === true) {
-							if (displayOrEnabled === true) {
-								$(targetSelector).show();
-							}
-							$(impactedElements).prop(`disabled`, false);
-						} else {
-							if (displayOrEnabled === true) {
-								$(targetSelector).hide();
-							}
-							$(impactedElements).prop(`disabled`, true);
-							if (displayControlFirstChange === false && CommonUtil.exists(initiators[CORE.CALLBACK_FUNCTION_NAME])) {
-								eval(`${initiators[CORE.CALLBACK_FUNCTION_NAME]}(\`[id="${impacted}"]\`)`);
+							if (show === true) {
+								if (displayOrEnabled === true) {
+									$(targetSelector).show();
+								}
+								$(impactedElements).prop(`disabled`, false);
+							} else {
+								if (displayOrEnabled === true) {
+									$(targetSelector).hide();
+								}
+								$(impactedElements).prop(`disabled`, true);
+								if (displayControlFirstChange === false && CommonUtil.exists(initiators[CORE.CALLBACK_FUNCTION_NAME])) {
+									eval(`${initiators[CORE.CALLBACK_FUNCTION_NAME]}(\`[id="${impacted}"]\`)`);
+								}
 							}
 						}
-					}
-				});
+					});
+					displayControlEvents.push(eventItemId);
+				}
 			};
 			$(nameSelector(field[0])).each((_, initiatorItem) => {
 				if (CommonUtil.isBlank($(initiatorItem).attr(`id`))) {
@@ -634,20 +639,38 @@
 			}
 		}
 
+		function initAndDeployListener(selector, event) {
+			applyEventGroupByName(selector, event);
+			deployNodeAppendListener(selector, event);
+		}
+
+		function applyEventGroupByName(selector, event) {
+			let buffer = {};
+			let noneNamedIndex = 0;
+			$(selector).each((_, item) => {
+				let key = $(item).attr(`name`);
+				if (!CommonUtil.exists(key)) {
+					key = noneNamedIndex ++;
+				}
+				if (!CommonUtil.exists(buffer[key])) {
+					buffer[key] = $();
+				}
+				buffer[key] = buffer[key].add(item);
+			});
+			for (let index in buffer) {
+				event.apply(null, [null, buffer[index]]);
+			}
+		}
+
 		function deployNodeAppendListener(selector, event) {
 			new MutationObserver(mutationList => {
 				for (let mutation of mutationList) {
 					for (let node of mutation.addedNodes) {
 						let targetNode = $(node).is(selector) ? $(node) : $(node).find(selector);
-						$(targetNode).each(event);
+						applyEventGroupByName(targetNode, event);
 					}
 				}
 			}).observe(document.body, {childList: true, subtree: true});
-		}
-
-		function initAndDeployListener(selector, event) {
-			$(selector).each(event);
-			deployNodeAppendListener(selector, event);
 		}
 
 		function setValue(value, doChange, ...selectors) {
