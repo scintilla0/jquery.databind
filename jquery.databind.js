@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.9.3 - 2024-07-31
+ * jquery.databind.js - version 1.9.4 - 2024-08-09
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -21,7 +21,7 @@
  * Add the attribute [data-display-hide-callback="$functionName"] to invoke the specified function as a callback when the DOM element is hidden.
  * Add the attribute [data-unchecked-value="$value"] to submit a default value when a checkbox element is not checked instead of submitting nothing.
  * Add the class [display-only] to an input or select element to display its content as a read-only span element that is not editable and not visible.
- * For a better visual effect, please add the CSS rule [.display-only, [data-display], [data-hide], [data-enable], [data-disable] { display: none; }] to your main stylesheet.
+ * For a better visual effect, please add the CSS rule [.display-only, [data-display], [data-hide] { display: none; }] to your main stylesheet.
  * Invoke $("$selector").readonly() to make checkbox, radio or select elements readonly via js code if they are unmodifiable, and $("$selector").removeReadonly() to remove it.
  * Invoke $("$selector").boolean() to evaluate the boolean value of an element. Returns null if it is unparseable.
  * A boolean test value can be passed in when evaluate whether the element reserves the target boolean value, e.g. $("$selector").boolean(false).
@@ -480,10 +480,11 @@
 			let value = $(item).val();
 			let dataBindField = $(item).attr(CORE.BIND);
 			let dataBindProperty = (CommonUtil.exists(dataBindField) ? ` ${CORE.BIND}="${dataBindField}"` : ``);
+			let dataBindOptinText = ($(item).is(`select`) ? ` ${CORE.OPTION_TEXT}` : ``);
 			if ($(item).is(`select`)) {
 				value = $(item).find(`option[value="${value}"]`).text();
 			}
-			let span = $(`<span${dataBindProperty} style="white-space: pre-wrap"></span>`);
+			let span = $(`<span${dataBindProperty}${dataBindOptinText} style="white-space: pre-wrap"></span>`);
 			$(span).text(value);
 			$(item).after(span);
 			$(item).css(`display`, `none`);

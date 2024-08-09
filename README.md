@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.9.4 (2024-08-09)
+*	Span elements generated on a select elements by [display-only] event now will have a [data-bind-option-text] property.
+
 #### 1.9.3 (2024-07-31)
 *	[data-display-hide-callback] event repeatedly triggered fixed.
 
