@@ -11,6 +11,10 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.9.5 (2024-10-11)
+*	[data-display] event can be triggered by [data-bind] event's effects now.
+*	Minor typo fixes.
+
 #### 1.9.4 (2024-08-09)
 *	Span elements generated on a select elements by [display-only] event now will have a [data-bind-option-text] property.
 

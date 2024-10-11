@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.9.4 - 2024-08-09
+ * jquery.databind.js - version 1.9.5 - 2024-10-11
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -38,7 +38,7 @@
 			UNCHECKED_VALUE: "data-unchecked-value", REVERSE_CHECKBOX_ID: "data-reverse-checkbox-id",
 			DISPLAY_ONLY: "display-only", DISPLAY_ONLY_DEPLOYED: "display-only-deployed",
 			MAINTAIN_DISABLED: 'maintain-disabled', TEMPLATE_ID_SELECTOR: "[id*=\"emplate\"]",
-			READONLY_ITEM: 'readonly-item', BIND_FIELD: "bindField",
+			READONLY_ITEM: 'readonly-item', BIND_FIELD: "bindField", INNER_CHANGE: "inner-change",
 			IS_SHOW_OR_HIDE: "isShowOrHide", IS_DISPLAY_OR_ENABLED: "isDisplayOrEnabled"};
 	const OUTSIDE_CONSTANTS = {HIGHLIGHT_MINUS: "data-enable-highlight-minus"};
 	const DISPLAY_CONTROL_CONFIG_PRESET = {
@@ -249,7 +249,7 @@
 						if ($(item).is(`input:checkbox[${CORE.CHECKBOX_TEXT}]`)) {
 							$(item).prop(`checked`, $(item).attr(CORE.CHECKBOX_TEXT) === setValue);
 						} else {
-							CommonUtil.setValue(setValue, false, $(item));
+							CommonUtil.setValue(setValue, $(item));
 						}
 						$(item).blur();
 						// maxlength highlight minus adapt
@@ -362,7 +362,7 @@
 			let bindDisplayControlEvent = (_, eventItem) => {
 				let eventItemId = $(eventItem).attr(`id`);
 				if (!displayControlEvents.includes(eventItemId)) {
-					$(document).on("change", `[id="${eventItemId}"]`, () => {
+					$(document).on("change " + CORE.INNER_CHANGE, `[id="${eventItemId}"]`, () => {
 						for (let impacted of displayControlInitiator[field[0]]) {
 							let initiators = displayControlImpacted[impacted];
 							let show = true;
@@ -447,12 +447,12 @@
 	function triggerDisplayControlEventAtReady() {
 		for (let initiator in displayControlInitiator) {
 			let selectorString = nameSelector(initiator);
-			$(selectorString).filter(`:not(:checkbox):not(:radio)`).change();
+			$(selectorString).filter(`:not(:checkbox):not(:radio)`).trigger(CORE.INNER_CHANGE);
 			let processedName = [];
 			$(selectorString).filter(`input:checkbox, input:radio`).each((_, item) => {
 				let name = $(item).attr(`name`);
 				if (!processedName.includes(name)) {
-					$(item).change();
+					$(item).trigger(CORE.INNER_CHANGE);
 					processedName.push(name);
 				}
 			});
@@ -480,11 +480,11 @@
 			let value = $(item).val();
 			let dataBindField = $(item).attr(CORE.BIND);
 			let dataBindProperty = (CommonUtil.exists(dataBindField) ? ` ${CORE.BIND}="${dataBindField}"` : ``);
-			let dataBindOptinText = ($(item).is(`select`) ? ` ${CORE.OPTION_TEXT}` : ``);
+			let dataBindOptionText = ($(item).is(`select`) ? ` ${CORE.OPTION_TEXT}` : ``);
 			if ($(item).is(`select`)) {
 				value = $(item).find(`option[value="${value}"]`).text();
 			}
-			let span = $(`<span${dataBindProperty}${dataBindOptinText} style="white-space: pre-wrap"></span>`);
+			let span = $(`<span${dataBindProperty}${dataBindOptionText} style="white-space: pre-wrap"></span>`);
 			$(span).text(value);
 			$(item).after(span);
 			$(item).css(`display`, `none`);
@@ -674,7 +674,7 @@
 			}).observe(document.body, {childList: true, subtree: true});
 		}
 
-		function setValue(value, doChange, ...selectors) {
+		function setValue(value, ...selectors) {
 			value = exists(value) ? value : '';
 			for (let selector of selectors) {
 				$(selector).each((_, item) => {
@@ -688,9 +688,7 @@
 					} else if ($(item).is(`a`)) {
 						$(item).attr(`href`, value);
 					}
-					if (doChange === true) {
-						throttle(() => $(item).blur().change(), $(item).attr(`id`));
-					}
+					$(item).trigger(CORE.INNER_CHANGE);
 				});
 			}
 		}
