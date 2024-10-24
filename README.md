@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.9.6 (2024-10-24)
+*	[data-display] event can be only bound on first element fixed.
+
 #### 1.9.5 (2024-10-11)
 *	[data-display] event can be triggered by [data-bind] event's effects now.
 *	Minor typo fixes.

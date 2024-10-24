@@ -1,5 +1,5 @@
 /*!
- * jquery.databind.js - version 1.9.5 - 2024-10-11
+ * jquery.databind.js - version 1.9.6 - 2024-10-24
  * @copyright (c) 2023-2024 scintilla0 (https://github.com/scintilla0)
  * @contributor: Squibler
  * @license MIT License http://www.opensource.org/licenses/mit-license.html
@@ -659,7 +659,9 @@
 				buffer[key] = buffer[key].add(item);
 			});
 			for (let index in buffer) {
-				event.apply(null, [null, buffer[index]]);
+				for (let item of buffer[index]) {
+					event.apply(null, [null, item]);
+				}
 			}
 		}
 
