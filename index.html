@@ -1,1 +1,1129 @@
-停止维护
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>jquery.databind.js demo</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/default.min.css">
+	<style>
+		.lang-zh {
+			display: none;
+			font-weight: bold;
+		}
+
+		body {
+			background-color: #f5f5f5;
+			color: #333;
+		}
+		h3 {
+			border-bottom: 2px solid #e0e0e0;
+			padding-bottom: 10px;
+		}
+		p {
+			margin-bottom: 20px;
+		}
+		#title {
+			margin-top: 100px;
+			margin-bottom: 50px;
+			text-align: center;
+		}
+		.content {
+			margin-bottom: 60px;
+		}
+
+		.align-items-center {
+			padding-top: 1px;
+			padding-bottom: 1px;
+		}
+		.code-container {
+			position: relative;
+			background-color: #f8f9fa;
+			border: 1px solid #dee2e6;
+			padding: 10px;
+			display: flex;
+			align-items: center;
+			height: 100%;
+			border-radius: 8px;
+			box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+		}
+		.code-container pre {
+			background-color: #f8f9fa !important;
+			margin-bottom: 0;
+			width: 100%;
+		}
+		.code-container pre code {
+			background-color: inherit;
+			tab-size: 4;
+		}
+		.copy-button {
+			position: absolute;
+			top: -6px;
+			right: -10px;
+			transform: scale(0.7);
+		}
+
+		p.brief span.expression {
+			font-weight: bold;
+		}
+		p.brief span.varName {
+			font-weight: bold;
+			color: #FF6666;
+		}
+		.btn {
+			margin: 10px;
+		}
+
+		p.brief.lang-zh > span.expression::before,
+		p.brief.lang-zh > span.expression::after,
+		p.brief.lang-zh > span.varName::before,
+		p.brief.lang-zh > span.varName::after {
+			content: ' ';
+		}
+
+	</style>
+</head>
+<body>
+	<div class="container my-4">
+		<div id="title">
+			<h1 class="mb-4 align-items-center">jquery.databind.js</h1>
+			<p class="lang-en">
+				A plugin for data binding and related auto-configuration<br>
+				<a href="https://github.com/scintilla0/jquery.databind" target="_blank">View and get the source code on Github</a>
+			</p>
+			<p class="lang-zh">
+				提供数据绑定及相关功能的小插件<br>
+				<a href="https://github.com/scintilla0/jquery.databind" target="_blank">在Github上查看源码</a>
+			</p>
+		</div>
+
+		<form autocomplete="off">
+			<div class="subject">
+				<h3 class="mb-3">[data-bind]</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Add the attribute <span class="expression">[data-bind="<span class="varName">[$fieldName]</span>"]</span> to most kinds of elements to enable automatic configuration.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						大多数标签可通过添加属性<span class="expression">[data-bind="<span class="varName">[$fieldName]</span>"]</span>以开启数据绑定配置．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="text" data-bind="field1">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" data-bind="field1"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<textarea data-bind="field1"></textarea>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;textarea data-bind="field1"&gt;&lt;/textarea&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<span class="bindSpan" data-bind="field1"></span>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;span data-bind="field1"&gt;&lt;/span&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<select data-bind="field1">
+								<option value=""></option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+							</select>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;select data-bind="field1"&gt;
+	&lt;option value=""&gt;&lt;/option&gt;
+	&lt;option value="1"&gt;1&lt;/option&gt;
+	&lt;option value="2"&gt;2&lt;/option&gt;
+	&lt;option value="3"&gt;3&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" id="field1-radio1" name="field1-radio" value="1" data-bind="field1">
+							<input type="radio" id="field1-radio2" name="field1-radio" value="2" data-bind="field1">
+							<input type="radio" id="field1-radio3" name="field1-radio" value="3" data-bind="field1">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field1-radio" value="1" data-bind="field1"&gt;
+&lt;input type="radio" name="field1-radio" value="2" data-bind="field1"&gt;
+&lt;input type="radio" name="field1-radio" value="3" data-bind="field1"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">[data-bind-checkbox-text]</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Checkbox elements are unable to initiate this event because of their multi-selectability, unless with <span class="expression">[data-bind-checkbox-text="<span class="varName">[$value]</span>"]</span> property.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						由于checkbox是可多选的，点击checkbox标签无法传递绑定值，但可以通过添加属性<span class="expression">[data-bind-checkbox-text="<span class="varName">[$value]</span>"]</span>来实现功能．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="checkbox" id="field1-checkbox1" name="field1-checkbox" value="1" data-bind="field1">
+							<input type="checkbox" id="field1-checkbox2" name="field1-checkbox" value="2" data-bind="field1">
+							<input type="checkbox" id="field1-checkbox3" name="field1-checkbox" value="3" data-bind="field1">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" name="field1-checkbox" value="1" data-bind="field1"&gt;
+&lt;input type="checkbox" name="field1-checkbox" value="2" data-bind="field1"&gt;
+&lt;input type="checkbox" name="field1-checkbox" value="3" data-bind="field1"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container" style="display: flex; align-items: center;">
+							<input type="checkbox" id="field2-checkbox1" name="field2-checkbox" value="1" data-bind="field2" data-bind-checkbox-text="checked">
+							<input type="text" data-bind="field2" style="width: fit-content;">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" name="field2-checkbox" value="1" data-bind="field2" data-bind-checkbox-text="checked"&gt;
+&lt;input type="text" data-bind="field2"&gt;</code></pre>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">[data-bind-option-text]</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Add the attribute <span class="expression">[data-bind-option-text]</span> to bind the option text of the other source in group instead of its exact value to this DOM element.<br>
+						You can also use a specified element property as binding text using <span class="expression">[data-bind-option-text="<span class="varName">[$propertyName]</span>"]</span>.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						如果你想绑定的不是option标签的值本身，而是其展示的内容，可以通过添加属性<span class="expression">[data-bind-option-text]</span>来实现．<br>
+						你也可以通过<span class="expression">[data-bind-option-text="<span class="varName">[$propertyName]</span>"]</span>来指定具体要绑定标签的哪个属性．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<select data-bind="field3">
+								<option value=""></option>
+								<option value="1" data-display-content="display content 1">label 1</option>
+								<option value="2" data-display-content="display content 2">label 2</option>
+								<option value="3" data-display-content="display content 3">label 3</option>
+							</select>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;select data-bind="field3"&gt;
+	&lt;option value=""&gt;&lt;/option&gt;
+	&lt;option value="1" data-display-content="display content 1"&gt;label 1&lt;/option&gt;
+	&lt;option value="2" data-display-content="display content 2"&gt;label 2&lt;/option&gt;
+	&lt;option value="3" data-display-content="display content 3"&gt;label 3&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="text" data-bind="field3">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" data-bind="field3"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="text" data-bind="field3" data-bind-option-text>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" data-bind="field3" data-bind-option-text&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="text" data-bind="field3" data-bind-option-text="data-display-content">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" data-bind="field3" data-bind-option-text="data-display-content"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">[data-check-field]</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Add the attribute <span class="expression">[data-check-field="<span class="varName">[$name]</span>"]</span> to a button or a checkbox element to control the check status of a set of checkboxes.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						为标签添加属性<span class="expression">[data-check-field="<span class="varName">[$name]</span>"]</span>可以让你通过某一个按钮或者checkbox来控制一组checkbox的选中状态．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" id="field4-checkbox-control" data-check-field="field4">
+								<label class="form-check-label" for="field4-checkbox-control">control</label>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" data-check-field="field4"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="checkbox" id="field4-checkbox1" name="field4" value="1">
+							<input type="checkbox" id="field4-checkbox2" name="field4" value="2">
+							<input type="checkbox" id="field4-checkbox3" name="field4" value="3">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" name="field4" value="1"&gt;
+&lt;input type="checkbox" name="field4" value="2"&gt;
+&lt;input type="checkbox" name="field4" value="3"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Add the attribute <span class="expression">[checked]</span> to specify the check action when using a <span class="expression">button</span> as the controlling element.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						如果你想单向控制选中状态，就在控制按钮的标签上添加属性<span class="expression">[checked]</span>．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="button" data-check-field="field5" checked value="check" style="width: 100px;">
+							<button type="button" data-check-field="field5" style="width: 100px;">uncheck</button>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="button" data-check-field="field5" checked value="check"&gt;
+&lt;button type="button" data-check-field="field5"&gt;uncheck&lt;/button&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="checkbox" id="field5-checkbox1" name="field5" value="1">
+							<input type="checkbox" id="field5-checkbox2" name="field5" value="2">
+							<input type="checkbox" id="field5-checkbox3" name="field5" value="3">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" name="field5" value="1"&gt;
+&lt;input type="checkbox" name="field5" value="2"&gt;
+&lt;input type="checkbox" name="field5" value="3"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Support <span class="expression">[*]</span>, <span class="expression">[^]</span> and <span class="expression">[$]</span> characters for a more flexible way to specify the name of the target checkboxes.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						该功能支持模糊匹配规则<span class="expression">[*]</span>，<span class="expression">[^]</span>和<span class="expression">[$]</span>．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="form-check-inline">
+								<input type="checkbox" class="form-check-input" id="field6-checkbox-control" data-check-field="eld6$">
+								<label class="form-check-label" for="field6-checkbox-control">control</label>
+							</div>						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" data-check-field="eld6$"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="checkbox" id="field6-checkbox1" name="field6" value="1">
+							<input type="checkbox" id="field6-checkbox2" name="field6" value="2">
+							<input type="checkbox" id="field6-checkbox3" name="field6" value="3">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" name="field6" value="1"&gt;
+&lt;input type="checkbox" name="field6" value="2"&gt;
+&lt;input type="checkbox" name="field6" value="3"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">[data-display] / [data-hide]</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Add the attribute <span class="expression">[data-display="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span> to a DOM element to control its display status according to the value of the specified DOM elements.<br>
+						This function does not support fuzzy match as the function <span class="expression">[data-check-field]</span>.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						为标签添加属性<span class="expression">[data-display="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span>以通过某个标签的值来控制被添加了该属性的标签的显示状态．<br>
+						该功能并不像<span class="expression">[data-check-field]</span>功能一样支持模糊匹配．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<span data-display="field7:1">display content 1: abcd</span>
+							<span data-display="field7:2">display content 2: dcba</span>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;span data-display="field7:1"&gt;display content 1: abcd&lt;/span&gt;
+&lt;span data-display="field7:2"&gt;display content 2: dcba&lt;/span&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" id="field7-radio1" name="field7" value="1" checked>
+							<input type="radio" id="field7-radio2" name="field7" value="2">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field7" value="1" checked&gt;
+&lt;input type="radio" name="field7" value="2"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Use the attribute <span class="expression">[data-hide="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span> to do the opposite.<br>
+						Notice that if both exist, display is executed in preference to hide.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						<span class="expression">[data-hide="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span>属性具有相同的功能，但显示状态与前者相反．<br>
+						请注意，如果两个属性同时存在，则显示的优先级高于隐藏．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<span data-hide="field8:1">display content 1: abcd</span>
+							<span data-display="field8:1" data-hide="field8:1">display content 2: dcba</span>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;span data-hide="field8:1"&gt;display content 1: abcd&lt;/span&gt;
+&lt;span data-display="field8:1" data-hide="field8:1"&gt;display content 2: dcba&lt;/span&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" id="field8-radio1" name="field8" value="1" checked>
+							<input type="radio" id="field8-radio2" name="field8" value="2">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field8" value="1" checked&gt;
+&lt;input type="radio" name="field8" value="2"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						This attribute supports multiple target values in the format of <span class="expression">[data-display="<span class="varName">[$name]</span>:[<span class="varName">[$value1]</span>,<span class="varName">[$value2]</span>]"]</span>.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						可以通过<span class="expression">[data-display="<span class="varName">[$name]</span>:[<span class="varName">[$value1]</span>,<span class="varName">[$value2]</span>]"]</span>的形式绑定多个目标值．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<span data-display="field9:[1,3]">display content 1,3: abcd</span>
+							<span data-display="field9:[2]">display content 2: dcba</span>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;span data-display="field9:[1,3]"&gt;display content 1,3: abcd&lt;/span&gt;
+&lt;span data-display="field9:[2]"&gt;display content 2: dcba&lt;/span&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" id="field9-radio1" name="field9" value="1" checked>
+							<input type="radio" id="field9-radio2" name="field9" value="2">
+							<input type="radio" id="field9-radio3" name="field9" value="3">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field9" value="1" checked&gt;
+&lt;input type="radio" name="field9" value="2"&gt;
+&lt;input type="radio" name="field9" value="3"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">[data-enable] / [data-disable]</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Add the attribute <span class="expression">[data-enable="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span> or <span class="expression">[data-disable="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span> to do similar as display and hide event, but only affect <span class="expression">[disabled]</span> property instead of display status.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						<span class="expression">[data-enable="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span>和<span class="expression">[data-disable="<span class="varName">[$name]</span>:<span class="varName">[$value]</span>"]</span>属性可以做到与前面类似的事，但只控制标签的<span class="expression">[disabled]</span>属性，而不控制其显示状态．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="text" data-enable="field11:1" value="test string">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" data-enable="field11:1" value="test string"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" id="field11-radio1" name="field11" value="1" checked>
+							<input type="radio" id="field11-radio2" name="field11" value="2">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field11" value="1" checked&gt;
+&lt;input type="radio" name="field11" value="2"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="text" data-disable="field12:1" value="test string">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" data-disable="field12:1" value="test string"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" id="field12-radio1" name="field12" value="1" checked>
+							<input type="radio" id="field12-radio2" name="field12" value="2">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field12" value="1" checked&gt;
+&lt;input type="radio" name="field12" value="2"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">[data-display-hide-callback]</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Add the attribute <span class="expression">[data-display-hide-callback="<span class="varName">[$functionName]</span>"]</span> to invoke the specified function as a callback when the DOM element is hidden or disabled.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						为标签添加属性<span class="expression">[data-display-hide-callback="<span class="varName">[$functionName]</span>"]</span>可以在该元素被隐藏或禁用时调用已经定义的js函数．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="row">
+								<div class="col-md">
+									<span data-display="field10:1" data-display-hide-callback="test1">display content 1: abcd</span>
+									<span data-display="field10:2">display content 2: dcba</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md">
+									times content1 hidden:&nbsp;<span id="test1Result" style="font-weight: bold">0</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;span data-display="field10:1" data-display-hide-callback="test1"&gt;display content 1: abcd&lt;/span&gt;
+&lt;span data-display="field10:2"&gt;display content 2: dcba&lt;/span&gt;</code>
+<code class="language-js">times content1 hidden: &lt;span id="test1Result"&gt;0&lt;/span&gt;
+function test1() {
+	$("#test1Result").increase();
+}</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" id="field10-radio1" name="field10" value="1" checked>
+							<input type="radio" id="field10-radio2" name="field10" value="2">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field10" value="1" checked&gt;
+&lt;input type="radio" name="field10" value="2"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">[data-unchecked-value]</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Add the attribute <span class="expression">[data-unchecked-value="<span class="varName">[$value]"</span>]</span> to submit a default value when a checkbox element is not checked instead of submitting nothing.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						为标签添加属性<span class="expression">[data-unchecked-value="<span class="varName">[$value]"</span>]</span>可以为单个checkbox添加未被选中时的默认值，防止其在未被选中时不将任何值提交到后端．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="row">
+								<div class="col-md">
+									<input type="checkbox" id="field29-checkbox1" name="field29" value="1" checked data-unchecked-value="0">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md">
+									submitting value:&nbsp;<span id="unchecked-value-result" style="font-weight: bold">1</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" name="field29-checkbox1" value="1" checked data-unchecked-value="0"&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">.display-only</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Add the class <span class="expression">"display-only"</span> to an input or select element to display its content as a read-only span element that is not editable and not visible.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						为input或select等标签添加class：<span class="expression">"display-only"</span>可以让他们仅把值显示在页面上，避免被轻易修改．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="text" class="display-only" value="display-only input">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" class="display-only" value="display-only input"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<select class="display-only">
+								<option value=""></option>
+								<option value="1" selected>label 1</option>
+								<option value="2">label 2</option>
+								<option value="3">label 3</option>
+							</select>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;select class="display-only"&gt;
+	&lt;option value=""&gt;&lt;/option&gt;
+	&lt;option value="1" selected&gt;label 1&lt;/option&gt;
+	&lt;option value="2"&gt;label 2&lt;/option&gt;
+	&lt;option value="3"&gt;label 3&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" id="field13-radio1" name="field13" class="display-only" value="1">
+							<input type="radio" id="field13-radio2" name="field13" class="display-only" value="2" checked>
+							<input type="radio" id="field13-radio3" name="field13" class="display-only" value="3">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field13" class="display-only" value="1"&gt;
+&lt;input type="radio" name="field13" class="display-only" value="2" checked&gt;
+&lt;input type="radio" name="field13" class="display-only" value="3"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="checkbox" id="field14-checkbox1" name="field14" class="display-only" value="1">
+							<input type="checkbox" id="field14-checkbox2" name="field14" class="display-only" value="2" checked>
+							<input type="checkbox" id="field14-checkbox3" name="field14" class="display-only" value="3" checked>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" name="field14" class="display-only" value="1"&gt;
+&lt;input type="checkbox" name="field14" class="display-only" value="2" checked&gt;
+&lt;input type="checkbox" name="field14" class="display-only" value="3" checked&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">$().readonly() / $().removeReadonly()</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						If checkbox, radio or select elements are unmodifiable in HTML for some reason, invoke <span class="expression">$(<span class="varName">[$selector]</span>).readonly()</span> to make them unselectable via js code.<br>
+						Notice that they are just unable to be selected instead of having a <span class="expression">[readonly]</span> or <span class="expression">[disabled]</span> attribute.<br>
+						These elements will have class <span class="expression">"readonly-item"</span> for your customized styles.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						可以通过调用<span class="expression">$(<span class="varName">[$selector]</span>).readonly()</span>方法来让checkbox、radio或select标签变成只读，不可编辑．<br>
+						这种方法只会让标签不可编辑，而不会为其添加<span class="expression">[readonly]</span>或<span class="expression">[disabled]</span>属性，不会影响其提交值．<br>
+						这些标签会被添加class：<span class="expression">"readonly-item"</span>，以允许为其制定自定义css样式等．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="text" class="readonly-group" name="field31" value="test string">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" class="readonly-group" name="field31" value="test string"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" class="readonly-group" id="field15-radio1" name="field15" value="1">
+							<input type="radio" class="readonly-group" id="field15-radio2" name="field15" value="2" checked>
+							<input type="radio" class="readonly-group" id="field15-radio3" name="field15" value="3">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" class="readonly-group" name="field15" value="1"&gt;
+&lt;input type="radio" class="readonly-group" name="field15" value="2" checked&gt;
+&lt;input type="radio" class="readonly-group" name="field15" value="3"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="checkbox" class="readonly-group" id="field16-checkbox1" name="field16" value="1">
+							<input type="checkbox" class="readonly-group" id="field16-checkbox2" name="field16" value="2" checked>
+							<input type="checkbox" class="readonly-group" id="field16-checkbox3" name="field16" value="3" checked>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="checkbox" class="readonly-group" name="field16" value="1"&gt;
+&lt;input type="checkbox" class="readonly-group" name="field16" value="2" checked&gt;
+&lt;input type="checkbox" class="readonly-group" name="field16" value="3" checked&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<select class="readonly-group" name="field30">
+								<option value=""></option>
+								<option value="1" selected>label 1</option>
+								<option value="2">label 2</option>
+								<option value="3">label 3</option>
+							</select>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;select class="readonly-group" name="field30"&gt;
+	&lt;option value=""&gt;&lt;/option&gt;
+	&lt;option value="1" selected&gt;label 1&lt;/option&gt;
+	&lt;option value="2"&gt;label 2&lt;/option&gt;
+	&lt;option value="3"&gt;label 3&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<button type="button" onclick="readonly()" style="width: 160px;">readonly</button>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-js">function readonly() {
+	$(".readonly-group").readonly();
+}</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).removeReadonly()</span> to remove these effects.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						通过调用<span class="expression">$(<span class="varName">[$selector]</span>).removeReadonly()</span>方法来取消只读．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3">
+							<button type="button" onclick="removeReadonly()" style="width: 160px;">removeReadonly</button>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-js">function removeReadonly() {
+	$(".readonly-group").removeReadonly();
+}</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">$().boolean()</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).boolean()</span> to evaluate the boolean value of an element. Returns <span class="expression">null</span> if it is unparseable.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						通过调用<span class="expression">$(<span class="varName">[$selector]</span>).boolean()</span>方法来获取标签中包含的boolean值．如果不包含boolean值则返回<span class="expression">null</span>．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field17" value="true">
+								</div>
+							</div>
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field18" value="123">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" id="field17" value="true"&gt;
+&lt;input type="text" id="field18" value="123"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-8 offset-md-4 code-container">
+							<pre><code class="language-js">let field17Boolean = $("#field17").boolean(); // field17Boolean = true
+let field18Boolean = $("#field18").boolean(); // field18Boolean = null</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						A boolean test value can be passed in when evaluate whether the element reserves the target boolean value.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						如果调用方法时传入了boolean值，则方法返回值为：标签中包含的boolean值与传入的boolean值是否等同．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field19" value="false">
+								</div>
+							</div>
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field20" value="123">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" id="field19" value="false"&gt;
+&lt;input type="text" id="field20" value="123"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-8 offset-md-4 code-container">
+							<pre><code class="language-js">let field19Boolean = $("#field19").boolean(false); // field19Boolean = true
+let field20Boolean = $("#field20").boolean(true); // field20Boolean = false</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">$().isBlank() / $.isBlank()</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).isBlank()</span> to evaluate whether the value of the target dom is blank.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						通过调用<span class="expression">$(<span class="varName">[$selector]</span>).isBlank()</span>来判断一个标签中是否包含任何形式的内容．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field21">
+								</div>
+							</div>
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field22" value="123">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" id="field21"&gt;
+&lt;input type="text" id="field22" value="123"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-8 offset-md-4 code-container">
+							<pre><code class="language-js">let field21Blank = $("#field21").isBlank(); // field21Blank = true
+let field22Blank = $("#field22").isBlank(); // field22Blank = false</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Invoke <span class="expression">$.isBlank()</span> to evaluate whether parameter is <span class="expression">undefined</span>, <span class="expression">null</span> or <span class="expression">blank</span>.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						通过调用<span class="expression">$.isBlank()</span>方法来判断目标值是否为<span class="expression">undefined</span>, <span class="expression">null</span>或空字符串等．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="text" id="field23">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" id="field23"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-8 offset-md-4 code-container">
+							<pre><code class="language-js">let field23Blank = $.isBlank($("#field23").val()); // field23Blank = true
+let field24Blank = $.isBlank('1234'); // field24Blank = false</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">$().isChecked()</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).isChecked()</span> to evaluate whether the target checkbox or radio element is checked.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						通过调用<span class="expression">$(<span class="varName">[$selector]</span>).isChecked()</span>来判断一个checkbox或radio标签是否被选中．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="checkbox" id="field32-checkbox1" name="field32" value="1" checked>
+							<input type="checkbox" id="field32-checkbox2" name="field32" value="2">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+								<pre><code class="language-html">&lt;input type="checkbox" name="field32" value="1" checked&gt;
+&lt;input type="checkbox" name="field32" value="2"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<input type="radio" id="field33-radio1" name="field33" value="1" checked>
+							<input type="radio" id="field33-radio2" name="field33" value="2">
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="radio" name="field33" value="1" checked&gt;
+&lt;input type="radio" name="field33" value="2"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-8 offset-md-4 code-container">
+							<pre><code class="language-js">let isField32Checkbox1Checked = $("#field32-checkbox1").isChecked(); // isField32Checkbox1Checked = true
+let isField32Checkbox2Checked = $("#field32-checkbox2").isChecked(); // isField32Checkbox2Checked = false
+let isField33Checkbox1Checked = $("#field33-checkbox1").isChecked(); // isField33Checkbox1Checked = true
+let isField33Checkbox2Checked = $("#field33-checkbox2").isChecked(); // isField33Checkbox2Checked = false</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="subject">
+				<h3 class="mb-3">$().modify() / $().increase()</h3>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).modify(<span class="varName">[$function]</span>)</span> or <span class="expression">$(<span class="varName">[$selector]</span>).modify(<span class="varName">[$prependString]</span>, <span class="varName">[$appendString]</span>)</span> to to quickly modify the value or text of the target element.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						通过调用<span class="expression">$(<span class="varName">[$selector]</span>).modify(<span class="varName">[$function]</span>)</span>或<span class="expression">$(<span class="varName">[$selector]</span>).modify(<span class="varName">[$prependString]</span>, <span class="varName">[$appendString]</span>)</span>方法来快速修改标签中的字符串．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field25" value="test">
+								</div>
+							</div>
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field26" value="test">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" id="field25" value="test"&gt;
+&lt;input type="text" id="field26" value="test"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<button type="button" onclick="modifyField25()" style="width: 120px;">modify25</button>
+							<button type="button" onclick="modifyField26()" style="width: 120px;">modify26</button>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-js">$("#field25").modify(value => 'prefix ' + value + ' suffix');
+$("#field26").modify('prefix ', ' suffix');</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<div class="content">
+					<p class="brief mb-3 lang-en">
+						Invoke <span class="expression">$(<span class="varName">[$selector]</span>).increase()</span> or <span class="expression">$(<span class="varName">[$selector]</span>).increase(<span class="varName">[$increaseValue]</span>)</span> to to quickly modify the numeric value or text of the target element.
+					</p>
+					<p class="brief mb-3 lang-zh">
+						通过调用<span class="expression">$(<span class="varName">[$selector]</span>).increase()</span>或<span class="expression">$(<span class="varName">[$selector]</span>).increase(<span class="varName">[$increaseValue]</span>)</span>方法来快速修改标签中的数值．
+					</p>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field27" value="1">
+								</div>
+							</div>
+							<div class="row align-items-center">
+								<div class="col-md">
+									<input type="text" id="field28" value="1">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-html">&lt;input type="text" id="field27" value="1"&gt;
+&lt;input type="text" id="field28" value="1"&gt;</code></pre>
+						</div>
+					</div>
+
+					<div class="item row mb-4 align-items-center">
+						<div class="col-md-3 item-container">
+							<button type="button" onclick="increaseField27()" style="width: 120px;">increase27</button>
+							<button type="button" onclick="increaseField28()" style="width: 120px;">increase28</button>
+						</div>
+						<div class="col-md-8 offset-md-1 code-container">
+							<pre><code class="language-js">$("#field27").increase();
+$("#field28").increase('-10');</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+
+		<div class="position-fixed bottom-0 right-0 p-3" style="z-index: 10; right: 0; bottom: 0; width: 200px;">
+			<div id="copyToast" class="toast text-bg-secondary" role="alert" aria-live="polite" aria-atomic="true" data-bs-delay="1500">
+				<div class="toast-body">
+					Content copied.
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
+	<script src="jquery.databind.js"></script>
+	<script>
+		hljs.highlightAll();
+		[`en`, `zh`].forEach(lang => {
+			if (navigator.language.includes(lang)) {
+				$(`.lang-` + lang).show();
+			} else {
+				$(`.lang-` + lang).remove();
+			}
+		});
+		$(`select`).addClass(`form-select`);
+		$(`button, input:button`).addClass(`btn`).addClass(`btn-primary`);
+		$(`input:text, textarea`).addClass(`form-control`);
+		$(`input:radio, input:checkbox`).filter(`:not(.form-check-input):not(:hidden)`).each((_, item) => {
+			$(item).addClass(`form-check-input`);
+			let div = $(`<div class="form-check-inline"></div>`);
+			$(div).insertAfter(item).append(item).append(`\n`);
+			$(div).append($(`<label class="form-check-label" for="${$(item).attr(`id`)}">item: ${$(item).val()}</label>`));
+			$(item).filter(`input:radio.display-only, input:checkbox.display-only`).readonly();
+		});
+		$(`.code-container`).prepend(`<button type="button" class="btn btn-outline-secondary btn-sm copy-button">copy</button>`);
+		$(document).on("click", `.copy-button`, ({target: button}) => {
+			let content = ``;
+			$(button).closest(`.code-container`).find(`code`).each((index, item) => {
+				if (index !== 0) {
+					content += `\n`;
+				}
+				content += $(item).text();
+			});
+			navigator.clipboard.writeText(content);
+			$(`#copyToast`).toast(`show`);
+		});
+
+		function readonly() {
+			$(`.readonly-group`).readonly();
+		}
+
+		function removeReadonly() {
+			$(`.readonly-group`).removeReadonly();
+		}
+
+		function test1() {
+			let testSpan = $(`#test1Result`);
+			$(testSpan).increase();
+			$(testSpan).css(`color`, `red`);
+			setTimeout(() => $(testSpan).css(`color`, ``), 500);
+		}
+
+		function modifyField25() {
+			$(`#field25`).modify(value => `prefix ${value} suffix`);
+		}
+
+		function modifyField26() {
+			$(`#field26`).modify(`prefix `, ` suffix`);
+		}
+
+		function increaseField27() {
+			$(`#field27`).increase();
+		}
+
+		function increaseField28() {
+			$(`#field28`).increase(`-10`);
+		}
+
+		$(`#field29-checkbox1`).on("click", ({target: dom}) => {
+			let resultSpan = $(`#unchecked-value-result`);
+			setTimeout(() => $(resultSpan).text($(`[name="field29"]:checked`).val()));
+			$(resultSpan).css(`color`, `red`);
+			setTimeout(() => $(resultSpan).css(`color`, ``), 500);
+		});
+
+	</script>
+</body>
+</html>
