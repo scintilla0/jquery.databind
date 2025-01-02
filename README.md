@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.9.7 (2025-01-02)
+*	Remove unused variables and functions.
+
 #### 1.9.6 (2024-10-24)
 *	[data-display] event can be only bound on first element fixed.
 
