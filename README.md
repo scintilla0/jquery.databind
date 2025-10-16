@@ -11,6 +11,9 @@ CDN URL(min.js):
 
 ### Change log
 
+#### 1.9.8 (2025-10-16)
+*	Fixed an iteration issue appears in lower jQuery version.
+
 #### 1.9.7 (2025-01-02)
 *	Remove unused variables and functions.
 
